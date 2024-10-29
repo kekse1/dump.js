@@ -4,7 +4,7 @@
  */
 
 //
-const DEFAULT_PARAM_SCHEME_JSON = 'json/param.json';
+const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.json';
 const DEFAULT_CONSOLE_WIDTH_MIN = 60;
 const DEFAULT_REFRESH = 1000;
 const DEFAULT_SILENT = true;
@@ -243,17 +243,14 @@ class Dump extends Quant
 
 			//
 			this.print();
-		}, path.join(this.param.source, DEFAULT_PARAM_SCHEME_JSON), this.param);
+		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 
 	destroy(_name, _code, ... _args)
 	{
-		if(this.handle)
-		{
-			fs.closeSync(this.handle);
-		}
-
-		return super.destroy();
+		this.destroying = true;
+		if(this.handle) fs.closeSync(this.handle);
+		return super.destroy(... _args);
 	}
 	
 	get isFile()
