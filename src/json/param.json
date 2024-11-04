@@ -3,7 +3,7 @@
 		"type": "string",
 		"required": true
 	},
-	"source": {
+	"script": {
 		"type": "string",
 		"required": true
 	},
