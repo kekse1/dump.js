@@ -12,7 +12,7 @@ BASE="$(basename "$REAL")"
 NAME="$(basename "$REAL" .sh)"
 SOURCE="${PROJ}/js/"
 TARGET="${SOURCE}/main.js"
-CONFIG="${PROJ}/json/config.json"
+CONFIG="${PROJ}/json/dump.json"
 
 #
 NODE="`which node 2>/dev/null`"
