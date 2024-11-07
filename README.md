@@ -32,19 +32,23 @@ until now.
 
 ### Example Screenshot
 This is a **first preview** screenshot.
-![First Preview](img/screenshot.png)
+![First Screenshot](img/screenshot.eins.png)
 
 And this is a newer one, with less extensions and a newly configured [configuration](./src/json/config.json),
 mostly with better colorization, plus the feature to not insist on a simple replacement character for
 non-printable or ANSI characters, but to draw a radix converted view on it - whereas I'd like to use
 the `2` to let the user see if the byte is even or odd. ;-)
-![Second Preview](img/screenshot.zwei.png)
+![Second Screenshot](img/screenshot.zwei.png)
 
 My latest feature: I wanted to analyse some abstract complexity in my A.I. header data by looking at it in binary,
 by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
 last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
 problem out):
-![Third Preview](img/screenshot.drei.png)
+![Third Screenshot](img/screenshot.drei.png)
+
+Extended the latest feature to see kinda **heatmap**. Just start with both paramters `--replace 256 --heat`; this
+way I really saw how much my values are distributed over the header data! **:-D**
+![Fourth Screenshot](img/screenshot.vier.png)
 
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.

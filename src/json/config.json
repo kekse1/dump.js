@@ -27,8 +27,8 @@
 	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
 	"replace": null,/*2,*/
 
-	/* if "replace" above equals 2, 0/1 all colored black/white! ... */
-	"bw": true,
+	/* ... */
+	"heatmap": null,
 
 	/* colors for the RIGHT (character) view.. looks nice as it is now. */
 	"design": {

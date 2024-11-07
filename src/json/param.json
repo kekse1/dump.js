@@ -47,8 +47,8 @@
 		"type": "integer",
 		"required": false
 	},
-	"bw": {
-		"type": "boolean",
+	"heatmap": {
+		"type": "integer",
 		"required": false
 	}
 }

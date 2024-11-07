@@ -166,30 +166,44 @@ class Dump extends Quant
 			}
 
 			//
-			if(!isRadix(this.replace = this.param.replace))
+			if(!int(this.replace = this.param.replace))
 			{
-				if(!isRadix(this.replace = this.getConfig('replace')))
+				if(!int(this.replace = this.getConfig('replace')))
 				{
 					this.replace = null;
 				}
 			}
 
-			if(!bool(this.bw = this.param.bw))
+			if(this.replace !== null)
 			{
-				if(!bool(this.bw = this.getConfig('bw')))
+				if(this.replace < 2)
 				{
-					this.bw = false;
+					this.replace = 2;
+				}
+				else if(this.replace > Dump.mapping.length)
+				{
+					this.replace = Dump.mapping.length;
 				}
 			}
 
-			if(this.replace !== 2)
+			if(!int(this.heatmap = this.param.heatmap))
 			{
-				this.bw = null;
+				if(!int(this.heatmap = this.param.heatmap))
+				{
+					this.heatmap = null;
+				}
 			}
-			else
+
+			if(this.heatmap !== null)
 			{
-				this.BLACK = [ 0, 0, 0 ];
-				this.WHITE = [ 255, 255, 255 ];
+				if(this.heatmap < 2)
+				{
+					this.heatmap = 2;
+				}
+				else if(this.heatmap > 256)
+				{
+					this.heatmap = 256;
+				}
 			}
 
 			//
@@ -311,35 +325,46 @@ class Dump extends Quant
 		return process.stdout.write(_string);
 	}
 
+	static get mapping()
+	{
+		return '0123456789abcdefghijklmnopqrstuvwxyz';
+	}
+
+	static map(_byte, _radix)
+	{
+		return this.mapping[_byte % Math.min(_radix, this.mapping.length)];
+	}
+
 	renderChar(_byte)
 	{
 		var fg, bg;
 
-		if(this.bw)
+		if(this.heatmap !== null)
 		{
-			if((_byte % 2) === 0)
-			{
-				fg = [ 255, 255, 255 ];
-				bg = [ 0, 0, 0 ];
-			}
-			else
-			{
-				fg = [ 0, 0, 0 ];
-				bg = [ 255, 255, 255 ];
-			}
+			var h = (256 / (this.heatmap - 1));
+			var h = Math.max(0, Math._round((h * (_byte % this.heatmap)) - 1));
+			bg = [ h, h, h ];
+			h = (255 - h);
+			fg = [ h, h, h ];
 		}
 
 		var result;
-		
+
+
+
+
 		if(_byte < 32 || _byte === 127)
 		{
-			if(this.replace !== null)
-				result = (_byte % this.replace).toString();
-			else if(isRadix(this.design.nonPrintable.modulo))
-				result = (_byte % this.design.nonPrintable.modulo).toString();
-			else	result = this.design.nonPrintable.replace;
+			if(this.replace === null)
+			{
+				result = this.design.nonPrintable.replace;
+			}
+			else
+			{
+				result = Dump.map(_byte, this.replace);
+			}
 
-			if(!this.bw)
+			if(!this.heatmap)
 			{
 				fg = this.design.nonPrintable.fg;
 				bg = this.design.nonPrintable.bg;
@@ -347,13 +372,16 @@ class Dump extends Quant
 		}
 		else if(_byte > 127)
 		{
-			if(this.replace !== null)
-				result = (_byte % this.replace).toString();
-			else if(isRadix(this.design.ansi.modulo))
-				result = (_byte % this.design.ansi.modulo).toString();
-			else	result = this.design.ansi.replace;
+			if(this.replace === null)
+			{
+				result = this.design.ansi.replace;
+			}
+			else
+			{
+				result = Dump.map(_byte, this.replace);
+			}
 
-			if(!this.bw)
+			if(!this.heatmap)
 			{
 				fg = this.design.ansi.fg;
 				bg = this.design.ansi.bg;
@@ -361,11 +389,16 @@ class Dump extends Quant
 		}
 		else
 		{
-			if(this.replace !== null)
-				result = (_byte % this.replace).toString();
-			else	result = String.fromCharCode(_byte);
+			if(this.replace === null)
+			{
+				result = String.fromCharCode(_byte);
+			}
+			else
+			{
+				result = Dump.map(_byte, this.replace);
+			}
 
-			if(!this.bw)
+			if(!this.heatmap)
 			{
 				fg = this.design.printable.fg;
 				bg = this.design.printable.bg;
