@@ -24,6 +24,12 @@
 	/* 'invalid' means non-printable characters (so 0-31 and 127); these can be 'fainted' (a bit darker) */
 	"faintInvalid": true,
 
+	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
+	"replace": null,/*2,*/
+
+	/* if "replace" above equals 2, 0/1 all colored black/white! ... */
+	"bw": true,
+
 	/* colors for the RIGHT (character) view.. looks nice as it is now. */
 	"design": {
 

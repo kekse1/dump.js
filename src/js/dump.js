@@ -166,6 +166,33 @@ class Dump extends Quant
 			}
 
 			//
+			if(!isRadix(this.replace = this.param.replace))
+			{
+				if(!isRadix(this.replace = this.getConfig('replace')))
+				{
+					this.replace = null;
+				}
+			}
+
+			if(!bool(this.bw = this.param.bw))
+			{
+				if(!bool(this.bw = this.getConfig('bw')))
+				{
+					this.bw = false;
+				}
+			}
+
+			if(this.replace !== 2)
+			{
+				this.bw = null;
+			}
+			else
+			{
+				this.BLACK = [ 0, 0, 0 ];
+				this.WHITE = [ 255, 255, 255 ];
+			}
+
+			//
 			this.faintInvalid = this.getConfig('faintInvalid');
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
 
@@ -286,32 +313,66 @@ class Dump extends Quant
 
 	renderChar(_byte)
 	{
+		var fg, bg;
+
+		if(this.bw)
+		{
+			if((_byte % 2) === 0)
+			{
+				fg = [ 255, 255, 255 ];
+				bg = [ 0, 0, 0 ];
+			}
+			else
+			{
+				fg = [ 0, 0, 0 ];
+				bg = [ 255, 255, 255 ];
+			}
+		}
+
 		var result;
 		
 		if(_byte < 32 || _byte === 127)
 		{
-			if(isRadix(this.design.nonPrintable.modulo))
+			if(this.replace !== null)
+				result = (_byte % this.replace).toString();
+			else if(isRadix(this.design.nonPrintable.modulo))
 				result = (_byte % this.design.nonPrintable.modulo).toString();
 			else	result = this.design.nonPrintable.replace;
-			result = result.fg(... this.design.nonPrintable.fg, false).
-				bg(... this.design.nonPrintable.bg, false);
+
+			if(!this.bw)
+			{
+				fg = this.design.nonPrintable.fg;
+				bg = this.design.nonPrintable.bg;
+			}
 		}
 		else if(_byte > 127)
 		{
-			if(isRadix(this.design.ansi.modulo))
+			if(this.replace !== null)
+				result = (_byte % this.replace).toString();
+			else if(isRadix(this.design.ansi.modulo))
 				result = (_byte % this.design.ansi.modulo).toString();
 			else	result = this.design.ansi.replace;
-			result = result.fg(... this.design.ansi.fg, false).
-				bg(... this.design.ansi.bg, false);
+
+			if(!this.bw)
+			{
+				fg = this.design.ansi.fg;
+				bg = this.design.ansi.bg;
+			}
 		}
 		else
 		{
-			result = String.fromCharCode(_byte);
-			result = result.fg(... this.design.printable.fg, false).
-				bg(... this.design.printable.bg, false);
+			if(this.replace !== null)
+				result = (_byte % this.replace).toString();
+			else	result = String.fromCharCode(_byte);
+
+			if(!this.bw)
+			{
+				fg = this.design.printable.fg;
+				bg = this.design.printable.bg;
+			}
 		}
 
-		return result;
+		return result.fg(... fg, false).bg(... bg, false);
 	}
 	
 	//

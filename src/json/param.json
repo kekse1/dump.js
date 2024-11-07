@@ -42,5 +42,13 @@
 	"stop": {
 		"type": "integer",
 		"required": false
+	},
+	"replace": {
+		"type": "integer",
+		"required": false
+	},
+	"bw": {
+		"type": "boolean",
+		"required": false
 	}
 }

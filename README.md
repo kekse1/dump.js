@@ -40,6 +40,12 @@ non-printable or ANSI characters, but to draw a radix converted view on it - whe
 the `2` to let the user see if the byte is even or odd. ;-)
 ![Second Preview](img/screenshot.zwei.png)
 
+My latest feature: I wanted to analyse some abstract complexity in my A.I. header data by looking at it in binary,
+by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
+last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
+problem out):
+![Third Preview](img/screenshot.drei.png)
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
