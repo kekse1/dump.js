@@ -34,6 +34,12 @@ until now.
 This is a **first preview** screenshot.
 ![First Preview](img/screenshot.png)
 
+And this is a newer one, with less extensions and a newly configured [configuration](./src/json/config.json),
+mostly with better colorization, plus the feature to not insist on a simple replacement character for
+non-printable or ANSI characters, but to draw a radix converted view on it - whereas I'd like to use
+the `2` to let the user see if the byte is even or odd. ;-)
+![Second Preview](img/screenshot.zwei.png)
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 

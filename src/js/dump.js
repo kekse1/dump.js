@@ -290,13 +290,17 @@ class Dump extends Quant
 		
 		if(_byte < 32 || _byte === 127)
 		{
-			result = this.design.nonPrintable.replace;
+			if(isRadix(this.design.nonPrintable.modulo))
+				result = (_byte % this.design.nonPrintable.modulo).toString();
+			else	result = this.design.nonPrintable.replace;
 			result = result.fg(... this.design.nonPrintable.fg, false).
 				bg(... this.design.nonPrintable.bg, false);
 		}
 		else if(_byte > 127)
 		{
-			result = this.design.ansi.replace;
+			if(isRadix(this.design.ansi.modulo))
+				result = (_byte % this.design.ansi.modulo).toString();
+			else	result = this.design.ansi.replace;
 			result = result.fg(... this.design.ansi.fg, false).
 				bg(... this.design.ansi.bg, false);
 		}
