@@ -166,23 +166,11 @@ class Dump extends Quant
 			}
 
 			//
-			if(!int(this.replace = this.param.replace))
+			if(!isRadix(this.replace = this.param.replace))
 			{
-				if(!int(this.replace = this.getConfig('replace')))
+				if(!isRadix(this.replace = this.getConfig('replace')))
 				{
 					this.replace = null;
-				}
-			}
-
-			if(this.replace !== null)
-			{
-				if(this.replace < 2)
-				{
-					this.replace = 2;
-				}
-				else if(this.replace > Dump.mapping.length)
-				{
-					this.replace = Dump.mapping.length;
 				}
 			}
 

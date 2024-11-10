@@ -16,7 +16,7 @@
 		"required": false
 	},
 	"radix": {
-		"type": "integer",
+		"type": "radix",
 		"required": false
 	},
 	"path": {
@@ -44,7 +44,7 @@
 		"required": false
 	},
 	"replace": {
-		"type": "integer",
+		"type": "radix",
 		"required": false
 	},
 	"heat": {
