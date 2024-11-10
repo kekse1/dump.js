@@ -23,6 +23,8 @@
 
 	/* 'invalid' means non-printable characters (so 0-31 and 127); these can be 'fainted' (a bit darker) */
 	"faintInvalid": true,
+	/* the same for ANSI (byte > 127); */
+	"faintANSI": true,
 
 	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
 	"replace": null,/*2,*/

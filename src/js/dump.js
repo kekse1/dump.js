@@ -208,6 +208,7 @@ class Dump extends Quant
 
 			//
 			this.faintInvalid = this.getConfig('faintInvalid');
+			this.faintANSI = this.getConfig('faintANSI');
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
 
 			//
@@ -350,9 +351,6 @@ class Dump extends Quant
 
 		var result;
 
-
-
-
 		if(_byte < 32 || _byte === 127)
 		{
 			if(this.replace === null)
@@ -440,6 +438,7 @@ class Dump extends Quant
 		{
 			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.pad) + ' ';
 			if(this.faintInvalid && !(_buffer[i] >= 32 && _buffer[i] !== 127)) column = column.faint(true);
+			else if(this.faintANSI && _buffer[i] > 127) column = column.faint(true);
 			this.line += column;
 		}
 		
