@@ -46,8 +46,8 @@ last thing was to colorize the bits (other bases also possible..). That's the re
 problem out):
 ![Third Screenshot](img/screenshot.drei.png)
 
-Extended the latest feature to see kinda **heatmap**. Just start with both paramters `--replace 256 --heat`; this
-way I really saw how much my values are distributed over the header data! **:-D**
+Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
+over the header data.
 ![Fourth Screenshot](img/screenshot.vier.png)
 
 ## Download
