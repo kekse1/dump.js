@@ -43,7 +43,7 @@ the `2` to let the user see if the byte is even or odd. ;-)
 My latest feature: I wanted to analyse some abstract complexity in my A.I. header data by looking at it in binary,
 by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
 last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
-problem out):
+problem out) (and btw, superseded by the `--heat`, below):
 ![Third Screenshot](img/screenshot.drei.png)
 
 Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
