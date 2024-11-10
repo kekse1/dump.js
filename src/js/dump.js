@@ -186,23 +186,23 @@ class Dump extends Quant
 				}
 			}
 
-			if(!int(this.heatmap = this.param.heatmap))
+			if(!int(this.heat = this.param.heat))
 			{
-				if(!int(this.heatmap = this.param.heatmap))
+				if(!int(this.heat = this.param.heat))
 				{
-					this.heatmap = null;
+					this.heat = null;
 				}
 			}
 
-			if(this.heatmap !== null)
+			if(this.heat !== null)
 			{
-				if(this.heatmap < 2)
+				if(this.heat < 2)
 				{
-					this.heatmap = 2;
+					this.heat = 0;
 				}
-				else if(this.heatmap > 256)
+				else if(this.heat > 256)
 				{
-					this.heatmap = 256;
+					this.heat = 256;
 				}
 			}
 
@@ -339,10 +339,10 @@ class Dump extends Quant
 	{
 		var fg, bg;
 
-		if(this.heatmap !== null)
+		if(this.heat !== null)
 		{
-			var h = (256 / (this.heatmap - 1));
-			var h = Math.max(0, Math._round((h * (_byte % this.heatmap)) - 1));
+			var h = (256 / (this.heat - 1));
+			var h = Math.max(0, Math._round((h * (_byte % this.heat)) - 1));
 			bg = [ h, h, h ];
 			h = (255 - h);
 			fg = [ h, h, h ];
@@ -364,7 +364,7 @@ class Dump extends Quant
 				result = Dump.map(_byte, this.replace);
 			}
 
-			if(!this.heatmap)
+			if(!this.heat)
 			{
 				fg = this.design.nonPrintable.fg;
 				bg = this.design.nonPrintable.bg;
@@ -381,7 +381,7 @@ class Dump extends Quant
 				result = Dump.map(_byte, this.replace);
 			}
 
-			if(!this.heatmap)
+			if(!this.heat)
 			{
 				fg = this.design.ansi.fg;
 				bg = this.design.ansi.bg;
@@ -398,7 +398,7 @@ class Dump extends Quant
 				result = Dump.map(_byte, this.replace);
 			}
 
-			if(!this.heatmap)
+			if(!this.heat)
 			{
 				fg = this.design.printable.fg;
 				bg = this.design.printable.bg;
