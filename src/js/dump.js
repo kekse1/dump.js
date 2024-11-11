@@ -71,7 +71,7 @@ class Dump extends Quant
 				radix = this.getConfig('radix');
 			}
 			
-			for(var i = 0; i < this.param.length; ++i)
+			if(!string(path, false)) for(var i = 0; i < this.param.length; ++i)
 			{
 				if(string(this.param[i], false))
 				{
