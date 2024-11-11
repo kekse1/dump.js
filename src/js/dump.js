@@ -166,12 +166,17 @@ class Dump extends Quant
 			}
 
 			//
-			if(!isRadix(this.replace = this.param.replace))
+			if(!isRadix(this.replace = this.param.replace) && !bool(this.replace) && this.replace !== null)
 			{
-				if(!isRadix(this.replace = this.getConfig('replace')))
+				if(!isRadix(this.replace = this.getConfig('replace')) && this.replace !== null && !bool(this.replace))
 				{
-					this.replace = null;
+					this.replace = undefined;
 				}
+			}
+
+			if(this.replace === null)
+			{
+				this.replace = true;
 			}
 
 			if(!int(this.heat = this.param.heat))
@@ -314,10 +319,9 @@ class Dump extends Quant
 		return process.stdout.write(_string);
 	}
 
-	static map(_byte, _radix)
+	static replace(_byte, _radix = this.replace)
 	{
-		if(!isRadix(_radix)) return _byte;
-		return Number.modulo(_byte, _radix);
+		return Number.map(_byte, _radix);
 	}
 
 	renderChar(_byte)
@@ -337,13 +341,13 @@ class Dump extends Quant
 
 		if(_byte < 32 || _byte === 127)
 		{
-			if(this.replace === null)
+			if(this.replace !== false)
 			{
-				result = this.design.nonPrintable.replace;
+				result = Dump.replace(_byte, this.replace);
 			}
 			else
 			{
-				result = Dump.map(_byte, this.replace);
+				result = this.design.nonPrintable.replace;
 			}
 
 			if(!this.heat)
@@ -354,13 +358,13 @@ class Dump extends Quant
 		}
 		else if(_byte > 127)
 		{
-			if(this.replace === null)
+			if(this.replace !== false)
 			{
-				result = this.design.ansi.replace;
+				result = Dump.replace(_byte, this.replace);
 			}
 			else
 			{
-				result = Dump.map(_byte, this.replace);
+				result = this.design.ansi.replace;
 			}
 
 			if(!this.heat)
@@ -371,13 +375,13 @@ class Dump extends Quant
 		}
 		else
 		{
-			if(this.replace === null)
+			if(this.replace !== false)
 			{
-				result = String.fromCharCode(_byte);
+				result = Dump.replace(_byte, this.replace);
 			}
 			else
 			{
-				result = Dump.map(_byte, this.replace);
+				result = String.fromCharCode(_byte);
 			}
 
 			if(!this.heat)

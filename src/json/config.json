@@ -27,7 +27,7 @@
 	"faintANSI": true,
 
 	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
-	"replace": null,/*2,*/
+	"replace": false,/*2,*/
 
 	/* ... */
 	"heatmap": null,
