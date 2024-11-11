@@ -314,14 +314,10 @@ class Dump extends Quant
 		return process.stdout.write(_string);
 	}
 
-	static get mapping()
-	{
-		return '0123456789abcdefghijklmnopqrstuvwxyz';
-	}
-
 	static map(_byte, _radix)
 	{
-		return this.mapping[_byte % Math.min(_radix, this.mapping.length)];
+		if(!isRadix(_radix)) return _byte;
+		return Number.modulo(_byte, _radix);
 	}
 
 	renderChar(_byte)
