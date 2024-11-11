@@ -100,7 +100,7 @@ class Dump extends Quant
 			}
 
 			//
-			this.radixDigits = Dump.getRadixDigitCount(this.radix);
+			this.radixDigits = Math.digits(this.radix, 256);
 
 			if(int(this.param.refresh) || bool(this.param.refresh))
 			{
@@ -667,11 +667,6 @@ class Dump extends Quant
 		if(this.refresh) this.timeout = setTimeout(
 			() => { this.timeout = null; this.print() },
 				this.refresh);
-	}
-
-	static getRadixDigitCount(_radix)
-	{
-		return Math._ceil(Math.logBase(_radix, 256));
 	}
 }
 
