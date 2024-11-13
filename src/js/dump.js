@@ -608,7 +608,7 @@ class Dump extends Quant
 			if(this.tail && this.stop !== null && this.bytes)
 			{
 				diff = (this.stop - this.start - this.bytes + 1);
-				if(diff > 0) start += diff;console.dir({start:this.start,stop:this.stop,bytes:this.bytes});
+				if(diff > 0) start += diff;
 			}
 
 			buffer = new Uint8Array(this.columns);
