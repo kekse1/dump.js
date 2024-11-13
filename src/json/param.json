@@ -1,14 +1,14 @@
 {
 	"project": {
-		"type": "string",
+		"type": "directory",
 		"required": true
 	},
 	"script": {
-		"type": "string",
+		"type": "directory",
 		"required": true
 	},
 	"config": {
-		"type": "string",
+		"type": "file",
 		"required": true
 	},
 	"refresh": {
@@ -20,7 +20,7 @@
 		"required": false
 	},
 	"path": {
-		"type": "string",
+		"type": "file",
 		"required": false
 	},
 	"ansi": {
