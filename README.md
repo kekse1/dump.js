@@ -31,6 +31,11 @@ know exactly how hard this will get when I will extend it (got a big TODO for th
 until now.
 
 ### Example Screenshot
+
+> [!INFO]
+> I already changed the colors (or enhanced them), and the character view is on the left now.
+> So the real design is not included in this older screenshots from earlier versions.
+
 This is a **first preview** screenshot.
 ![First Screenshot](img/screenshot.eins.png)
 

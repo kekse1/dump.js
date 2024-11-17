@@ -200,8 +200,6 @@ class Dump extends Quant
 			}
 
 			//
-			this.faintInvalid = this.getConfig('faintInvalid');
-			this.faintANSI = this.getConfig('faintANSI');
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
 
 			//
@@ -347,13 +345,13 @@ class Dump extends Quant
 			}
 			else
 			{
-				result = this.design.nonPrintable.replace;
+				result = this.design.nonPrintable.left.replace;
 			}
 
 			if(!this.heat)
 			{
-				fg = this.design.nonPrintable.fg;
-				bg = this.design.nonPrintable.bg;
+				fg = this.design.nonPrintable.left.fg;
+				bg = this.design.nonPrintable.left.bg;
 			}
 		}
 		else if(_byte > 127)
@@ -364,13 +362,13 @@ class Dump extends Quant
 			}
 			else
 			{
-				result = this.design.ansi.replace;
+				result = this.design.ansi.left.replace;
 			}
 
 			if(!this.heat)
 			{
-				fg = this.design.ansi.fg;
-				bg = this.design.ansi.bg;
+				fg = this.design.ansi.left.fg;
+				bg = this.design.ansi.left.bg;
 			}
 		}
 		else
@@ -386,8 +384,8 @@ class Dump extends Quant
 
 			if(!this.heat)
 			{
-				fg = this.design.printable.fg;
-				bg = this.design.printable.bg;
+				fg = this.design.printable.left.fg;
+				bg = this.design.printable.left.bg;
 			}
 		}
 
@@ -419,43 +417,46 @@ class Dump extends Quant
 	handleChunk(_buffer, _position, _fin)
 	{
 		//
-		this.line = this.lineBegin;
-		
+		var left = '';
+		var right = '';
+
 		//
 		var i = 0, column; for(; i < _buffer.length; ++i)
 		{
-			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.pad) + ' ';
-			if(this.faintInvalid && !(_buffer[i] >= 32 && _buffer[i] !== 127)) column = column.faint(true);
-			else if(this.faintANSI && _buffer[i] > 127) column = column.faint(true);
-			this.line += column;
+			//
+			left += this.renderChar(_buffer[i]);
+
+			//
+			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
+			
+			if(_buffer[i] > 127)
+			{
+				column = column.fg(... this.design.ansi.right.fg, false);
+			}
+			else if(_buffer[i] === 127 || _buffer[i] < 32)
+			{
+				column = column.fg(... this.design.nonPrintable.right.fg, false);
+			}
+			else
+			{
+				column = column.fg(... this.design.printable.right.fg, false);
+			}
+
+			right += column;
 		}
 		
-		//
 		var diff = (this.columns - i);
 		
 		if(diff > 0)
 		{
-			this.line += ' '.repeat(this.radixDigits + 1).repeat(diff);
+			diff = this.design.empty.left.replace.repeat(diff);
+			diff = diff.fg(... this.design.empty.left.fg, false);
+			left += diff;
 		}
 		
-		this.line += ' ';
-		
-		for(i = 0; i < _buffer.length; ++i)
-		{
-			this.line += this.renderChar(_buffer[i]);
-		}
-		
-		if(diff > 0)
-		{
-			diff = this.design.empty.replace.repeat(diff);
-			diff = diff.fg(... this.design.empty.fg, false).
-				bg(... this.design.empty.bg, false);
-			this.line += diff;
-		}
-		
-		//
-		this.line += String.none() + EOL;
-		Dump.write(this.line); this.line = '';
+		const line = (this.lineBegin + left + String.none() + ' ' + right + String.none());
+
+		Dump.write(line + EOL); 
 		return ++this.linesPrint;
 	}
 	

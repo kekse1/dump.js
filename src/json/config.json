@@ -21,58 +21,96 @@
 		.. e.g. more place for bigger prompts, etc.. */
 	"consoleHeightSub": 4,
 
-	/* 'invalid' means non-printable characters (so 0-31 and 127); these can be 'fainted' (a bit darker) */
-	"faintInvalid": true,
-	/* the same for ANSI (byte > 127); */
-	"faintANSI": true,
-
 	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
 	"replace": false,/*2,*/
 
 	/* ... */
 	"heatmap": null,
 
-	/* colors for the RIGHT (character) view.. looks nice as it is now. */
+	/* colors for the left (character) view.. looks nice as it is now. */
 	"design": {
 
-		/* pad string to pad numeric outputs (on the left); .. */
-		"pad": "0",
+		"left": {
+		
+			/* */
+			
+		},
+		
+		"right": {
+		
+			/* pad string to pad numeric outputs .. */
+			"pad": "0"
+			
+		},
 
 		/* valid are all printable characters (ascii, for ansi see below). */
 		"printable": {
 			
-			"fg": [ 0, 0, 0 ],
-			"bg": [ 150, 210, 80 ]
+			"left": {
+			
+				"fg": [ 0, 0, 0 ],
+				"bg": [ 150, 210, 80 ]
+				
+			},
+			
+			"right": {
+			
+				"fg": [ 150, 210, 80 ]
+				
+			}
 
 		},
 
 		/* invalid are mostly binary values.. so 0-31 and 127 */
 		"nonPrintable": {
 
-			"modulo": 2,
-			"replace": " ",
-			"fg": [ 255, 255, 255 ],
-			"bg": [ 80, 130, 210 ]
+			"left": {
+			
+				"modulo": 2,
+				"replace": " ",
+				"fg": [ 255, 255, 255 ],
+				"bg": [ 80, 130, 210 ]
+				
+			},
+			
+			"right": {
+				
+				"fg": [ 80, 130, 210 ]
+
+			}
 
 		},
 
 		/* ansi is >127 */
 		"ansi": {
 
-			"modulo": 2,
-			"replace": " ",
-			"fg": [ 255, 255, 255 ],
-			"bg": [ 170, 60, 70 ]
+			"left": {
+			
+				"modulo": 2,
+				"replace": " ",
+				"fg": [ 255, 255, 255 ],
+				"bg": [ 170, 60, 70 ]
+				
+			},
+			
+			"right": {
+			
+				"fg": [ 170, 60, 70 ]
+				
+			}
 
 		},
 
 		/* special case: if the input data ended, and the current/last output line wasn't written up to it's end. */
 		"empty": {
 
-			"replace": " ",
-			"fg": [ 255, 255, 255 ],
-			"bg": [ 0, 0, 0 ]
-
+			"left": {
+			
+				"replace": " ",
+				"fg": [ 255, 255, 255 ]
+				
+			}
+			
 		}
 
 	}
