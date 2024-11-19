@@ -6,7 +6,7 @@ My own **Radix viewer/editor**.
 ## Index
 * [Introduction](#introduction)
 	* [First words](#first-words)
-	* [Example Screenshot](#example-screenshot)
+	* [Example Screenshots](#example-screenshots)
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
@@ -30,14 +30,14 @@ I found out such a code like it's also the [**`hexyl`**](https://github.com/shar
 know exactly how hard this will get when I will extend it (got a big TODO for this one). But it was a cake of piece
 until now.
 
-### Example Screenshot
+### Example Screenshots
+
+This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
+![Newest Screenshot](img/screenshot.null.png)
 
 > [!INFO]
-> I already changed the colors (or enhanced them), and the character view is on the left now.
-> So the real design is not included in this older screenshots from earlier versions.
-
-This is a **first preview** screenshot.
-![First Screenshot](img/screenshot.eins.png)
+> The following screenshots are a bit older, so neither the command line
+> parameters are updated there, nor the colors/design. JFYI.
 
 And this is a newer one, with less extensions and a newly configured [configuration](./src/json/config.json),
 mostly with better colorization, plus the feature to not insist on a simple replacement character for
