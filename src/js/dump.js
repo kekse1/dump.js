@@ -166,17 +166,12 @@ class Dump extends Quant
 			}
 
 			//
-			if(!isRadix(this.replace = this.param.replace) && !bool(this.replace) && this.replace !== null)
+			if(!isRadix(this.replace = this.param.replace) && !bool(this.replace))
 			{
-				if(!isRadix(this.replace = this.getConfig('replace')) && this.replace !== null && !bool(this.replace))
+				if(!isRadix(this.replace = this.getConfig('replace')) && !bool(this.replace))
 				{
-					this.replace = undefined;
+					this.replace = false;
 				}
-			}
-
-			if(this.replace === null)
-			{
-				this.replace = true;
 			}
 
 			if(!int(this.heat = this.param.heat))
@@ -337,15 +332,51 @@ class Dump extends Quant
 
 		var result;
 
-		if(_byte < 32 || _byte === 127)
+		if(_byte === 0 || _byte === 255)
 		{
 			if(this.replace !== false)
 			{
 				result = Dump.replace(_byte, this.replace);
 			}
+			else if(isRadix(this.design.null.left.replace) ||
+				this.design.null.left.replace === true)
+			{
+				result = Dump.replace(_byte, this.design.null.left.replace);
+			}
+			else if(string(this.design.null.left.replace, false))
+			{
+				result = this.design.null.left.replace[0];
+			}
 			else
 			{
-				result = this.design.nonPrintable.left.replace;
+				result = ' ';
+			}
+
+			if(!this.heat)
+			{
+				fg = this.design.null.left.fg;
+				bg = this.design.null.left.bg;
+			}
+		}
+		else if(_byte < 32 || _byte === 127)
+		{
+			if(this.replace !== false)
+			{
+				result = Dump.replace(_byte, this.replace);
+			}
+			else if(isRadix(this.design.nonPrintable.left.replace) ||
+				this.design.nonPrintable.left.replace === true)
+			{
+				result = Dump.replace(_byte,
+					this.design.nonPrintable.left.replace);
+			}
+			else if(string(this.design.nonPrintable.left.replace, false))
+			{
+				result = this.design.nonPrintable.left.replace[0];
+			}
+			else
+			{
+				result = '-';
 			}
 
 			if(!this.heat)
@@ -360,9 +391,19 @@ class Dump extends Quant
 			{
 				result = Dump.replace(_byte, this.replace);
 			}
+			else if(isRadix(this.design.ansi.left.replace) ||
+				this.design.ansi.left.replace === true)
+			{
+				result = Dump.replace(_byte,
+					this.design.ansi.left.replace);
+			}
+			else if(string(this.design.ansi.left.replace, false))
+			{
+				result = this.design.ansi.left.replace[0];
+			}
 			else
 			{
-				result = this.design.ansi.left.replace;
+				result = '+';
 			}
 
 			if(!this.heat)
@@ -376,6 +417,16 @@ class Dump extends Quant
 			if(this.replace !== false)
 			{
 				result = Dump.replace(_byte, this.replace);
+			}
+			else if(isRadix(this.design.printable.left.replace) ||
+				this.design.printable.left.replace === true)
+			{
+				result = Dump.replace(_byte,
+					this.design.printable.left.replace);
+			}
+			else if(string(this.design.printable.left.replace, false))
+			{
+				result = this.design.printable.left.replace[0];
 			}
 			else
 			{
@@ -429,7 +480,11 @@ class Dump extends Quant
 			//
 			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
 			
-			if(_buffer[i] > 127)
+			if(_buffer[i] === 0 || _buffer[i] === 255)
+			{
+				column = column.fg(... this.design.null.right.fg, false);
+			}
+			else if(_buffer[i] > 127)
 			{
 				column = column.fg(... this.design.ansi.right.fg, false);
 			}

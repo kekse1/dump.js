@@ -48,14 +48,16 @@
 			
 			"left": {
 			
+				"replace": null,
 				"fg": [ 0, 0, 0 ],
-				"bg": [ 150, 210, 80 ]
+				"bg": [ 90, 130, 190 ]
+
 				
 			},
 			
 			"right": {
 			
-				"fg": [ 150, 210, 80 ]
+				"fg": [ 90, 130, 190 ]
 				
 			}
 
@@ -66,16 +68,15 @@
 
 			"left": {
 			
-				"modulo": 2,
-				"replace": "-",
-				"fg": [ 255, 255, 255 ],
-				"bg": [ 170, 60, 70 ]
+				"replace": true,
+				"fg": [ 0, 0, 0 ],
+				"bg": [ 190, 150, 40 ]
 				
 			},
 			
 			"right": {
 				
-				"fg": [ 170, 60, 70 ]
+				"fg": [ 250, 190, 20 ]
 
 			}
 
@@ -86,19 +87,38 @@
 
 			"left": {
 			
-				"modulo": 2,
-				"replace": "+",
+				"replace": true,
 				"fg": [ 0, 0, 0 ],
-				"bg": [ 80, 130, 210 ]
+				"bg": [ 140, 180, 80 ]
 				
 			},
 			
 			"right": {
 			
-				"fg": [ 80, 130, 210 ]
+				/*"fg": [ 110, 190, 40 ]*/
+				"fg": [ 120, 190, 40 ]
 				
 			}
 
+		},
+
+		/* \0 null byte, is special. and last byte \255 kommt hier noch dazu (quasi negatives \0 .. ;-) */
+		"null": {
+
+			"left": {
+
+				"replace": "~",
+				"fg": [ 255, 255, 255 ],
+				"bg": [ 60, 40, 10 ]
+
+			},
+			
+			"right": {
+
+				"fg": [ 90, 50, 0 ]
+
+			}
+		
 		},
 
 		/* special case: if the input data ended, and the current/last output line wasn't written up to it's end. */
