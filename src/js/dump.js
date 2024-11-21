@@ -518,7 +518,7 @@ class Dump extends Quant
 	
 	get lineBegin()
 	{
-		return (' ' + (this.linesPrint % 256).toString(this.radix).padStart(this.radixDigits, '0') + '  ').faint(true);
+		return (' ' + (this.linesPrint % 256).toString(this.radix).padStart(this.radixDigits, '0') + ' ').faint(true);
 	}
 
 	//
