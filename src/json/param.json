@@ -44,7 +44,7 @@
 		"required": false
 	},
 	"replace": {
-		"type": [ "radix", "null", "boolean" ],
+		"type": [ "radix", "boolean" ],
 		"required": false
 	},
 	"heat": {
