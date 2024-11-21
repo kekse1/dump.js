@@ -505,7 +505,8 @@ class Dump extends Quant
 		if(diff > 0)
 		{
 			diff = this.design.empty.left.replace.repeat(diff);
-			diff = diff.fg(... this.design.empty.left.fg, false);
+			diff = diff.fg(... this.design.empty.left.fg, false).
+				bg(... this.design.empty.left.bg, false);
 			left += diff;
 		}
 		
