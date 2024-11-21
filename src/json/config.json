@@ -30,6 +30,12 @@
 	/* colors for the left (character) view.. looks nice as it is now. */
 	"design": {
 
+		/* see also `--colorize` parameter! */
+		"colorize": [
+			[ 0, 0, 0 ],
+			[ 255, 255, 255 ]
+		],
+
 		"left": {
 		
 			/* */

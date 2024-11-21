@@ -50,5 +50,13 @@
 	"heat": {
 		"type": "integer",
 		"required": false
+	},
+	"color": {
+		"type": [ "string", "null" ],
+		"required": false
+	},
+	"modulo": {
+		"type": [ "string", "null" ],
+		"required": false
 	}
 }

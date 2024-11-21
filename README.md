@@ -35,6 +35,15 @@ until now.
 This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
 ![Newest Screenshot](img/screenshot.null.png)
 
+And this is the new `--color` feature. So you can define a list of (RGB) colors to divide the bytes (right view)
+into the amount of defined colors. So with two colors, e.g., bytes would change color in the middle (of 256).
+
+> [!TIP]
+> With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
+> to see only one line with the info how much lines and bytes (with size) were ignored.
+
+![Newest --color feature](img/screenshot.five.png)
+
 > [!INFO]
 > The following screenshots are a bit older, so neither the command line
 > parameters are updated there, nor the colors/design. JFYI.

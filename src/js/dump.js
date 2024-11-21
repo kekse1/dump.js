@@ -11,6 +11,7 @@ const DEFAULT_SILENT = true;
 const DEFAULT_BASE = 1024;
 const DEFAULT_PREC = 2;
 const DEFAULT_FIXED = true;
+const DEFAULT_THROW = true;
 
 //
 import Application from '../shared/app.js';
@@ -202,6 +203,27 @@ class Dump extends Quant
 					this.heat = 256;
 				}
 			}
+			
+			if(!string(this.color = this.param.color, false) && this.color !== null)
+			{
+				if(!array(this.color = this.getConfig('design.color'), false) && !array(this.color, false) && this.color !== null)
+				{
+					this.color = null;
+				}
+			}
+			
+			if(this.color !== null)
+			{
+				try
+				{
+					this.color = Dump.generateColorization(this.color, true);
+				}
+				catch(_err)
+				{
+					console.error('[--color] ' + _err.message);
+					process.exit(true);
+				}
+			}
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
@@ -325,18 +347,210 @@ class Dump extends Quant
 	{
 		return Number.map(_byte, _radix);
 	}
+	
+	static parseColorString(_string, _throw = DEFAULT_THROW)
+	{
+		if(_string.length === 0)
+		{
+			return null;
+		}
+		
+		var colors;
+		var sep;
+		
+		if(_string.includes(';'))
+		{
+			sep = ';';
+			colors = _string.split(';');
+		}
+		else
+		{
+			sep = ',';
+			
+			if((colors = _string.split(',')).length < 3)
+			{
+				if(_throw)
+				{
+					throw new Error('Invalid color string (nothing found)');
+				}
+				
+				return null;
+			}
+			
+			const rest = (colors.length % 3);
+			
+			if(rest !== 0)
+			{
+				if(_throw)
+				{
+					throw new Error('Invalid colorization length (' + colors.length + ' % 3 != 0)');
+				}
+				
+				colors.length = (colors.length - rest);
+			}
+			
+			const temp = [ ... colors ];
+			colors.length = 0;
+			
+			for(var i = 0, j = -1; i < temp.length; ++i)
+			{
+				if((i % 3) === 0)
+				{
+					colors[++j] = new Array(3);
+				}
+				
+				if(isNaN(colors[j][i % 3] = (Number(temp[i]) % 256)))
+				{
+					if(_throw)
+					{
+						throw new Error('Item[' + i + '] was not a byte (of color[' + j + '][' + (i % 3) + '])');
+					}
+					
+					return null;
+				}
+			}
+
+			return colors;
+		}
+		
+		for(var i = 0; i < colors.length; ++i)
+		{
+			if((colors[i] = colors[i].split(',')).length < 3)
+			{
+				colors.splice(i--, 1);
+			}
+			else
+			{
+				colors[i].length = 3;
+			}
+		}
+		
+		if(colors.length === 0)
+		{
+			if(_throw)
+			{
+				throw new Error('Invalid color string (nothing found)');
+			}
+			
+			return null;
+		}
+		
+		var color; for(var i = 0; i < colors.length; ++i)
+		{
+			color = new Array(3);
+			
+			for(var j = 0; j < colors[i].length; ++j)
+			{
+				if(isNaN(colors[i][j]))
+				{
+					if(_throw)
+					{
+						throw new Error('Item[' + i + '][' + j + '] was not a byte');
+					}
+					
+					color = null;
+					break;
+				}
+				
+				color[j] = (Number(colors[i][j]) % 256);
+			}
+			
+			if(color)
+			{
+				colors[i] = color;
+			}
+			else
+			{
+				colors.splice(i--, 1);
+			}
+		}
+		
+		if(colors.length === 0)
+		{
+			return null;
+		}
+		
+		return colors;
+	}
+	
+	static generateColorization(_color)
+	{
+		const checkArray = (_array) => {
+			for(var i = 0; i < _array.length; ++i)
+			{
+				if(array(_array[i], true))
+				{
+					if(_array[i].length !== 3)
+					{
+						_array.splice(i--, 1);
+					}
+					else for(var j = 0; j < _array[i].length; ++j)
+					{
+						if(!byte(_array[j]))
+						{
+							_array.splice(i--, 1);
+							break;
+						}
+					}
+				}
+				else if(string(_array[i], true))
+				{
+					if(! (_array[i] = Dump.parseColorString(_array[i])))
+					{
+						_array.splice(i--, 1);
+					}
+				}
+				else
+				{
+					_array.splice(i--, 1);
+				}
+			}
+			
+			if(_array.length === 0) return null;
+			else if(_array.length > 256) _array.length = 256;
+			return _array;
+		};
+		
+		var result;
+		
+		if(array(_color, true))
+		{
+			result = checkArray(_color);
+		}
+		else if(string(_color, true))
+		{
+			if(result = Dump.parseColorString(_color))
+			{
+				if(result.length > 256)
+				{
+					result.length = 256;
+				}
+			}
+		}
+		else
+		{
+			result = null;
+		}
+		
+		return result;
+	}
 
 	renderChar(_byte)
 	{
 		var fg, bg;
+		var h;
 
 		if(this.heat !== null)
 		{
-			var h = (256 / (this.heat - 1));
-			var h = Math.max(0, Math._round((h * (_byte % this.heat)) - 1));
+			h = (256 / (this.heat - 1));
+			h = Math.max(0, Math._round((h * (_byte % this.heat)) - 1));
 			bg = [ h, h, h ];
 			h = (255 - h);
 			fg = [ h, h, h ];
+		}
+		else
+		{
+			fg = bg = null;
 		}
 
 		var result;
@@ -361,7 +575,7 @@ class Dump extends Quant
 				result = ' ';
 			}
 
-			if(!this.heat)
+			if(! (fg && bg))
 			{
 				fg = this.design.null.left.fg;
 				bg = this.design.null.left.bg;
@@ -388,7 +602,7 @@ class Dump extends Quant
 				result = '-';
 			}
 
-			if(!this.heat)
+			if(! (fg && bg))
 			{
 				fg = this.design.nonPrintable.left.fg;
 				bg = this.design.nonPrintable.left.bg;
@@ -415,7 +629,7 @@ class Dump extends Quant
 				result = '+';
 			}
 
-			if(!this.heat)
+			if(! (fg && bg))
 			{
 				fg = this.design.ansi.left.fg;
 				bg = this.design.ansi.left.bg;
@@ -442,7 +656,7 @@ class Dump extends Quant
 				result = String.fromCharCode(_byte);
 			}
 
-			if(!this.heat)
+			if(! (fg && bg))
 			{
 				fg = this.design.printable.left.fg;
 				bg = this.design.printable.left.bg;
@@ -472,7 +686,7 @@ class Dump extends Quant
 		this.linesPrint = 0;
 		console.clear();
 	}
-	
+
 	//
 	handleChunk(_buffer, _position, _fin)
 	{
@@ -513,7 +727,23 @@ class Dump extends Quant
 			//
 			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
 			
-			if(_buffer[i] === 0 || _buffer[i] === 255)
+			if(this.color)
+			{
+				const h = Math._floor(256 / this.color.length);
+				var fg;
+				
+				for(var j = 0; j < this.color.length; ++j)
+				{
+					if(_buffer[i] <= (h * (j + 1)))
+					{
+						fg = this.color[j];
+						break;
+					}
+				}
+				
+				column = column.fg(... fg, false);
+			}
+			else if(_buffer[i] === 0 || _buffer[i] === 255)
 			{
 				column = column.fg(... this.design.null.right.fg, false);
 			}
