@@ -8,6 +8,9 @@ const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.json';
 const DEFAULT_CONSOLE_WIDTH_MIN = 60;
 const DEFAULT_REFRESH = 1000;
 const DEFAULT_SILENT = true;
+const DEFAULT_BASE = 1024;
+const DEFAULT_PREC = 2;
+const DEFAULT_FIXED = true;
 
 //
 import Application from '../shared/app.js';
@@ -163,6 +166,12 @@ class Dump extends Quant
 			{
 				console.error('You can\'t use both --head and --tail together!');
 				return process.exit(true);
+			}
+			
+			//
+			if(!bool(this.locale = this.getConfig('locale')))
+			{
+				console.error('Invalid configuration[`locale`] (expecting a Boolean)');
 			}
 
 			//
@@ -468,6 +477,30 @@ class Dump extends Quant
 	handleChunk(_buffer, _position, _fin)
 	{
 		//
+		var isEmpty = true;
+		
+		for(var i = 0; i < _buffer.length; ++i)
+		{
+			if(_buffer[i] !== 0)
+			{
+				isEmpty = false;
+				break;
+			}
+		}
+		
+		if(isEmpty)
+		{
+			++this.emptyLines;
+			this.emptyBytes += _buffer.length;
+
+			return this.linesPrint;
+		}
+		else if(this.emptyLines)
+		{
+			this.printEmpty();
+		}
+		
+		//
 		var left = '';
 		var right = '';
 
@@ -519,6 +552,33 @@ class Dump extends Quant
 	get lineBegin()
 	{
 		return (' ' + (this.linesPrint % 256).toString(this.radix).padStart(this.radixDigits, '0') + ' ').faint(true);
+	}
+
+	printEmpty()
+	{
+		//
+		if(!this.emptyLines)
+		{
+			return this.linesPrint;
+		}
+
+		//
+		var EMPTY = ' EMPTY '; if(process.ansi) EMPTY = EMPTY.inverse();
+		const size = Math.size(this.emptyBytes, DEFAULT_BASE, DEFAULT_PREC, DEFAULT_FIXED, process.ansi);
+		this.emptyLines = (this.locale ? this.emptyLines.toLocaleString() : this.emptyLines.toString());
+		this.emptyBytes = (this.locale ? this.emptyBytes.toLocaleString() : this.emptyBytes.toString());
+
+		if(process.ansi)
+		{
+			this.emptyLines = this.emptyLines.bold(true);
+			this.emptyBytes = this.emptyBytes.bold(true);
+		}
+
+		Dump.write(' ' + EMPTY + ' { lines: ' + this.emptyLines + ', bytes: ' + this.emptyBytes + ', size: ' + size + ' }' + EOL);
+
+		//
+		this.emptyLines = this.emptyBytes = 0;
+		return ++this.linesPrint;
 	}
 
 	//
@@ -580,6 +640,8 @@ class Dump extends Quant
 				String.up(this.linesPrint) +
 					String.clearAfter());
 		this.linesPrint = 0;
+		this.emptyLines = 0;
+		this.emptyBytes = 0;
 
 		//
 		const checkLimits = () => {
@@ -656,6 +718,7 @@ class Dump extends Quant
 			});
 			
 			process.stdin.once('end', () => {
+				if(this.emptyLines) this.printEmpty();
 				process.exit(0);
 			});
 		}
@@ -713,6 +776,7 @@ class Dump extends Quant
 				
 				if(fin || (fin = checkLimits()))
 				{
+					if(this.emptyLines) this.printEmpty();
 					break;
 				}
 			}

@@ -24,8 +24,8 @@
 	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
 	"replace": false,/*2,*/
 
-	/* ... */
-	"heatmap": null,
+	/* print (some!) numeric values w/ `.toLocaleString()` instead of `.toString()` ... */
+	"locale": true,
 
 	/* colors for the left (character) view.. looks nice as it is now. */
 	"design": {
