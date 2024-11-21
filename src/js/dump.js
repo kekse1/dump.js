@@ -700,27 +700,33 @@ class Dump extends Quant
 	handleChunk(_buffer, _position, _fin)
 	{
 		//
-		var isEmpty = true;
+		var isSame = true;
 		
-		for(var i = 0; i < _buffer.length; ++i)
+		for(var i = 1; i < _buffer.length; ++i)
 		{
-			if(_buffer[i] !== 0)
+			if(_buffer[i] !== _buffer[0])
 			{
-				isEmpty = false;
+				isSame = false;
 				break;
 			}
 		}
 		
-		if(isEmpty)
+		if(isSame)
 		{
-			++this.emptyLines;
-			this.emptyBytes += _buffer.length;
+			if(this.sameByte !== null && this.sameByte !== _buffer[0])
+			{
+				this.printSame();
+			}
+			
+			this.sameBytes += _buffer.length;
+			this.sameByte = _buffer[0];
+			++this.sameLines;
 
 			return this.linesPrint;
 		}
-		else if(this.emptyLines)
+		else if(this.sameByte !== null)
 		{
-			this.printEmpty();
+			this.printSame();
 		}
 		
 		//
@@ -793,30 +799,52 @@ class Dump extends Quant
 		return (' ' + (this.linesPrint % 256).toString(this.radix).padStart(this.radixDigits, '0') + ' ').faint(true);
 	}
 
-	printEmpty()
+	printSame()
 	{
 		//
-		if(!this.emptyLines)
+		if(this.sameByte === null)
 		{
 			return this.linesPrint;
 		}
 
 		//
-		var EMPTY = ' EMPTY '; if(process.ansi) EMPTY = EMPTY.inverse();
-		const size = Math.size(this.emptyBytes, DEFAULT_BASE, DEFAULT_PREC, DEFAULT_FIXED, process.ansi);
-		this.emptyLines = (this.locale ? this.emptyLines.toLocaleString() : this.emptyLines.toString());
-		this.emptyBytes = (this.locale ? this.emptyBytes.toLocaleString() : this.emptyBytes.toString());
+		var PREFIX = (this.sameByte === 0 ? ' EMPTY ' : ' SAME ');
+		var BYTE = this.sameByte.toString(this.radix);
+		if(process.ansi) BYTE = BYTE.bold(true);
+		BYTE = ('\\' + BYTE).pad(this.radixDigits + 1, ' ', true);
+		PREFIX += BYTE + ' ';
+		if(process.ansi) PREFIX = PREFIX.inverse();
+		if(this.sameByte !== 0) PREFIX = ' ' + PREFIX;
+		
+		const size = Math.size(this.sameBytes, DEFAULT_BASE, DEFAULT_PREC, DEFAULT_FIXED, process.ansi);
+
+		if(this.radix !== 10)
+		{
+			this.sameLines = this.sameLines.toString(this.radix);
+			this.sameBytes = this.sameBytes.toString(this.radix);
+		}
+		else if(this.locale)
+		{
+			this.sameLines = this.sameLines.toLocaleString();
+			this.sameBytes = this.sameBytes.toLocaleString();
+		}
+		else
+		{
+			this.sameLines = this.sameLines.toString();
+			this.sameBytes = this.sameBytes.toString();
+		}
 
 		if(process.ansi)
 		{
-			this.emptyLines = this.emptyLines.bold(true);
-			this.emptyBytes = this.emptyBytes.bold(true);
+			this.sameLines = this.sameLines.bold(true);
+			this.sameBytes = this.sameBytes.bold(true);
 		}
 
-		Dump.write(' ' + EMPTY + ' { lines: ' + this.emptyLines + ', bytes: ' + this.emptyBytes + ', size: ' + size + ' }' + EOL);
+		Dump.write(' ' + PREFIX + ' { lines: ' + this.sameLines + ', bytes: ' + this.sameBytes + ', size: ' + size + ' }' + EOL);
 
 		//
-		this.emptyLines = this.emptyBytes = 0;
+		this.sameByte = null;
+		this.sameLines = this.sameBytes = 0;
 		return ++this.linesPrint;
 	}
 
@@ -879,8 +907,10 @@ class Dump extends Quant
 				String.up(this.linesPrint) +
 					String.clearAfter());
 		this.linesPrint = 0;
-		this.emptyLines = 0;
-		this.emptyBytes = 0;
+		
+		this.sameByte = null;
+		this.sameLines = 0;
+		this.sameBytes = 0;
 
 		//
 		const checkLimits = () => {
@@ -957,7 +987,7 @@ class Dump extends Quant
 			});
 			
 			process.stdin.once('end', () => {
-				if(this.emptyLines) this.printEmpty();
+				if(this.sameByte !== null) this.printSame();
 				process.exit(0);
 			});
 		}
@@ -1015,7 +1045,7 @@ class Dump extends Quant
 				
 				if(fin || (fin = checkLimits()))
 				{
-					if(this.emptyLines) this.printEmpty();
+					if(this.sameByte !== null) this.printSame();
 					break;
 				}
 			}
