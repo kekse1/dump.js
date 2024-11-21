@@ -1,7 +1,7 @@
 <img src="https://kekse.biz/github.php?draw&override=github:dump" />
 
 # The **`dump`** utility
-My own **Radix viewer/editor**.
+My own **Radix viewer**.
 
 ## Index
 * [Introduction](#introduction)
