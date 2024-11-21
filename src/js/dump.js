@@ -206,7 +206,7 @@ class Dump extends Quant
 			
 			if(!string(this.color = this.param.color, false) && this.color !== null)
 			{
-				if(!array(this.color = this.getConfig('design.color'), false) && !array(this.color, false) && this.color !== null)
+				if(!array(this.color = this.getConfig('design.color'), false) && !string(this.color, false) && this.color !== null)
 				{
 					this.color = null;
 				}
@@ -486,7 +486,16 @@ class Dump extends Quant
 					}
 					else for(var j = 0; j < _array[i].length; ++j)
 					{
-						if(!byte(_array[j]))
+						if(string(_array[i][j], true))
+						{
+							if(isNaN(_array[i][j] = Number(_array[i][j])))
+							{
+								_array.splice(i--, 1);
+								break;
+							}
+						}
+
+						if(!byte(_array[i][j]))
 						{
 							_array.splice(i--, 1);
 							break;
@@ -499,10 +508,10 @@ class Dump extends Quant
 					{
 						_array.splice(i--, 1);
 					}
-				}
-				else
-				{
-					_array.splice(i--, 1);
+					else
+					{
+						_array[i] = _array[i][0];
+					}
 				}
 			}
 			
