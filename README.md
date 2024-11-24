@@ -41,6 +41,7 @@ into the amount of defined colors. So with two colors, e.g., bytes would change 
 > [!TIP]
 > With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
 > to see only one line with the info how much lines and bytes (with size) were ignored.
+> **Update**: looking for **same** bytes, not only the null.
 
 ![Newest --color feature](img/screenshot.five.png)
 
