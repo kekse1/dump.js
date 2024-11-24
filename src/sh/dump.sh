@@ -10,20 +10,21 @@ DIR="$(dirname "$REAL")"
 PROJ="$(realpath "${DIR}/../")"
 BASE="$(basename "$REAL")"
 NAME="$(basename "$REAL" .sh)"
-SOURCE="${PROJ}/js/"
-TARGET="${SOURCE}/main.js"
-CONFIG="${PROJ}/json/dump.json"
+SCRIPT="${PROJ}/js/dump"
+MAIN="${SCRIPT}/main.js"
+CONFIG="${PROJ}/config/dump.json"
 
 #
-NODE="`which node 2>/dev/null`"
+NODE="node"
+NODE="`which $NODE 2>/dev/null`"
 
-if [[ -z "$NODE" ]]; then
+if [[ $? -ne 0 ]]; then
 	echo "Unable to find the \`node\` interpreter!" >&2
 	exit 1
 fi
 
 #
-CMD="'${NODE}' '${TARGET}' --project '${PROJ}' --source '${SOURCE}' --config '${CONFIG}'"
+CMD="'${NODE}' '${MAIN}' --project '${PROJ}' --script '${SCRIPT}' --config '${CONFIG}'"
 
 for i in "$@"; do
 	CMD="${CMD} '$i'"

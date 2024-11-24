@@ -56,7 +56,11 @@
 		"required": false
 	},
 	"modulo": {
-		"type": [ "string", "null" ],
+		"type": [ "radix", "boolean" ],
+		"required": false
+	},
+	"follow": {
+		"type": "boolean",
 		"required": false
 	}
 }
