@@ -52,7 +52,7 @@ maybe).
 > [!NOTE]
 > If you've other ideas for possible `dump` **utilities**, please mail me.
 
-![Screenshot of the first utility of my dump](img/screenshot.util.count.png)
+![Screenshot of the first utility of my dump](img/dump.util.count.png)
 
 > [!WARNING]
 > The following screenshots are a bit older, so neither the command line
