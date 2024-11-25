@@ -29,11 +29,13 @@
 	},
 	"head": {
 		"type": [ "boolean", "integer" ],
-		"required": false
+		"required": false,
+		"disable": "tail"
 	},
 	"tail": {
 		"type": [ "boolean", "integer" ],
-		"required": false
+		"required": false,
+		"disable": "head"
 	},
 	"start": {
 		"type": "integer",
