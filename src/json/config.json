@@ -27,6 +27,9 @@
 	/* print (some!) numeric values w/ `.toLocaleString()` instead of `.toString()` ... */
 	"locale": true,
 
+	/* filter out many same bytes? yes/no */
+	"filter": true,
+
 	/* colors for the left (character) view.. looks nice as it is now. */
 	"design": {
 

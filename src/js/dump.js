@@ -176,6 +176,12 @@ class Dump extends Quant
 			}
 
 			//
+			if(!bool(this.filter = this.param.filter))
+			{
+				this.filter = this.getConfig('filter');
+			}
+
+			//
 			if(!isRadix(this.replace = this.param.replace) && !bool(this.replace))
 			{
 				if(!isRadix(this.replace = this.getConfig('replace')) && !bool(this.replace))
@@ -251,7 +257,7 @@ class Dump extends Quant
 			{
 				if(this.stats.size)
 				{
-					this.start = Math.getIndex(this.param.start, this.stats.size);
+					this.start = Math.getIndex.number(this.param.start, this.stats.size);
 				}
 				else if(this.param.start >= 0)
 				{
@@ -271,7 +277,7 @@ class Dump extends Quant
 			{
 				if(this.stats.size)
 				{
-					this.stop = Math.getIndex(this.param.stop, this.stats.size);
+					this.stop = Math.getIndex.number(this.param.stop, this.stats.size);
 				}
 				else if(this.param.stop >= 0)
 				{
@@ -700,33 +706,36 @@ class Dump extends Quant
 	handleChunk(_buffer, _position, _fin)
 	{
 		//
-		var isSame = true;
-		
-		for(var i = 1; i < _buffer.length; ++i)
+		if(this.filter)
 		{
-			if(_buffer[i] !== _buffer[0])
+			var isSame = true;
+		
+			for(var i = 1; i < _buffer.length; ++i)
 			{
-				isSame = false;
-				break;
+				if(_buffer[i] !== _buffer[0])
+				{
+					isSame = false;
+					break;
+				}
 			}
-		}
 		
-		if(isSame)
-		{
-			if(this.sameByte !== null && this.sameByte !== _buffer[0])
+			if(isSame)
+			{
+				if(this.sameByte !== null && this.sameByte !== _buffer[0])
+				{
+					this.printSame();
+				}
+			
+				this.sameBytes += _buffer.length;
+				this.sameByte = _buffer[0];
+				++this.sameLines;
+
+				return this.linesPrint;
+			}
+			else if(this.sameByte !== null)
 			{
 				this.printSame();
 			}
-			
-			this.sameBytes += _buffer.length;
-			this.sameByte = _buffer[0];
-			++this.sameLines;
-
-			return this.linesPrint;
-		}
-		else if(this.sameByte !== null)
-		{
-			this.printSame();
 		}
 		
 		//
@@ -802,6 +811,11 @@ class Dump extends Quant
 	printSame()
 	{
 		//
+		if(!this.filter)
+		{
+			return false;
+		}
+		
 		if(this.sameByte === null)
 		{
 			return this.linesPrint;
@@ -908,9 +922,12 @@ class Dump extends Quant
 					String.clearAfter());
 		this.linesPrint = 0;
 		
-		this.sameByte = null;
-		this.sameLines = 0;
-		this.sameBytes = 0;
+		if(this.filter)
+		{
+			this.sameByte = null;
+			this.sameLines = 0;
+			this.sameBytes = 0;
+		}
 
 		//
 		const checkLimits = () => {
@@ -987,7 +1004,8 @@ class Dump extends Quant
 			});
 			
 			process.stdin.once('end', () => {
-				if(this.sameByte !== null) this.printSame();
+				if(this.filter && this.sameByte !== null)
+					this.printSame();
 				process.exit(0);
 			});
 		}
@@ -1045,7 +1063,8 @@ class Dump extends Quant
 				
 				if(fin || (fin = checkLimits()))
 				{
-					if(this.sameByte !== null) this.printSame();
+					if(this.filter && this.sameByte !== null)
+						this.printSame();
 					break;
 				}
 			}

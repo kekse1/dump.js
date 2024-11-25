@@ -57,6 +57,10 @@
 		"type": [ "string", "null" ],
 		"required": false
 	},
+	"filter": {
+		"type": "boolean",
+		"required": false
+	},
 	"modulo": {
 		"type": [ "radix", "boolean" ],
 		"required": false
