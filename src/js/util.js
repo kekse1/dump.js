@@ -54,6 +54,16 @@ class Utility extends Quant
 		return [ 'count' ];
 	}
 
+	static help(_exit = true)
+	{
+		const utils = this.utilities;
+		console.log('These are the available utilties (just argue with one of them):' + EOL);
+		for(const u of utils) console.log('\t' + u);
+		console.eol();
+		if(_exit) process.exit();
+		return utils;
+	}
+
 	onExit(_name, _code, ... _args)
 	{
 		//
