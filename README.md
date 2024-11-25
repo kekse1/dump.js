@@ -45,7 +45,16 @@ into the amount of defined colors. So with two colors, e.g., bytes would change 
 
 ![Newest --color feature](img/screenshot.five.png)
 
-> [!INFO]
+Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
+[`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
+maybe).
+
+> [!NOTE]
+> If you've other ideas for possible `dump` **utilities**, please mail me.
+
+![Screenshot of the first utility of my dump](img/screenshot.util.count.png)
+
+> [!WARNING]
 > The following screenshots are a bit older, so neither the command line
 > parameters are updated there, nor the colors/design. JFYI.
 
