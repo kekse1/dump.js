@@ -263,7 +263,7 @@ class Utility extends Quant
 				autoClose: true,
 				emitClose: true,
 				start: this.offset,
-				end: (this.offset + this.size) });
+				end: (this.offset + this.size - 1) });
 
 			//
 			this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
