@@ -1,0 +1,16 @@
+{
+
+	/* globally enable/disable this project */
+	"enabled": true,
+
+	/* possibility to globally disable all ansi escape sequences (styles/colors/..) */
+	"ansi": true,
+
+	/* sort results; either (null) for NO sort, or a boolean to define
+	       	the direction (asc/desc); ... */
+	"sort": null,
+
+	/* default radix (base) */
+	"radix": 10
+
+}

@@ -14,27 +14,30 @@ import Utility from './utility.js';
 const param = getopt(true);
 
 //
-var count = false;
+const utilities = Utility.utilities;
+var utility = '';
 var dump = null;
 
 //
-for(var i = 0; i < param.length; ++i)
+var u; for(var i = 0; i < param.length; ++i)
 {
-	if(param[i].toLowerCase() === 'count')
+	if(string(param[i], false))
 	{
-		param.splice(i, 1);
-		count = true;
-		break;
+		if(utilities.includes(u = param[i].toLowerCase()))
+		{
+			utility = param.splice(i, 1)[0];
+			break;
+		}
 	}
 }
 
-if(!count)
+if(!utility)
 {
 	dump = new Dump(param);
 }
 else
 {
-	(count = new Utility(param)).count();
+	dump = new Utility(param, utility);
 }
 
 //

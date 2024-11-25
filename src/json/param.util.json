@@ -1,0 +1,22 @@
+{
+	"project": {
+		"type": "directory",
+		"required": true
+	},
+	"script": {
+		"type": "directory",
+		"required": true
+	},
+	"config": {
+		"type": "file",
+		"required": true
+	},
+	"radix": {
+	       "type": "radix",
+	       "required": false
+	},
+	"sort": {
+		"type": [ "boolean", "null" ],
+		"required": false
+	}
+}
