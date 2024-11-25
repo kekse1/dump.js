@@ -13,10 +13,46 @@
 	},
 	"radix": {
 	       "type": "radix",
-	       "required": false
+	       "required": false,
+	       "disable": "locale"
 	},
 	"sort": {
 		"type": [ "boolean", "null" ],
 		"required": false
+	},
+	"empty": {
+		"type": "boolean",
+		"required": false
+	},
+	"offset": {
+		"type": "integer",
+		"required": false
+	},
+	"size": {
+		"type": "integer",
+		"required": false
+	},
+	"locale": {
+		"type": "boolean",
+		"required": false,
+		"disable": "radix"
+	},
+	"ansi": {
+		"type": "boolean",
+		"required": false
+	},
+	"pairs": {
+		"type": "boolean",
+		"required": false,
+		"disable": "list"
+	},
+	"sep": {
+		"type": "string",
+		"required": false
+	},
+	"list": {
+		"type": "boolean",
+		"required": false,
+		"disable": "pairs"
 	}
 }

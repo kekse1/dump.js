@@ -7,9 +7,6 @@
 const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.util.json';
 const DEFAULT_SILENT = true;
 
-const DEFAULT_RADIX = 10;
-const DEFAULT_SORT = null;
-
 //
 import Quant from '../shared/quant.js';
 import Application from '../shared/app.js';
@@ -54,13 +51,14 @@ class Utility extends Quant
 		return [ 'count' ];
 	}
 
-	static help(_exit = true)
+	static help(_exit = null)
 	{
-		const utils = this.utilities;
+		const utils = this.utilities; utils.unshift('help'.bold(true));
 		console.log('These are the available utilties (just argue with one of them):' + EOL);
 		for(const u of utils) console.log('\t' + u);
 		console.eol();
-		if(_exit) process.exit();
+		if(_exit === true) process.exit();
+		else if(byte(_exit)) process.exit(_exit);
 		return utils;
 	}
 
@@ -80,7 +78,102 @@ class Utility extends Quant
 			}
 			
 			//
-			if(isRadix(this.param.radix))
+			if(process.stdout.isTTY)
+			{
+				if('ansi' in this.param)
+				{
+					process.ansi = this.param.ansi;
+				}
+				else
+				{
+					process.ansi = this.getConfig('ansi');
+				}
+			}
+			else
+			{
+				process.ansi = null;
+			}
+			
+			//
+			var file = null, stats = null;
+			
+			for(var i = 0; i < this.param.length; ++i)
+			{
+				if(string(this.param[i], false)) try
+				{
+					file = path.resolve(this.param[i]);
+					stats = fs.statSync(file, { bigint: false, throwIfNoEntry: true });
+					if(! (stats.isFile() || stats.isBlockDevice() || stats.isCharacterDevice()))
+					{
+						file = null;
+						stats = null;
+					}
+					else
+					{
+						this.param.splice(i, 1);
+						break;
+					}
+				}
+				catch(_err)
+				{
+					file = null;
+					stats = null;
+					continue;
+				}
+			}
+			
+			if(!file)
+			{
+				console.error('Missing or invalid file path parameter.');
+				process.exit(true);
+			}
+			else if(stats.size < 1)
+			{
+				if(! ('size' in this.param))
+				{
+					console.warn('Unable to determine file size, so please argue with `--size`.');
+					process.exit(true);
+				}
+				
+				stats.size = this.param.size;
+			}
+			else
+			{
+				this.path = file;
+				this.stats = stats;
+			}
+
+			//
+			if('size' in this.param)
+			{
+				this.size = Math.min(this.param.size, stats.size);
+			}
+			else
+			{
+				this.size = stats.size;
+			}
+
+			if('offset' in this.param)
+			{
+				this.offset = this.param.offset;
+			}
+			else
+			{
+				this.offset = 0;
+			}
+			
+			if(this.offset < 0)
+			{
+				this.offset = (stats.size + this.offset);
+			}
+
+			if(this.size > (stats.size - this.offset))
+			{
+				this.size = (stats.size - this.offset);
+			}
+
+			//
+			if('radix' in this.param)
 			{
 				this.radix = this.param.radix;
 			}
@@ -89,27 +182,274 @@ class Utility extends Quant
 				this.radix = this.getConfig('radix');
 			}
 			
-			if(bool(this.param.sort))
+			if(this.radix === 10)
 			{
-				this.sort = !this.param.sort;
+				if('locale' in this.param)
+				{
+					this.locale = this.param.locale;
+				}
+				else
+				{
+					this.locale = this.getConfig('locale');
+				}
 			}
-			else if(this.param.sort === null)
+			else
 			{
-				this.sort = null;
+				this.locale = null;
+			}
+			
+			//
+			if(bool(this.param.sort) || this.param.sort === null)
+			{
+				this.sort = this.param.sort;
 			}
 			else
 			{
 				this.sort = this.getConfig('sort');
 			}
 
+			if('empty' in this.param)
+			{
+				this.empty = this.param.empty;
+			}
+			else
+			{
+				this.empty = this.getConfig('empty');
+			}
+
 			//
-			this[this.util](this.param);
+			if('pairs' in this.param)
+			{
+				this.pairs = this.param.pairs;
+			}
+			else
+			{
+				this.pairs = this.getConfig('pairs');
+			}
+			
+			if('list' in this.param)
+			{
+				this.list = this.param.list;
+			}
+			else
+			{
+				this.list = this.getConfig('list');
+			}
+			
+			if(this.pairs)
+			{
+				this.list = null;
+			}
+			else if(this.list)
+			{
+				this.pairs = null;
+			}
+			
+			if(string(this.param.sep, false))
+			{
+				this.sep = this.param.sep;
+			}
+			else
+			{
+				this.sep = this.getConfig('sep');
+			}
+
+			//
+			this.prepare(this.util);
+
+			//
+			this.stream = fs.createReadStream(file, {
+				encoding: null,
+				autoClose: true,
+				emitClose: true,
+				start: this.offset,
+				end: (this.offset + this.size) });
+
+			//
+			this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
+			this.stream.on('end', (... _a) => this.onEnd(... _a));
 		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 
-	count(_param = this.param)
+	count(_chunk)
 	{
-throw new Error('TODO: migrate old `count()`');
+		for(var i = 0; i < _chunk.length; ++i)
+		{
+			++this.counting[_chunk[i]];
+		}
+	}
+	
+	showCount()
+	{
+		for(var i = 0; i < this.counting.length; ++i)
+		{
+			this.counting[i] = [ i, this.counting[i] ];
+		}
+		
+		if(bool(this.sort))
+		{
+			this.counting.sort(1, !this.sort);
+		}
+		
+		var maxKey = 0, maxValue = 0;
+		
+		for(var i = 0; i < this.counting.length; ++i)
+		{
+			if(this.counting[i][1] === 0 && !this.empty)
+			{
+				this.counting[i] = null;
+				continue;
+			}
+			
+			if(this.radix !== 10)
+			{
+				this.counting[i][0] = this.counting[i][0].toString(this.radix);
+				this.counting[i][1] = this.counting[i][1].toString(this.radix);
+			}
+			else if(this.locale && !this.pairs)
+			{
+				this.counting[i][0] = this.counting[i][0].toLocaleString();
+				this.counting[i][1] = this.counting[i][1].toLocaleString();
+			}
+			else
+			{
+				this.counting[i][0] = this.counting[i][0].toString();
+				this.counting[i][1] = this.counting[i][1].toString();
+			}
+			
+			if(this.counting[i][0].length > maxKey)
+			{
+				maxKey = this.counting[i][0].length;
+			}
+			
+			if(this.counting[i][1].length > maxValue)
+			{
+				maxValue = this.counting[i][1].length;
+			}
+		}
+		
+		for(var i = 0; i < this.counting.length; ++i)
+		{
+			if(this.counting[i] === null)
+			{
+				continue;
+			}
+			
+			if(!this.pairs)
+			{
+				this.counting[i][0] = this.counting[i][0].padStart(maxKey, ' ');
+				this.counting[i][1] = this.counting[i][1].padStart(maxValue, ' ');
+
+				if(process.ansi)
+				{
+					this.counting[i][1] = this.counting[i][1].bold(true);
+				}
+			}
+		}
+		
+		var open = '[';
+		var close = ']';
+		
+		if(process.ansi && !this.pairs)
+		{
+			open = open.faint(true);
+			close = close.faint(true);
+		}
+
+		var key, value;
+		
+		if(this.pairs)
+		{
+			for(var i = 0; i < this.counting.length; ++i)
+			{
+				if(this.counting[i] === null) continue;
+				key = this.counting[i][0];
+				value = this.counting[i][1];
+				process.stdout.write(key + '=' + value + this.sep);
+			}
+			
+			return process.exit();
+		}
+		else if(this.list || !process.stdout.isTTY)
+		{
+			for(var i = 0; i < this.counting.length; ++i)
+			{
+				if(this.counting[i] === null) continue;
+				key = open + this.counting[i][0] + close;
+				value = this.counting[i][1];
+				process.stdout.write(key + ' ' + value + this.sep);
+			}
+			
+			return process.exit();
+		}
+
+		const max = (maxKey + maxValue + 4);
+		const empty = ' '.repeat(max);
+		const width = process.stdout.columns;
+		var w = 0;
+		var item;
+
+		for(var i = 0; i < this.counting.length; ++i)
+		{
+			if(this.counting[i] === null)
+			{
+				item = empty;
+			}
+			else
+			{
+				key = open + this.counting[i][0] + close;
+				value = this.counting[i][1];
+				item = key + ' ' + value + ' ';
+			}
+
+			if((w += (max + 1)) >= width)
+			{
+				process.stdout.write(EOL);
+				w = 0;
+			}
+
+			process.stdout.write(item);
+		}
+		
+		process.stdout.write(EOL);
+		process.exit();
+	}
+	
+	finish(_util = this.util)
+	{
+		switch(_util)
+		{
+			case 'count':
+				this.showCount();
+				break;
+			default:
+				throw new Error('Invalid utility; unexpected!');
+		}
+		
+		return process.exit();
+	}
+	
+	prepare(_util = this.util)
+	{
+		switch(_util)
+		{
+			case 'count':
+				this.counting = new Array(256).fill(0);
+				break;
+			default:
+				throw new Error('Invalid utility chosen');
+		}
+	}
+	
+	onData(_chunk, ... _args)
+	{
+		return this[this.util](_chunk, ... _args);
+	}
+	
+	onEnd(... _args)
+	{
+		this.stream = null;
+		return this.finish(this.util);
 	}
 }
 

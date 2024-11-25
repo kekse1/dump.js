@@ -11,6 +11,22 @@
 	"sort": null,
 
 	/* default radix (base) */
-	"radix": 10
+	"radix": 10,
+
+	/* with default radix (10) the numbers can also be adapted to your locale setting */
+	"locale": true,
+
+	/* also show empty items? */
+	"empty": false,
+
+	/* without any beautify or so, only assignments; like `10=64`; see also 'separator' below */
+	"pairs": false,
+
+	/* or you enable the regular 'list' output.. will be overridden by 'pairs'. */
+	"list": false,
+
+	/* if with 'pairs' or 'list' is enabled (see above), this is the separator..
+		defaults to newline '\n'. */
+	"sep": "\n"
 
 }
