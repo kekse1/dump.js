@@ -199,13 +199,13 @@ class Utility extends Quant
 			}
 			
 			//
-			if(bool(this.param.sort) || this.param.sort === null)
+			if(bool(this.param.order) || this.param.order === null)
 			{
-				this.sort = this.param.sort;
+				this.order = this.param.order;
 			}
 			else
 			{
-				this.sort = this.getConfig('sort');
+				this.order = this.getConfig('order');
 			}
 
 			if('empty' in this.param)
@@ -286,9 +286,9 @@ class Utility extends Quant
 			this.counting[i] = [ i, this.counting[i] ];
 		}
 		
-		if(bool(this.sort))
+		if(bool(this.order))
 		{
-			this.counting.sort(1, !this.sort);
+			this.counting.sort(1, !this.order);
 		}
 		
 		var maxKey = 0, maxValue = 0;

@@ -16,7 +16,7 @@
 	       "required": false,
 	       "disable": "locale"
 	},
-	"sort": {
+	"order": {
 		"type": [ "boolean", "null" ],
 		"required": false
 	},
