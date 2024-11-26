@@ -868,7 +868,7 @@ class Dump extends Quant
 		var columns = 0;
 		var length = this.lineBegin.textLength;
 
-		while((length + columns + 3 + this.radixDigits + 1) <= (console.width || 80))
+		while((length + columns + 3 + this.radixDigits) <= (console.width || 80))
 		{
 			length += ((255).toString(this.radix) + ' ').length;
 			++columns;
@@ -969,7 +969,7 @@ class Dump extends Quant
 		//
 		if(this.isStdIn)
 		{
-			process.stdin.setEncoding('utf8');//(null) won't work here?
+			process.stdin.setEncoding('latin1');//(null) won't work here?
 			process.stdin.on('data', (_chunk) => {
 				for(var i = start; i < _chunk.length; i += this.columns)
 				{
