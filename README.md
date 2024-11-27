@@ -54,6 +54,10 @@ maybe).
 
 ![Screenshot of the first utility of my dump](img/dump.util.count.png)
 
+And this is showing the `--replace` feature.
+
+![Screenshot of `--replace` feature](img/screenshot.sechs.png)
+
 > [!WARNING]
 > The following screenshots are a bit older, so neither the command line
 > parameters are updated there, nor the colors/design. JFYI.
