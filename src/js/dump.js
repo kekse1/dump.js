@@ -198,6 +198,15 @@ class Dump extends Quant
 				}
 			}
 
+			if(this.heat < 2)
+			{
+				this.heat = 2;
+			}
+			else if(this.heat > 256)
+			{
+				this.heat = 256;
+			}
+
 			if(this.heat !== null)
 			{
 				if(this.heat < 2)
