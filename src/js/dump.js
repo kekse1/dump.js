@@ -812,6 +812,11 @@ class Dump extends Quant
 		return ++this.linesPrint;
 	}
 	
+	get emptyLineBegin()
+	{
+		return ((' ').repeat(this.lineBegin.textLength));
+	}
+
 	get lineBegin()
 	{
 		return (' ' + (this.linesPrint % 256).toString(this.radix).padStart(this.radixDigits, '0') + ' ').faint(true);
@@ -863,7 +868,7 @@ class Dump extends Quant
 			this.sameBytes = this.sameBytes.bold(true);
 		}
 
-		Dump.write(' ' + PREFIX + ' { lines: ' + this.sameLines + ', bytes: ' + this.sameBytes + ', size: ' + size + ' }' + EOL);
+		Dump.write(this.emptyLineBegin + PREFIX + ' { lines: ' + this.sameLines + ', bytes: ' + this.sameBytes + ', size: ' + size + ' }' + EOL);
 
 		//
 		this.sameByte = null;
