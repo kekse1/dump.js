@@ -131,7 +131,8 @@ class Utility extends Quant
 			{
 				if(! ('size' in this.param))
 				{
-					console.warn('Unable to determine file size, so please argue with `--size`.');
+					console.error('Unable to determine file size, so please argue with `--size`.');
+					console.warn('But maybe this file is just empty..');
 					process.exit(true);
 				}
 				
