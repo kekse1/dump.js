@@ -200,7 +200,7 @@ class Dump extends Quant
 
 			if(this.heat < 2)
 			{
-				this.heat = 2;
+				this.heat = null;
 			}
 			else if(this.heat > 256)
 			{
