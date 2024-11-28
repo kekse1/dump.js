@@ -52,7 +52,7 @@ maybe).
 > [!NOTE]
 > If you've other ideas for possible `dump` **utilities**, please mail me.
 
-![Screenshot of the first utility of my dump](img/dump.util.count.png)
+![Screenshot of the first utility of my dump](img/screenshot.util.count.png)
 
 And this is showing the `--replace` feature.
 
