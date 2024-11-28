@@ -16,9 +16,6 @@
 	/* with default radix (10) the numbers can also be adapted to your locale setting */
 	"locale": true,
 
-	/* also show empty items? */
-	"empty": false,
-
 	/* without any beautify or so, only assignments; like `10=64`; see also 'separator' below */
 	"pairs": false,
 
@@ -30,6 +27,10 @@
 	"sep": "\n",
 
 	/* space between the items.. too compact is worse to take a look at it... */
-	"spaces": 3
+	"spaces": 3,
+
+	/* also show empty items? comment: this won't happen always, depending
+		on output type and ansi (param/config) state.. */
+	"empty": false
 
 }

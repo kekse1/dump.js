@@ -209,15 +209,6 @@ class Utility extends Quant
 				this.order = this.getConfig('order');
 			}
 
-			if('empty' in this.param)
-			{
-				this.empty = this.param.empty;
-			}
-			else
-			{
-				this.empty = this.getConfig('empty');
-			}
-
 			//
 			if('pairs' in this.param)
 			{
@@ -266,6 +257,11 @@ class Utility extends Quant
 
 			this.space = ' '.repeat(this.spaces);
 
+			if(!bool(this.empty = this.param.empty))
+			{
+				this.empty = this.getConfig('empty');
+			}
+
 			//
 			this.prepare(this.util);
 
@@ -295,7 +291,11 @@ class Utility extends Quant
 	{
 		for(var i = 0; i < this.counting.length; ++i)
 		{
-			this.counting[i] = [ i, this.counting[i] ];
+			this.counting[i] = [
+				i,
+				this.counting[i],
+				(this.counting[i] === 0)
+			];
 		}
 		
 		if(bool(this.order))
@@ -307,12 +307,6 @@ class Utility extends Quant
 		
 		for(var i = 0; i < this.counting.length; ++i)
 		{
-			if(this.counting[i][1] === 0 && !this.empty)
-			{
-				this.counting[i] = null;
-				continue;
-			}
-			
 			if(this.radix !== 10)
 			{
 				this.counting[i][0] = this.counting[i][0].toString(this.radix);
@@ -342,11 +336,6 @@ class Utility extends Quant
 
 		for(var i = 0; i < this.counting.length; ++i)
 		{
-			if(this.counting[i] === null)
-			{
-				continue;
-			}
-			
 			if(!this.pairs)
 			{
 				this.counting[i][0] = this.counting[i][0].padStart(maxKey, ' ');
@@ -370,12 +359,12 @@ class Utility extends Quant
 		}
 
 		var key, value;
-		
+
 		if(this.pairs)
 		{
 			for(var i = 0; i < this.counting.length; ++i)
 			{
-				if(this.counting[i] === null) continue;
+				if(!this.empty && this.counting[i][2]) continue;
 				key = this.counting[i][0];
 				value = this.counting[i][1];
 				process.stdout.write(key + '=' + value + this.sep);
@@ -387,7 +376,7 @@ class Utility extends Quant
 		{
 			for(var i = 0; i < this.counting.length; ++i)
 			{
-				if(this.counting[i] === null) continue;
+				if(!this.empty && this.counting[i][2]) continue;
 				key = open + this.counting[i][0] + close;
 				value = this.counting[i][1];
 				process.stdout.write(key + ' ' + value + this.sep);
@@ -396,15 +385,15 @@ class Utility extends Quant
 			return process.exit();
 		}
 		
-		const max = (maxKey + maxValue + 4 + this.spaces);
-		const empty = ' '.repeat(max);
+		const max = (maxKey + maxValue + 3);
+		var empty = ' '.repeat(max);
 		const width = process.stdout.columns;
-		var w = 0;
 		var item;
+		const lines = [''];
 
-		for(var i = 0; i < this.counting.length; ++i)
+		for(var i = 0, j = 0; i < this.counting.length; ++i)
 		{
-			if(this.counting[i] === null)
+			if(this.counting[i][2] && !process.ansi)
 			{
 				item = empty;
 			}
@@ -413,21 +402,29 @@ class Utility extends Quant
 				key = open + this.counting[i][0] + close;
 				value = this.counting[i][1];
 				item = key + ' ' + value;
+
+				if(process.ansi && this.counting[i][2] && !this.empty)
+					item = item.text.fg(92, 92, 92, true);
 			}
 
-			if((w += (max - this.spaces + 1)) >= width)
+			if((lines[j].textLength + 10) >= width)
 			{
-				process.stdout.write(EOL);
-				w = 0;
+				lines[++j] = '';
 			}
 
 			item += this.space;
-			w += this.spaces;
-
-			process.stdout.write(item);
+			lines[j] += item;
 		}
 		
-		process.stdout.write(EOL);
+		if(bool(this.order)) for(var i = 0; i < lines.length; ++i)
+		{
+			if(lines[i].isEmpty)
+			{
+				lines.splice(i--, 1);
+			}
+		}
+
+		process.stdout.write(lines.join(EOL) + EOL);
 		process.exit();
 	}
 	
