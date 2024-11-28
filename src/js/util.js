@@ -415,14 +415,6 @@ class Utility extends Quant
 			item += this.space;
 			lines[j] += item;
 		}
-		
-		if(bool(this.order)) for(var i = 0; i < lines.length; ++i)
-		{
-			if(lines[i].isEmpty)
-			{
-				lines.splice(i--, 1);
-			}
-		}
 
 		process.stdout.write(lines.join(EOL) + EOL);
 		process.exit();
