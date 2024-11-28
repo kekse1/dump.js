@@ -30,6 +30,6 @@
 	"sep": "\n",
 
 	/* space between the items.. too compact is worse to take a look at it... */
-	"spaces": 4
+	"spaces": 3
 
 }
