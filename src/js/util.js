@@ -404,7 +404,7 @@ class Utility extends Quant
 				item = key + ' ' + value;
 
 				if(process.ansi && this.counting[i][2] && !this.empty)
-					item = item.text.fg(92, 92, 92, true);
+					item = item.text.fg(88, 88, 88, true);
 			}
 
 			if((lines[j].textLength + 10) >= width)
