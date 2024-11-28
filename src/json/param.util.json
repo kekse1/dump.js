@@ -54,5 +54,9 @@
 		"type": "boolean",
 		"required": false,
 		"disable": "pairs"
+	},
+	"spaces": {
+		"type": "integer",
+		"required": false
 	}
 }

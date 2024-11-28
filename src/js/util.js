@@ -255,6 +255,17 @@ class Utility extends Quant
 				this.sep = this.getConfig('sep');
 			}
 
+			if(int(this.param.spaces) && this.param.spaces >= 0)
+			{
+				this.spaces = this.param.spaces;
+			}
+			else
+			{
+				this.spaces = this.getConfig('spaces');
+			}
+
+			this.space = ' '.repeat(this.spaces);
+
 			//
 			this.prepare(this.util);
 
@@ -328,7 +339,7 @@ class Utility extends Quant
 				maxValue = this.counting[i][1].length;
 			}
 		}
-		
+
 		for(var i = 0; i < this.counting.length; ++i)
 		{
 			if(this.counting[i] === null)
@@ -384,8 +395,8 @@ class Utility extends Quant
 			
 			return process.exit();
 		}
-
-		const max = (maxKey + maxValue + 4);
+		
+		const max = (maxKey + maxValue + 4 + this.spaces);
 		const empty = ' '.repeat(max);
 		const width = process.stdout.columns;
 		var w = 0;
@@ -401,14 +412,17 @@ class Utility extends Quant
 			{
 				key = open + this.counting[i][0] + close;
 				value = this.counting[i][1];
-				item = key + ' ' + value + ' ';
+				item = key + ' ' + value;
 			}
 
-			if((w += (max + 1)) >= width)
+			if((w += (max - this.spaces + 1)) >= width)
 			{
 				process.stdout.write(EOL);
 				w = 0;
 			}
+
+			item += this.space;
+			w += this.spaces;
 
 			process.stdout.write(item);
 		}

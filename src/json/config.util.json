@@ -27,6 +27,9 @@
 
 	/* if with 'pairs' or 'list' is enabled (see above), this is the separator..
 		defaults to newline '\n'. */
-	"sep": "\n"
+	"sep": "\n",
+
+	/* space between the items.. too compact is worse to take a look at it... */
+	"spaces": 3
 
 }
