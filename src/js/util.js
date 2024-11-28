@@ -343,7 +343,8 @@ class Utility extends Quant
 
 				if(process.ansi)
 				{
-					this.counting[i][1] = this.counting[i][1].bold(true);
+					this.counting[i][0] = this.counting[i][0].debug(true);
+					this.counting[i][1] = this.counting[i][1].info(true);
 				}
 			}
 		}
@@ -353,8 +354,8 @@ class Utility extends Quant
 		
 		if(process.ansi && !this.pairs)
 		{
-			open = open.faint(true);
-			close = close.faint(true);
+			open = open.faint(true).defaultFG(true);
+			close = close.faint(true).defaultFG(true);
 		}
 
 		var key, value;
