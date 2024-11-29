@@ -800,7 +800,7 @@ class Dump extends Quant
 			
 			if(this.highlight.has(_buffer[i]))
 			{
-				column = column.bold(false).fg(255, 255, 255, false);
+				column = column.bold(true).fg(255, 255, 255, false);
 			}
 			else if(this.color)
 			{
