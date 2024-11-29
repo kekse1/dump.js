@@ -82,6 +82,9 @@ over the header data.
 ### Command Line Parameters
 //TODO/
 
+See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json); I'm going
+to explain them soon.
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
