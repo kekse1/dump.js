@@ -239,6 +239,9 @@ class Dump extends Quant
 					process.exit(true);
 				}
 			}
+			
+			//
+			this.highlight = Dump.prepareHighlight(this.param.highlight);
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
@@ -318,6 +321,41 @@ class Dump extends Quant
 			//
 			this.print();
 		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
+	}
+	
+	static prepareHighlight(_highlight)
+	{
+		const result = new Set();
+		
+		if(int(_highlight))
+		{
+			result.add(_highlight % 256);
+			return result;
+		}
+		else if(!string(_highlight, false))
+		{
+			return result;
+		}
+		
+		_highlight = _highlight.split(',');
+		var number;
+		
+		for(var i = 0; i < _highlight.length; ++i)
+		{
+			if(_highlight[i].length > 0 && !isNaN(_highlight[i]))
+			{
+				number = Math.int(Number(_highlight[i]) % 256);
+
+				if(number < 0)
+				{
+					number = (256 + number);
+				}
+				
+				result.add(number);
+			}
+		}
+
+		return result;
 	}
 
 	destroy(_name, _code, ... _args)
@@ -760,7 +798,11 @@ class Dump extends Quant
 			//
 			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
 			
-			if(this.color)
+			if(this.highlight.has(_buffer[i]))
+			{
+				column = column.bold(false).fg(255, 255, 255, false);
+			}
+			else if(this.color)
 			{
 				const h = Math._floor(256 / this.color.length);
 				var fg;

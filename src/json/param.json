@@ -68,5 +68,9 @@
 	"follow": {
 		"type": "boolean",
 		"required": false
+	},
+	"highlight": {
+		"type": [ "string", "integer" ],
+		"required": false
 	}
 }
