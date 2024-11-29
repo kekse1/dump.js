@@ -725,7 +725,20 @@ class Dump extends Quant
 			}
 		}
 
-		return result.fg(... fg, false).bg(... bg, false);
+		if(this.highlight.has(_byte))
+		{
+			result = result.text.bold(true).
+				fg(0, 0, 0, false).
+				bg(255, 255, 255, false);
+		}
+		else
+		{
+			result = result.
+				fg(... fg, false).
+				bg(... bg, false);
+		}
+
+		return result;
 	}
 	
 	//
