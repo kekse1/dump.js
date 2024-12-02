@@ -7,7 +7,7 @@ My own **Radix viewer**.
 * [Introduction](#introduction)
 	* [First words](#first-words)
 	* [Example Screenshots](#example-screenshots)
-    * [Command Line Parameters](#command-line-parameters)
+    * [Command Line Arguments](#command-line-arguments)
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
@@ -79,11 +79,41 @@ Extended the latest feature to see kinda **heatmap**; this way I really saw how 
 over the header data.
 ![Fourth Screenshot](img/screenshot.vier.png)
 
-### Command Line Parameters
-//TODO/
+### Command Line Arguments
+See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json).
 
-See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json); I'm going
-to explain them soon.
+The default 'runtime' parameters are not listed here. They'll be inserted by the start shell script.
+Laters I'll also explain these switches here; was to lazy to create a table this time..
+
+#### `dump`
+* `--refresh` (Integer/Boolean)
+* `--radix` (Radix)
+* `--path` (File)
+* `--ansi` (Boolean)
+* `--head` (Boolean/Integer)
+* `--tail` (Boolean/Integer)
+* `--start` (Integer)
+* `--stop` (Integer)
+* `--replace` (Radix/Boolean)
+* `--heat` (Integer)
+* `--color` (String/null)
+* `--filter` (Boolean)
+* `--modulo` (Radix/Boolean)
+* `--follow` (Boolean)
+* `--highlight` (String/Integer)
+
+#### `dump.util`
+* `--radix` (Radix)
+* `--order` (Boolean/null)
+* `--offset` (Integer)
+* `--size` (Integer)
+* `--locale` (Boolean)
+* `--ansi` (Boolean)
+* `--pairs` (Boolean)
+* `--sep` (String)
+* `--list` (Boolean)
+* `--spaces` (Integer)
+* `--empty` (Boolean)
 
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
