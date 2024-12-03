@@ -388,7 +388,7 @@ class Utility extends Quant
 		const max = (maxKey + maxValue + 3);
 		var empty = ' '.repeat(max);
 		const width = process.stdout.columns;
-		var item;
+		var item, w = 0, l;
 		const lines = [''];
 
 		for(var i = 0, j = 0; i < this.counting.length; ++i)
@@ -407,11 +407,13 @@ class Utility extends Quant
 					item = item.text.fg(88, 88, 88, true);
 			}
 
-			if((lines[j].textLength + 10) >= width)
+			if((w += (l = item.textLength)) >= width)
 			{
 				lines[++j] = '';
+				w = l;
 			}
 
+			w += this.spaces;
 			item += this.space;
 			lines[j] += item;
 		}
