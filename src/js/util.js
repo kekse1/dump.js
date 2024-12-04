@@ -407,7 +407,7 @@ class Utility extends Quant
 					item = item.text.fg(88, 88, 88, true);
 			}
 
-			if((w += (l = item.textLength)) >= width)
+			if((w += (l = item.textLength)) >= (width - 2))
 			{
 				lines[++j] = '';
 				w = l;
