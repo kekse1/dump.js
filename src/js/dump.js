@@ -241,7 +241,7 @@ class Dump extends Quant
 			}
 			
 			//
-			this.highlight = Dump.prepareHighlight(this.param.highlight);
+			this.high = Dump.prepareHighlight(this.param.high);
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
@@ -725,7 +725,7 @@ class Dump extends Quant
 			}
 		}
 
-		if(this.highlight.has(_byte))
+		if(this.high.has(_byte))
 		{
 			result = result.text.bold(true).
 				fg(0, 0, 0, false).
@@ -811,7 +811,7 @@ class Dump extends Quant
 			//
 			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
 			
-			if(this.highlight.has(_buffer[i]))
+			if(this.high.has(_buffer[i]))
 			{
 				column = column.bold(true).fg(255, 255, 255, false);
 			}

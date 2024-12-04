@@ -69,7 +69,7 @@
 		"type": "boolean",
 		"required": false
 	},
-	"highlight": {
+	"high": {
 		"type": [ "string", "integer" ],
 		"required": false
 	}
