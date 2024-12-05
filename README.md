@@ -117,6 +117,15 @@ Laters I'll also explain these switches here; was to lazy to create a table this
 * `--spaces` (Integer)
 * `--empty` (Boolean)
 
+#### Special Syntax
+There are (very less) parse functions to interprete your parameters.
+
+Mostly it's the color string parser, which interpretes RGB input colors (separated by `,` or `;` (optionally)).
+And for the `--without` or `--only` you can also define more than one byte, separated via `,`, and even byte
+ranges via `-`. And an optional last `;` separator to define the step!
+
+So e.g., when you want to show only even/odd numbers, e.g. try `--{only,without} '0-255;2'`.
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 

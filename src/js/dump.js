@@ -345,11 +345,15 @@ class Dump extends Quant
 		}
 		
 		_input = _input.split(',');
-		var number;
+		var number, min, max, step, idx;
 		
 		for(var i = 0; i < _input.length; ++i)
 		{
-			if(_input[i].length > 0 && !isNaN(_input[i]))
+			if(_input[i].length === 0)
+			{
+				continue;
+			}
+			else if(!isNaN(_input[i]))
 			{
 				number = Math.int(Number(_input[i]) % 256);
 
@@ -359,6 +363,53 @@ class Dump extends Quant
 				}
 				
 				result.add(number);
+			}
+			else if(_input[i].includes('-'))
+			{
+				idx = _input[i].lastIndexOf(';');
+				step = 1;
+				
+				if(idx > -1)
+				{
+					if(isNaN(step = _input[i].substr(idx + 1)))
+					{
+						step = 1;
+					}
+					else
+					{
+						step = Math.int(Number(step) % 256);
+					}
+					
+					_input[i] = _input[i].substr(0, idx);
+				}
+				
+				if((_input[i] = _input[i].split('-')).length !== 2)
+				{
+					continue;
+				}
+				
+				if(isNaN(_input[i][0]) || isNaN(_input[i][1]))
+				{
+					continue;
+				}
+				
+				if((_input[i][0] = Math.int(Number(_input[i][0]) % 256)) < 0)
+				{
+					_input[i][0] = (256 + _input[i][0]);
+				}
+				
+				if((_input[i][1] = Math.int(Number(_input[i][1]) % 256)) < 0)
+				{
+					_input[i][1] = (256 + _input[i][1]);
+				}
+				
+				min = Math.min(_input[i][0], _input[i][1]);
+				max = Math.max(_input[i][0], _input[i][1]);
+				
+				for(var i = min; i <= max; i += step)
+				{
+					result.add(i);
+				}
 			}
 		}
 
