@@ -102,7 +102,7 @@ Laters I'll also explain these switches here; was to lazy to create a table this
 * `--follow` (Boolean)
 * `--highlight` (String/Integer)
 * `--without` (String/Integer)
-* `--with` (String/Integer)
+* `--only` (String/Integer)
 
 #### `dump.util`
 * `--radix` (Radix)
@@ -121,10 +121,10 @@ Laters I'll also explain these switches here; was to lazy to create a table this
 There are (very less) parse functions to interprete your parameters.
 
 Mostly it's the color string parser, which interpretes RGB input colors (separated by `,` or `;` (optionally)).
-And for the `--without` or `--with` you can also define more than one byte, separated via `,`, and even byte
+And for the `--without` or `--only` you can also define more than one byte, separated via `,`, and even byte
 ranges via `-`. And an optional last `/` separator to define the step!
 
-So e.g., when you want to show only even/odd numbers, e.g. try `--with{,out} '0-255/2'`.
+So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255/2'`.
 
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.

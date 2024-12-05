@@ -64,30 +64,24 @@ class Dump extends Quant
 
 			//
 			var path = this.param.path;
-			var radix;
 			
 			if(isRadix(this.param.radix))
 			{
-				radix = this.param.radix;
+				this.radix = this.param.radix;
 			}
 			else
 			{
-				radix = this.getConfig('radix');
+				this.radix = this.getConfig('radix');
 			}
 			
 			if(!string(path, false)) for(var i = 0; i < this.param.length; ++i)
 			{
 				if(string(this.param[i], false))
 				{
-					path = this.param.splice(i--, 1)[0];
-				}
-				else if(isRadix(this.param[i]))
-				{
-					radix = this.param.splice(i--, 1)[0];
+					path = this.param.splice(i, 1)[0];
+					break;
 				}
 			}
-			
-			this.radix = radix;
 
 			if(process.STDIN)
 			{
@@ -243,9 +237,9 @@ class Dump extends Quant
 			//
 			this.high = Dump.parseBytes(this.param.high);
 			
-			if((this.with = Dump.parseBytes(this.param.with)).size === 0)
+			if((this.only = Dump.parseBytes(this.param.only)).size === 0)
 			{
-				this.with = null;
+				this.only = null;
 			}
 			
 			this.without = Dump.parseBytes(this.param.without);
@@ -673,7 +667,7 @@ class Dump extends Quant
 			fg = bg = null;
 		}
 		
-		if(this.with && !this.with.has(_byte))
+		if(this.only && !this.only.has(_byte))
 		{
 			return String.none() + ' ';
 		}
@@ -876,7 +870,7 @@ class Dump extends Quant
 			left += this.renderChar(_buffer[i]);
 
 			//
-			if(this.with && !this.with.has(_buffer[i]))
+			if(this.only && !this.only.has(_buffer[i]))
 			{
 				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
 			}
