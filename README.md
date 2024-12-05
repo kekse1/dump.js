@@ -101,6 +101,8 @@ Laters I'll also explain these switches here; was to lazy to create a table this
 * `--modulo` (Radix/Boolean)
 * `--follow` (Boolean)
 * `--highlight` (String/Integer)
+* `--without` (String/Integer)
+* `--only` (String/Integer)
 
 #### `dump.util`
 * `--radix` (Radix)

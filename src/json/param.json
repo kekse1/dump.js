@@ -72,5 +72,13 @@
 	"high": {
 		"type": [ "string", "integer" ],
 		"required": false
+	},
+	"only": {
+		"type": [ "string", "integer" ],
+		"required": false
+	},
+	"without": {
+		"type": [ "string", "integer" ],
+		"required": false
 	}
 }

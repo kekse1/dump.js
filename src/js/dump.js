@@ -241,7 +241,14 @@ class Dump extends Quant
 			}
 			
 			//
-			this.high = Dump.prepareHighlight(this.param.high);
+			this.high = Dump.parseBytes(this.param.high);
+			
+			if((this.only = Dump.parseBytes(this.param.only)).size === 0)
+			{
+				this.only = null;
+			}
+			
+			this.without = Dump.parseBytes(this.param.without);
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
@@ -323,28 +330,28 @@ class Dump extends Quant
 		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 	
-	static prepareHighlight(_highlight)
+	static parseBytes(_input)
 	{
 		const result = new Set();
 		
-		if(int(_highlight))
+		if(int(_input))
 		{
-			result.add(_highlight % 256);
+			result.add(_input % 256);
 			return result;
 		}
-		else if(!string(_highlight, false))
+		else if(!string(_input, false))
 		{
 			return result;
 		}
 		
-		_highlight = _highlight.split(',');
+		_input = _input.split(',');
 		var number;
 		
-		for(var i = 0; i < _highlight.length; ++i)
+		for(var i = 0; i < _input.length; ++i)
 		{
-			if(_highlight[i].length > 0 && !isNaN(_highlight[i]))
+			if(_input[i].length > 0 && !isNaN(_input[i]))
 			{
-				number = Math.int(Number(_highlight[i]) % 256);
+				number = Math.int(Number(_input[i]) % 256);
 
 				if(number < 0)
 				{
@@ -614,6 +621,15 @@ class Dump extends Quant
 		{
 			fg = bg = null;
 		}
+		
+		if(this.only && !this.only.has(_byte))
+		{
+			return String.none() + ' ';
+		}
+		else if(this.without.has(_byte))
+		{
+			return String.none() + ' ';
+		}
 
 		var result;
 
@@ -809,43 +825,54 @@ class Dump extends Quant
 			left += this.renderChar(_buffer[i]);
 
 			//
-			column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
-			
-			if(this.high.has(_buffer[i]))
+			if(this.only && !this.only.has(_buffer[i]))
 			{
-				column = column.bold(true).fg(255, 255, 255, false);
+				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
 			}
-			else if(this.color)
+			else if(this.without.has(_buffer[i]))
 			{
-				const h = Math._floor(256 / this.color.length);
-				var fg;
-				
-				for(var j = 0; j < this.color.length; ++j)
-				{
-					if(_buffer[i] <= (h * (j + 1)))
-					{
-						fg = this.color[j];
-						break;
-					}
-				}
-				
-				column = column.fg(... fg, false);
-			}
-			else if(_buffer[i] === 0 || _buffer[i] === 255)
-			{
-				column = column.fg(... this.design.null.right.fg, false);
-			}
-			else if(_buffer[i] > 127)
-			{
-				column = column.fg(... this.design.ansi.right.fg, false);
-			}
-			else if(_buffer[i] === 127 || _buffer[i] < 32)
-			{
-				column = column.fg(... this.design.nonPrintable.right.fg, false);
+				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
 			}
 			else
 			{
-				column = column.fg(... this.design.printable.right.fg, false);
+				column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
+				
+				if(this.high.has(_buffer[i]))
+				{
+					column = column.bold(true).fg(255, 255, 255, false);
+				}
+				else if(this.color)
+				{
+					const h = Math._floor(256 / this.color.length);
+					var fg;
+					
+					for(var j = 0; j < this.color.length; ++j)
+					{
+						if(_buffer[i] <= (h * (j + 1)))
+						{
+							fg = this.color[j];
+							break;
+						}
+					}
+					
+					column = column.fg(... fg, false);
+				}
+				else if(_buffer[i] === 0 || _buffer[i] === 255)
+				{
+					column = column.fg(... this.design.null.right.fg, false);
+				}
+				else if(_buffer[i] > 127)
+				{
+					column = column.fg(... this.design.ansi.right.fg, false);
+				}
+				else if(_buffer[i] === 127 || _buffer[i] < 32)
+				{
+					column = column.fg(... this.design.nonPrintable.right.fg, false);
+				}
+				else
+				{
+					column = column.fg(... this.design.printable.right.fg, false);
+				}
 			}
 
 			right += column;
