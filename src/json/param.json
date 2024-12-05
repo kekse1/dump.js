@@ -73,7 +73,7 @@
 		"type": [ "string", "integer" ],
 		"required": false
 	},
-	"only": {
+	"with": {
 		"type": [ "string", "integer" ],
 		"required": false
 	},

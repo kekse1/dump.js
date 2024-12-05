@@ -243,9 +243,9 @@ class Dump extends Quant
 			//
 			this.high = Dump.parseBytes(this.param.high);
 			
-			if((this.only = Dump.parseBytes(this.param.only)).size === 0)
+			if((this.with = Dump.parseBytes(this.param.with)).size === 0)
 			{
-				this.only = null;
+				this.with = null;
 			}
 			
 			this.without = Dump.parseBytes(this.param.without);
@@ -673,7 +673,7 @@ class Dump extends Quant
 			fg = bg = null;
 		}
 		
-		if(this.only && !this.only.has(_byte))
+		if(this.with && !this.with.has(_byte))
 		{
 			return String.none() + ' ';
 		}
@@ -876,7 +876,7 @@ class Dump extends Quant
 			left += this.renderChar(_buffer[i]);
 
 			//
-			if(this.only && !this.only.has(_buffer[i]))
+			if(this.with && !this.with.has(_buffer[i]))
 			{
 				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
 			}
