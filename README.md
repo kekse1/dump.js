@@ -126,6 +126,9 @@ ranges via `-`. And an optional last `/` separator to define the step!
 
 So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255/2'`.
 
+The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
+or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
