@@ -360,7 +360,7 @@ class Dump extends Quant
 			}
 			else if(_input[i].includes('-'))
 			{
-				idx = _input[i].lastIndexOf('/');
+				idx = _input[i].lastIndexOf('+');
 				step = 1;
 				
 				if(idx > -1)

@@ -122,7 +122,8 @@ There are (very less) parse functions to interprete your parameters.
 
 Mostly it's the color string parser, which interpretes RGB input colors (separated by `,` or `;` (optionally)).
 And for the `--without` or `--only` you can also define more than one byte, separated via `,`, and even byte
-ranges via `-`. And an optional last `/` separator to define the step!
+ranges via `-`. And an optional last `+` separator to define the step. Another **will** be `/`, to define
+those bytes in another radix than the decimal default (it's a cake of pice, but nevertheless a TODO item);
 
 So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255/2'`.
 
