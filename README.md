@@ -125,7 +125,7 @@ And for the `--without` or `--only` you can also define more than one byte, sepa
 ranges via `-`. And an optional last `+` separator to define the step. Another **will** be `/`, to define
 those bytes in another radix than the decimal default (it's a cake of pice, but nevertheless a TODO item);
 
-So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255/2'`.
+So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255+2'`.
 
 The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
 or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.
