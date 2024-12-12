@@ -183,7 +183,7 @@ Once we have enough requests, I'll make the effort to get everything up and runn
 [GitHub **Issues**](https://github.com/kekse1/dump/issues)
 
 ### eMail
-<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=8&size=21px&fg=20,90,150&font=OpenSans&ro&readonly" />
+<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=4&size=24px&fg=20,90,150&font=OpenSans&ro&readonly" />
 
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
