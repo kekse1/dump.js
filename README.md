@@ -6,6 +6,10 @@ My own **Radix viewer**.
 > [!TIP]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
 
+First version with only **viewing** functionality. And it only supports radix/base **2** to **36**,
+the default within JavaScript. My own `radix.js` is already there, but not in this project.. gonna
+to copy it over here **l8rs**.
+
 ## Index
 * [Introduction](#introduction)
 	* [First words](#first-words)
