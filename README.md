@@ -3,6 +3,9 @@
 # The **`dump`** utility
 My own **Radix viewer**.
 
+> [!TIP]
+> When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
+
 ## Index
 * [Introduction](#introduction)
 	* [First words](#first-words)
