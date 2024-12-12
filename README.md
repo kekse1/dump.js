@@ -3,7 +3,7 @@
 # The **`dump`** utility
 My own **Radix viewer**.
 
-> [!TIP]
+> [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
 
 First version with only **viewing** functionality. And it only supports radix/base **2** to **36**,
@@ -18,7 +18,9 @@ copy it over here **l8rs**.
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
-* [References](#references)
+		* [Contact me](#contact-me)
+* [Contact](#contact)
+* [Links](#links)
 * [Copyright and License](#copyright-and-license)
 
 ## Introduction
@@ -168,7 +170,22 @@ If you'd like to use it, you could bring in your own **polyfill**. .. in case yo
 want to wait until I'm going to run my
 [**`init-sub-proj.sh`**](https://github.com/kekse1/scripts/?tab=readme-ov-file#init-sub-projsh).
 
-## References
+#### Contact me
+If you think this project could be beneficial to you, or if you're simply interested in trying it out,
+please send me a [**mail**](#contact) expressing your interest, or create an [**issue**](#contact)
+here on GitHub.
+
+Once we have enough requests, I'll make the effort to get everything up and running for you all.
+
+## Contact
+
+### Issues
+[GitHub **Issues**](https://github.com/kekse1/dump/issues)
+
+### eMail
+<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=8&size=21px&fg=20,90,150&font=OpenSans&ro&readonly" />
+
+## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
 
 I mention this project here because I often used it before I came up with my own solution.
