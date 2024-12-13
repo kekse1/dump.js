@@ -95,36 +95,39 @@ The default 'runtime' parameters are not listed here. They'll be inserted by the
 Laters I'll also explain these switches here; was to lazy to create a table this time..
 
 #### `dump`
-* `--refresh` (Integer/Boolean)
-* `--radix` (Radix)
-* `--path` (File)
-* `--ansi` (Boolean)
-* `--head` (Boolean/Integer)
-* `--tail` (Boolean/Integer)
-* `--start` (Integer)
-* `--stop` (Integer)
-* `--replace` (Radix/Boolean)
-* `--heat` (Integer)
-* `--color` (String/null)
-* `--filter` (Boolean)
-* `--modulo` (Radix/Boolean)
-* `--follow` (Boolean)
-* `--highlight` (String/Integer)
-* `--without` (String/Integer)
-* `--only` (String/Integer)
+* **`--refresh`** (Integer/Boolean)
+* **`--radix`** (Radix)
+* **`--path`** (File)
+* **`--ansi`** (Boolean)
+* **`--head`** (Boolean/Integer)
+* **`--tail`** (Boolean/Integer)
+* **`--start`** (Integer)
+* **`--stop`** (Integer)
+* **`--replace`** (Radix/Boolean)
+* **`--heat`** (Integer)
+* **`--color`** (String/null)
+* **`--filter`** (Boolean)
+* **`--modulo`** (Radix/Boolean)
+* **`--follow`** (Boolean)
+* **`--high`** (String/Integer)
+* **`--without`** (String/Integer)
+* **`--only`** (String/Integer)
 
 #### `dump.util`
-* `--radix` (Radix)
-* `--order` (Boolean/null)
-* `--offset` (Integer)
-* `--size` (Integer)
-* `--locale` (Boolean)
-* `--ansi` (Boolean)
-* `--pairs` (Boolean)
-* `--sep` (String)
-* `--list` (Boolean)
-* `--spaces` (Integer)
-* `--empty` (Boolean)
+* **`--radix`** (Radix)
+* **`--order`** (Boolean/null)
+* **`--offset`** (Integer)
+* **`--size`** (Integer)
+* **`--locale`** (Boolean)
+* **`--ansi`** (Boolean)
+* **`--pairs`** (Boolean)
+* **`--sep`** (String)
+* **`--list`** (Boolean)
+* **`--spaces`** (Integer)
+* **`--empty`** (Boolean)
+* **`--high`** (String/Integer)
+* **`--without`** (String/Integer)
+* **`--only`** (String/Integer)
 
 #### Special Syntax
 There are (very less) parse functions to interprete your parameters.
@@ -143,7 +146,7 @@ or more comma `,`. It doesn't really matter, but please do not combine both in o
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
 ### Structure
-* [**`js/`**](./src/js/): the real runtime code; one **startup** script (for the `numb.sh`) and one with the real logic implementation;
+* [**`js/`**](./src/js/): the 'real' code; one **startup** script `main.js` (for `dump.sh`), the `dump.js`, `util.js` and `helper.js`;
 * [**`json/`**](./src/json/): the configuration file and a scheme file for the argv parameters; also depends on more code;
 * [**`sh/`**](./src/sh/): a **startup** (bash) shell script; I'm always using such scripts massively (to better prepare the environment);
 

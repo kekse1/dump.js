@@ -11,7 +11,7 @@ const DEFAULT_SILENT = true;
 import Quant from '../shared/quant.js';
 import Application from '../shared/app.js';
 import Parameter from '../shared/param.js';
-
+import Helper from './helper.js';
 import path from 'node:path';
 import fs from 'node:fs';
 
@@ -263,6 +263,16 @@ class Utility extends Quant
 			}
 
 			//
+			this.high = Helper.parseBytes(this.param.high);
+
+			if((this.only = Helper.parseBytes(this.param.only)).size === 0)
+			{
+				this.only = null;
+			}
+
+			this.without = Helper.parseBytes(this.param.without);
+
+			//
 			this.prepare(this.util);
 
 			//
@@ -293,14 +303,29 @@ class Utility extends Quant
 		{
 			this.counting[i] = [
 				i,
+				i,
 				this.counting[i],
-				(this.counting[i] === 0)
+				(this.counting[i] > 0),
+				null
 			];
+
+			if(this.only && !this.only.has(i))
+			{
+				this.counting[i][4] = false;
+			}
+			else if(this.without.has(i))
+			{
+				this.counting[i][4] = false;
+			}
+			else
+			{
+				this.counting[i][4] = true;
+			}
 		}
 		
 		if(bool(this.order))
 		{
-			this.counting.sort(1, !this.order);
+			this.counting.sort(2, !this.order);
 		}
 		
 		var maxKey = 0, maxValue = 0;
@@ -309,28 +334,28 @@ class Utility extends Quant
 		{
 			if(this.radix !== 10)
 			{
-				this.counting[i][0] = this.counting[i][0].toString(this.radix);
 				this.counting[i][1] = this.counting[i][1].toString(this.radix);
+				this.counting[i][2] = this.counting[i][2].toString(this.radix);
 			}
 			else if(this.locale && !this.pairs)
 			{
-				this.counting[i][0] = this.counting[i][0].toLocaleString();
 				this.counting[i][1] = this.counting[i][1].toLocaleString();
+				this.counting[i][2] = this.counting[i][2].toLocaleString();
 			}
 			else
 			{
-				this.counting[i][0] = this.counting[i][0].toString();
 				this.counting[i][1] = this.counting[i][1].toString();
+				this.counting[i][2] = this.counting[i][2].toString();
 			}
 			
-			if(this.counting[i][0].length > maxKey)
+			if(this.counting[i][1].length > maxKey)
 			{
-				maxKey = this.counting[i][0].length;
+				maxKey = this.counting[i][1].length;
 			}
 			
-			if(this.counting[i][1].length > maxValue)
+			if(this.counting[i][2].length > maxValue)
 			{
-				maxValue = this.counting[i][1].length;
+				maxValue = this.counting[i][2].length;
 			}
 		}
 
@@ -338,13 +363,21 @@ class Utility extends Quant
 		{
 			if(!this.pairs)
 			{
-				this.counting[i][0] = this.counting[i][0].padStart(maxKey, ' ');
-				this.counting[i][1] = this.counting[i][1].padStart(maxValue, ' ');
+				this.counting[i][1] = this.counting[i][1].padStart(maxKey, ' ');
+				this.counting[i][2] = this.counting[i][2].padStart(maxValue, ' ');
 
 				if(process.ansi)
 				{
-					this.counting[i][0] = this.counting[i][0].debug(true);
-					this.counting[i][1] = this.counting[i][1].info(true);
+					if(this.high.has(this.counting[i][0]))
+					{
+						this.counting[i][1] = this.counting[i][1].bold(true).fg(255, 255, 255, true);
+						this.counting[i][2] = this.counting[i][2].bold(true).fg(255, 255, 255, true);
+					}
+					else
+					{
+						this.counting[i][1] = this.counting[i][1].debug(true);
+						this.counting[i][2] = this.counting[i][2].info(true);
+					}
 				}
 			}
 		}
@@ -364,9 +397,10 @@ class Utility extends Quant
 		{
 			for(var i = 0; i < this.counting.length; ++i)
 			{
-				if(!this.empty && this.counting[i][2]) continue;
-				key = this.counting[i][0];
-				value = this.counting[i][1];
+				if(!this.empty && !this.counting[i][3]) continue;
+				else if(!this.counting[i][4]) continue;
+				key = this.counting[i][1];
+				value = this.counting[i][2];
 				process.stdout.write(key + '=' + value + this.sep);
 			}
 			
@@ -376,9 +410,10 @@ class Utility extends Quant
 		{
 			for(var i = 0; i < this.counting.length; ++i)
 			{
-				if(!this.empty && this.counting[i][2]) continue;
-				key = open + this.counting[i][0] + close;
-				value = this.counting[i][1];
+				if(!this.empty && !this.counting[i][3]) continue;
+				else if(!this.counting[i][4]) continue;
+				key = open + this.counting[i][1] + close;
+				value = this.counting[i][2];
 				process.stdout.write(key + ' ' + value + this.sep);
 			}
 			
@@ -393,17 +428,21 @@ class Utility extends Quant
 
 		for(var i = 0, j = 0; i < this.counting.length; ++i)
 		{
-			if(this.counting[i][2] && !process.ansi)
+			if(!this.counting[i][3] && !process.ansi)
+			{
+				item = empty;
+			}
+			else if(!this.counting[i][4])
 			{
 				item = empty;
 			}
 			else
 			{
-				key = open + this.counting[i][0] + close;
-				value = this.counting[i][1];
+				key = open + this.counting[i][1] + close;
+				value = this.counting[i][2];
 				item = key + ' ' + value;
 
-				if(process.ansi && this.counting[i][2] && !this.empty)
+				if(process.ansi && !this.counting[i][3] && !this.empty)
 					item = item.text.fg(88, 88, 88, true);
 			}
 
@@ -463,3 +502,4 @@ class Utility extends Quant
 export default Utility;
 
 //
+
