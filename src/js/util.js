@@ -375,7 +375,7 @@ class Utility extends Quant
 					}
 					else
 					{
-						this.counting[i][1] = this.counting[i][1].debug(true);
+						this.counting[i][1] = this.counting[i][1].debug(true).bold(true);
 						this.counting[i][2] = this.counting[i][2].info(true);
 					}
 				}
