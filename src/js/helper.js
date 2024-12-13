@@ -61,7 +61,7 @@ class Helper
 					
 					_input[i] = _input[i].substr(0, idx);
 				}
-				
+
 				if((_input[i] = _input[i].split('-')).length !== 2)
 				{
 					continue;
@@ -71,7 +71,7 @@ class Helper
 				{
 					continue;
 				}
-				
+
 				if((_input[i][0] = Math.int(Number(_input[i][0]) % 256)) < 0)
 				{
 					_input[i][0] = (256 + _input[i][0]);
@@ -81,13 +81,13 @@ class Helper
 				{
 					_input[i][1] = (256 + _input[i][1]);
 				}
-				
+
 				min = Math.min(_input[i][0], _input[i][1]);
 				max = Math.max(_input[i][0], _input[i][1]);
 				
-				for(var i = min; i <= max; i += step)
+				for(var j = min; j <= max; j += step)
 				{
-					result.add(i);
+					result.add(j);
 				}
 			}
 		}
