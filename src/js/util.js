@@ -371,7 +371,7 @@ class Utility extends Quant
 					if(this.high.has(this.counting[i][0]))
 					{
 						this.counting[i][1] = this.counting[i][1].bold(true).fg(255, 255, 255, true);
-						this.counting[i][2] = this.counting[i][2].bold(true).fg(255, 255, 255, true);
+						this.counting[i][2] = this.counting[i][2].fg(255, 255, 255, true);
 					}
 					else
 					{
