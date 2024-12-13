@@ -146,9 +146,9 @@ or more comma `,`. It doesn't really matter, but please do not combine both in o
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
 ### Structure
-* [**`js/`**](./src/js/): the 'real' code; one **startup** script `main.js` (for `dump.sh`), the `dump.js`, `util.js` and `helper.js`;
-* [**`json/`**](./src/json/): the configuration file and a scheme file for the argv parameters; also depends on more code;
-* [**`sh/`**](./src/sh/): a **startup** (bash) shell script; I'm always using such scripts massively (to better prepare the environment);
+* [**`js/`**](./src/js/): the 'real' code; one **startup** script [`main.js`](src/js/main.js) (for [`dump.sh`](src/sh/dump.sh)), the [`dump.js`](src/js/dump.js), [`util.js`](src/js/util.js) and the [`helper.js`](src/js/helper.js);
+* [**`json/`**](./src/json/): two configuration files (`config*.json`) and two schemes for the possible argv parameters (`param*.json`);
+* [**`sh/`**](./src/sh/): **startup** (bash) shell scripts; in general I'm massively using such helper scripts (enivironment preparations);
 
 I **think** in the future I'll also provide an easy setup/install script. But not for now. We'll see..
 
