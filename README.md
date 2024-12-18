@@ -14,7 +14,7 @@ copy it over here **l8rs**.
 * [Introduction](#introduction)
 	* [First words](#first-words)
 	* [Command Line Parameters](#command-line-parameters)
-	* [Example Screenshots](#example-screenshots)
+* [Example Screenshots](#example-screenshots)
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
@@ -94,7 +94,7 @@ So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only
 The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
 or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.
 
-### Example Screenshots
+## Example Screenshots
 
 > [!TIP]
 > With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
