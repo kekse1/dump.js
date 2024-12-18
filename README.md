@@ -42,18 +42,15 @@ until now.
 
 ### Example Screenshots
 
-This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
-![Newest Screenshot](img/screenshot.null.png)
-
-And this is the new `--color` feature. So you can define a list of (RGB) colors to divide the bytes (right view)
-into the amount of defined colors. So with two colors, e.g., bytes would change color in the middle (of 256).
-
 > [!TIP]
 > With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
 > to see only one line with the info how much lines and bytes (with size) were ignored.
 > **Update**: looking for **same** bytes, not only the null.
 
 ![Newest --color feature](img/screenshot.seven.png)
+
+This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
+![Newest Screenshot](img/screenshot.null.png)
 
 Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
 [`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
