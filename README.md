@@ -14,7 +14,7 @@ copy it over here **l8rs**.
 * [Introduction](#introduction)
 	* [First words](#first-words)
 	* [Example Screenshots](#example-screenshots)
-    * [Command Line Arguments](#command-line-arguments)
+    * [Command Line Parameters](#command-line-parameters)
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
@@ -85,7 +85,7 @@ Extended the latest feature to see kinda **heatmap**; this way I really saw how 
 over the header data.
 ![Fourth Screenshot](img/screenshot.vier.png)
 
-### Command Line Arguments
+### Command Line Parameters
 See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json).
 
 The default 'runtime' parameters are not listed here. They'll be inserted by the start shell script.
