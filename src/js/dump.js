@@ -621,7 +621,11 @@ class Dump extends Quant
 		{
 			var isSame = true;
 		
-			for(var i = 1; i < _buffer.length; ++i)
+			if(_buffer.length < this.bytes)
+			{
+				isSame = false;
+			}
+			else for(var i = 1; i < _buffer.length; ++i)
 			{
 				if(_buffer[i] !== _buffer[0])
 				{

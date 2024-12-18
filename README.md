@@ -53,7 +53,7 @@ into the amount of defined colors. So with two colors, e.g., bytes would change 
 > to see only one line with the info how much lines and bytes (with size) were ignored.
 > **Update**: looking for **same** bytes, not only the null.
 
-![Newest --color feature](img/screenshot.five.png)
+![Newest --color feature](img/screenshot.seven.png)
 
 Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
 [`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
