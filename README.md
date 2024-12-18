@@ -13,8 +13,8 @@ copy it over here **l8rs**.
 ## Index
 * [Introduction](#introduction)
 	* [First words](#first-words)
+	* [Command Line Parameters](#command-line-parameters)
 	* [Example Screenshots](#example-screenshots)
-    * [Command Line Parameters](#command-line-parameters)
 * [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
@@ -39,51 +39,6 @@ But it became necessary, so I invented it.
 I found out such a code like it's also the [**`hexyl`**](https://github.com/sharkdp/hexyl/) is really easy. Don't
 know exactly how hard this will get when I will extend it (got a big TODO for this one). But it was a cake of piece
 until now.
-
-### Example Screenshots
-
-> [!TIP]
-> With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
-> to see only one line with the info how much lines and bytes (with size) were ignored.
-> **Update**: looking for **same** bytes, not only the null.
-
-![Newest --color feature](img/screenshot.seven.png)
-
-This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
-![Newest Screenshot](img/screenshot.null.png)
-
-Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
-[`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
-maybe).
-
-> [!NOTE]
-> If you've other ideas for possible `dump` **utilities**, please mail me.
-
-![Screenshot of the first utility of my dump](img/screenshot.util.count.png)
-
-And this is showing the `--replace` feature.
-
-![Screenshot of `--replace` feature](img/screenshot.sechs.png)
-
-> [!WARNING]
-> The following screenshots are a bit older, so neither the command line
-> parameters are updated there, nor the colors/design. JFYI.
-
-And this is a newer one, with less extensions and a newly configured [configuration](./src/json/config.json),
-mostly with better colorization, plus the feature to not insist on a simple replacement character for
-non-printable or ANSI characters, but to draw a radix converted view on it - whereas I'd like to use
-the `2` to let the user see if the byte is even or odd. ;-)
-![Second Screenshot](img/screenshot.zwei.png)
-
-My latest feature: I wanted to analyse some abstract complexity in my A.I. header data by looking at it in binary,
-by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
-last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
-problem out) (and btw, superseded by the `--heat`, below):
-![Third Screenshot](img/screenshot.drei.png)
-
-Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
-over the header data.
-![Fourth Screenshot](img/screenshot.vier.png)
 
 ### Command Line Parameters
 See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json).
@@ -138,6 +93,51 @@ So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only
 
 The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
 or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.
+
+### Example Screenshots
+
+> [!TIP]
+> With the newest version I also added the check for many null `\0`. Any empty line would so be summed up,
+> to see only one line with the info how much lines and bytes (with size) were ignored.
+> **Update**: looking for **same** bytes, not only the null.
+
+![Newest --color feature](img/screenshot.seven.png)
+
+This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
+![Newest Screenshot](img/screenshot.null.png)
+
+Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
+[`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
+maybe).
+
+> [!NOTE]
+> If you've other ideas for possible `dump` **utilities**, please mail me.
+
+![Screenshot of the first utility of my dump](img/screenshot.util.count.png)
+
+And this is showing the `--replace` feature.
+
+![Screenshot of `--replace` feature](img/screenshot.sechs.png)
+
+> [!WARNING]
+> The following screenshots are a bit older, so neither the command line
+> parameters are updated there, nor the colors/design. JFYI.
+
+And this is a newer one, with less extensions and a newly configured [configuration](./src/json/config.json),
+mostly with better colorization, plus the feature to not insist on a simple replacement character for
+non-printable or ANSI characters, but to draw a radix converted view on it - whereas I'd like to use
+the `2` to let the user see if the byte is even or odd. ;-)
+![Second Screenshot](img/screenshot.zwei.png)
+
+My latest feature: I wanted to analyse some abstract complexity in my A.I. header data by looking at it in binary,
+by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
+last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
+problem out) (and btw, superseded by the `--heat`, below):
+![Third Screenshot](img/screenshot.drei.png)
+
+Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
+over the header data.
+![Fourth Screenshot](img/screenshot.vier.png)
 
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
