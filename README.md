@@ -86,10 +86,13 @@ There are (very less) parse functions to interprete your parameters.
 
 Mostly it's the color string parser, which interpretes RGB input colors (separated by `,` or `;` (optionally)).
 And for the `--without` or `--only` you can also define more than one byte, separated via `,`, and even byte
-ranges via `-`. And an optional last `+` separator to define the step. Another **will** be `/`, to define
-those bytes in another radix than the decimal default (it's a cake of pice, but nevertheless a TODO item);
+ranges via `-`. The (optional) last `+` separator to define the step. The last (also optional) parameter is
+the input value radix/base, which will be used to interprete your input numbers; it's separated by a regular
+slash `/`.
 
-So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255+2'`.
+So e.g., when you want to show only even/odd numbers, e.g. try `--without/--only '0-255+2'`. Another example
+can be `--high '0-ff+f/16'` (so mask all bytes between the hexadecimal values `0` to `ff`, with a step of
+the hexadecimal `f` (so all 15 bytes).
 
 The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
 or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.

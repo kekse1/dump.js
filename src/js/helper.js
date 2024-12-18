@@ -24,7 +24,7 @@ class Helper
 		}
 		
 		_input = _input.split(',');
-		var number, min, max, step, idx;
+		var number, min, max, step, idx, radix;
 		
 		for(var i = 0; i < _input.length; ++i)
 		{
@@ -32,63 +32,102 @@ class Helper
 			{
 				continue;
 			}
-			else if(!isNaN(_input[i]))
-			{
-				number = Math.int(Number(_input[i]) % 256);
 
-				if(number < 0)
+			idx = _input[i].lastIndexOf('/');
+			
+			if(idx === -1)
+			{
+				radix = 10;
+			}
+			else
+			{
+				if((radix = Number(_input[i].substr(idx + 1))) < 2 || radix > 36)
 				{
-					number = (256 + number);
+					continue;
 				}
 				
-				result.add(number);
+				_input[i] = _input[i].substr(0, idx);
 			}
-			else if(_input[i].includes('-'))
+			
+			if(_input[i].substr(1).includes('-'))
 			{
-				idx = _input[i].lastIndexOf('+');
-				step = 1;
-				
-				if(idx > -1)
+				if((idx = _input[i].lastIndexOf('+')) === -1)
 				{
-					if(isNaN(step = _input[i].substr(idx + 1)))
+					step = 1;
+				}
+				else
+				{
+					if(isNaN(step = parseInt(_input[i].substr(idx + 1), radix)))
 					{
 						step = 1;
 					}
 					else
 					{
-						step = Math.int(Number(step) % 256);
+						step = (Math.int(step) % 256);
 					}
-					
+
 					_input[i] = _input[i].substr(0, idx);
 				}
 
-				if((_input[i] = _input[i].split('-')).length !== 2)
+				if(_input[i][0] === '-')
+				{
+					if((idx = _input[i].substr(1).indexOf('-')) === -1)
+					{
+						continue;
+					}
+					else
+					{
+						++idx;
+					}
+				}
+				else if((idx = _input[i].indexOf('-')) === -1)
 				{
 					continue;
 				}
 				
-				if(isNaN(_input[i][0]) || isNaN(_input[i][1]))
+				_input[i] = [
+					_input[i].substr(0, idx),
+					_input[i].substr(idx + 1)
+				];
+
+				if(isNaN(_input[i][0] = parseInt(_input[i][0], radix)))
 				{
 					continue;
 				}
 
-				if((_input[i][0] = Math.int(Number(_input[i][0]) % 256)) < 0)
+				if(isNaN(_input[i][1] = parseInt(_input[i][1], radix)))
+				{
+					continue;
+				}
+				
+				if((_input[i][0] = Math.int(_input[i][0] % 256)) < 0)
 				{
 					_input[i][0] = (256 + _input[i][0]);
 				}
 				
-				if((_input[i][1] = Math.int(Number(_input[i][1]) % 256)) < 0)
+				if((_input[i][1] = Math.int(_input[i][1] % 256)) < 0)
 				{
 					_input[i][1] = (256 + _input[i][1]);
 				}
 
-				min = Math.min(_input[i][0], _input[i][1]);
-				max = Math.max(_input[i][0], _input[i][1]);
-				
-				for(var j = min; j <= max; j += step)
+				if(_input[i][0] === _input[i][1])
 				{
 					result.add(j);
 				}
+				
+				if(_input[i][0] > _input[i][1]) for(var j = _input[i][0]; j >= _input[i][1]; j -= step)
+					result.add(j);
+				else for(var j = _input[i][0]; j <= _input[i][1]; j += step)
+					result.add(j);
+			}
+			else if(!isNaN(_input[i] = parseInt(_input[i], radix)))
+			{
+				if((_input[i] = Math.int(_input[i] % 256)) < 0)
+				{
+					_input[i] = (256 + _input[i]);
+				}
+				
+				result.add(_input[i]);
 			}
 		}
 
