@@ -114,11 +114,14 @@ class Helper
 				{
 					result.add(j);
 				}
-				
-				if(_input[i][0] > _input[i][1]) for(var j = _input[i][0]; j >= _input[i][1]; j -= step)
+				else if(_input[i][0] > _input[i][1]) for(var j = _input[i][0]; j >= _input[i][1]; j -= step)
+				{
 					result.add(j);
+				}
 				else for(var j = _input[i][0]; j <= _input[i][1]; j += step)
+				{
 					result.add(j);
+				}
 			}
 			else if(!isNaN(_input[i] = parseInt(_input[i], radix)))
 			{
