@@ -620,8 +620,8 @@ class Dump extends Quant
 		if(this.filter)
 		{
 			var isSame = true;
-		
-			if(_buffer.length < this.bytes)
+			
+			if(_buffer.length < this.bytes || this.bytes === 0)
 			{
 				isSame = false;
 			}
@@ -949,7 +949,7 @@ class Dump extends Quant
 			//
 			if(this.tail && this.stop !== null && this.bytes)
 			{
-				diff = (this.stop - this.start - this.bytes + 1);
+				diff = (this.stop - this.start - this.bytes);
 				if(diff > 0) start += diff;
 			}
 
