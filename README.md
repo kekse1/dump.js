@@ -153,7 +153,8 @@ You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](h
 I **think** in the future I'll also provide an easy setup/install script. But not for now. We'll see..
 
 > [!TIP]
-> I prefer to use the newest [`dump.printable.sh`](./src/sh/dump.printable.sh);
+> At the moment I prefer to use the newest [`dump.printable.sh`](./src/sh/dump.printable.sh) (which
+> is actually just a wrapper around the `dump.count` utility) with my preferred settings (TODO?).
 
 Additionally, my [configuration `.json` file](./src/json/config.json) will have a better structure. It all was quick-and-easy setup for me,
 but the more config parameters will come, the more structure they need .. and gonna have.
