@@ -112,7 +112,7 @@ class Helper
 
 				if(_input[i][0] === _input[i][1])
 				{
-					result.add(j);
+					result.add(_input[i][0]);
 				}
 				else if(_input[i][0] > _input[i][1]) for(var j = _input[i][0]; j >= _input[i][1]; j -= step)
 				{
