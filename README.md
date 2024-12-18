@@ -184,10 +184,10 @@ Once we have enough requests, I'll make the effort to get everything up and runn
 ## Contact
 
 <a href="https://github.com/kekse1/dump/issues/">
-    <img src="https://kekse.biz/github.php?override=github:dump&draw&text=Issues&angle=-4&size=21px&fg=20,90,150&font=OpenSans&ro&readonly" />
+    <img src="https://kekse.biz/github.php?override=github:dump&draw&text=Issues&angle=-4&size=21px&fg=20,90,150&font=OpenSans&ro&readonly&h=48&v=16" />
 </a>
 
-<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=6&size=24px&fg=20,90,150&font=OpenSans&ro&readonly" />
+<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=6&size=24px&fg=20,90,150&font=OpenSans&ro&readonly&h=64&v=16" />
 
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
