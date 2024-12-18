@@ -152,14 +152,17 @@ You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](h
 
 I **think** in the future I'll also provide an easy setup/install script. But not for now. We'll see..
 
+> [!TIP]
+> I prefer to use the newest [`dump.printable.sh`](./src/sh/dump.printable.sh);
+
 Additionally, my [configuration `.json` file](./src/json/config.json) will have a better structure. It all was quick-and-easy setup for me,
 but the more config parameters will come, the more structure they need .. and gonna have.
 
-> [!TIP]
+> [!NOTE]
 > I'm using my `.json` configuration with the help of my
 > [**`config.js`**](https://github.com/kekse1/javascript/#configjs).
 
-> [!TIP]
+> [!NOTE]
 > I'm also using my own [**`JSON.js`**](https://github.com/kekse1/json.js/) project in here.
 > This is why you can see the comments in my [`config.json`](./src/json/config.json).
 
