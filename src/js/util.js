@@ -395,6 +395,8 @@ class Utility extends Quant
 
 		if(this.pairs)
 		{
+			String.TAB = 0;
+
 			for(var i = 0; i < this.counting.length; ++i)
 			{
 				if(!this.empty && !this.counting[i][3]) continue;
