@@ -161,7 +161,7 @@ but the more config parameters will come, the more structure they need .. and go
 
 > [!NOTE]
 > I'm using my `.json` configuration with the help of my
-> [**`config.js`**](https://github.com/kekse1/javascript/#configjs).
+> [**`config.js`**](https://github.com/kekse1/javascripts/#configjs).
 
 > [!NOTE]
 > I'm also using my own [**`JSON.js`**](https://github.com/kekse1/json.js/) project in here.
