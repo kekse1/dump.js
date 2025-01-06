@@ -1,7 +1,7 @@
-<img src="https://kekse.biz/github.php?draw&override=github:dump" />
+<img src="https://kekse.biz/github.php?draw&override=github:dump.js" />
 
 # The **`dump`** utility
-My own **Radix viewer**.
+My own **Radix viewer** (JavaScript version).
 
 > [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
