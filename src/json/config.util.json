@@ -8,7 +8,7 @@
 
 	/* sort results; either (null) for NO sort, or a boolean to define
 	       	the direction (asc/desc); ... */
-	"order": null,
+	"sort": null,
 
 	/* default radix (base) */
 	"radix": 10,

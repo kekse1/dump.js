@@ -28,11 +28,13 @@ class Utility extends Quant
 		{
 			throw new Error('Missing _param argument');
 		}
-		else if(!string(_util, false))
+		
+		if(!string(_util, false))
 		{
 			throw new Error('Missing _util argument');
 		}
-		else if(!func(this[this.util = _util]))
+		
+		if(!func(this[this.util = _util]))
 		{
 			console.error('The utility `' + _util + '` is not available.');
 			process.exit(254);
@@ -43,7 +45,8 @@ class Utility extends Quant
 		
 		new Application(this, { silent: DEFAULT_SILENT,
 			callback: (... _a) => this.onApplication(... _a),
-			name: 'Dump/Utility', param: this.param, config: this.param.config });
+			name: 'Dump/Utility', param: this.param,
+			config: this.param.get('config') });
 	}
 	
 	static get utilities()
@@ -80,9 +83,9 @@ class Utility extends Quant
 			//
 			if(process.stdout.isTTY)
 			{
-				if('ansi' in this.param)
+				if(this.param.has('ansi'))
 				{
-					process.ansi = this.param.ansi;
+					process.ansi = this.param.get('ansi');
 				}
 				else
 				{
@@ -129,14 +132,14 @@ class Utility extends Quant
 			}
 			else if(stats.size < 1)
 			{
-				if(! ('size' in this.param))
+				if(!this.param.has('size'))
 				{
 					console.error('Unable to determine file size, so please argue with `--size`.');
 					console.warn('But maybe this file is just empty..');
 					process.exit(true);
 				}
 				
-				stats.size = this.param.size;
+				stats.size = this.param.get('size');
 			}
 			else
 			{
@@ -145,18 +148,20 @@ class Utility extends Quant
 			}
 
 			//
-			if('size' in this.param)
+			if(this.param.has('size'))
 			{
-				this.size = Math.min(this.param.size, stats.size);
+				this.size = Math.min(
+					this.param.get('size'),
+					stats.size);
 			}
 			else
 			{
 				this.size = stats.size;
 			}
 
-			if('offset' in this.param)
+			if(this.param.has('offset'))
 			{
-				this.offset = this.param.offset;
+				this.offset = this.param.get('offset');
 			}
 			else
 			{
@@ -174,9 +179,9 @@ class Utility extends Quant
 			}
 
 			//
-			if('radix' in this.param)
+			if(this.param.has('radix'))
 			{
-				this.radix = this.param.radix;
+				this.radix = this.param.get('radix');
 			}
 			else
 			{
@@ -185,9 +190,9 @@ class Utility extends Quant
 			
 			if(this.radix === 10)
 			{
-				if('locale' in this.param)
+				if(this.param.has('locale'))
 				{
-					this.locale = this.param.locale;
+					this.locale = this.param.get('locale');
 				}
 				else
 				{
@@ -200,28 +205,28 @@ class Utility extends Quant
 			}
 			
 			//
-			if(bool(this.param.order) || this.param.order === null)
+			if(bool(this.param.get('sort')) || this.param.get('sort') === null)
 			{
-				this.order = this.param.order;
+				this.sort = this.param.get('sort');
 			}
 			else
 			{
-				this.order = this.getConfig('order');
+				this.sort = this.getConfig('sort');
 			}
 
 			//
-			if('pairs' in this.param)
+			if(this.param.has('pairs'))
 			{
-				this.pairs = this.param.pairs;
+				this.pairs = this.param.get('pairs');
 			}
 			else
 			{
 				this.pairs = this.getConfig('pairs');
 			}
 			
-			if('list' in this.param)
+			if(this.param.has('list'))
 			{
-				this.list = this.param.list;
+				this.list = this.param.get('list');
 			}
 			else
 			{
@@ -237,18 +242,18 @@ class Utility extends Quant
 				this.pairs = null;
 			}
 			
-			if(string(this.param.sep, false))
+			if(string(this.param.get('sep'), false))
 			{
-				this.sep = this.param.sep;
+				this.sep = this.param.get('sep');
 			}
 			else
 			{
 				this.sep = this.getConfig('sep');
 			}
 
-			if(int(this.param.spaces) && this.param.spaces >= 0)
+			if(int(this.param.get('spaces')) && this.param.get('spaces') >= 0)
 			{
-				this.spaces = this.param.spaces;
+				this.spaces = this.param.get('spaces');
 			}
 			else
 			{
@@ -257,20 +262,20 @@ class Utility extends Quant
 
 			this.space = ' '.repeat(this.spaces);
 
-			if(!bool(this.empty = this.param.empty))
+			if(!bool(this.empty = this.param.get('empty')))
 			{
 				this.empty = this.getConfig('empty');
 			}
 
 			//
-			this.high = Helper.parseBytes(this.param.high);
+			this.high = Helper.parseBytes(this.param.get('high'));
 
-			if((this.only = Helper.parseBytes(this.param.only)).size === 0)
+			if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
 			{
 				this.only = null;
 			}
 
-			this.without = Helper.parseBytes(this.param.without);
+			this.without = Helper.parseBytes(this.param.get('without'));
 
 			//
 			this.prepare(this.util);
@@ -286,7 +291,8 @@ class Utility extends Quant
 			//
 			this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
 			this.stream.on('end', (... _a) => this.onEnd(... _a));
-		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
+		}, path.join(this.param.get('script'),
+			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 
 	count(_chunk)
@@ -323,9 +329,9 @@ class Utility extends Quant
 			}
 		}
 		
-		if(bool(this.order))
+		if(bool(this.sort))
 		{
-			this.counting.sort(2, !this.order);
+			this.counting.sort(2, !this.sort);
 		}
 		
 		var maxKey = 0, maxValue = 0;

@@ -17,7 +17,7 @@ const param = getopt(true);
 var dump = null;
 
 //
-if(param.util)
+if(param.has('util'))
 {
 	const utils = Utility.utilities;
 	var util = '';
@@ -44,7 +44,7 @@ if(param.util)
 	}
 	else
 	{
-		delete param.util;
+		param.remove('util');
 	}
 
 	dump = new Utility(param, util);

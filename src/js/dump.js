@@ -34,7 +34,8 @@ class Dump extends Quant
 		{
 			throw new Error('No _param defined');
 		}
-		else if(console.width > 0 && console.width < DEFAULT_CONSOLE_WIDTH_MIN)
+		
+		if(console.width > 0 && console.width < DEFAULT_CONSOLE_WIDTH_MIN)
 		{
 			console.error('Your terminal is too small.. My hope were ' + DEFAULT_CONSOLE_WIDTH_MIN + ' columns.');
 			return process.exit(true);
@@ -45,7 +46,8 @@ class Dump extends Quant
 		
 		new Application(this, { silent: DEFAULT_SILENT,
 			callback: (... _a) => this.onApplication(... _a),
-			name: 'Dump', param: this.param, config: this.param.config });
+			name: 'Dump', param: this.param,
+			config: this.param.get('config') });
 	}
 
 	onExit(_name, _code, ... _args)
@@ -64,20 +66,20 @@ class Dump extends Quant
 			}
 
 			//
-			var path = this.param.path;
+			var path = this.param.get('path');
 			
-			if(isRadix(this.param.radix))
+			if(isRadix(this.param.get('radix')))
 			{
-				this.radix = this.param.radix;
+				this.radix = this.param.get('radix');
 			}
 			else
 			{
 				this.radix = this.getConfig('radix');
 			}
 			
-			if(!string(path, false)) for(var i = 0; i < this.param.length; ++i)
+			if(!pathname(path)) for(var i = 0; i < this.param.length; ++i)
 			{
-				if(string(this.param[i], false))
+				if(pathname(this.param[i]))
 				{
 					path = this.param.splice(i, 1)[0];
 					break;
@@ -88,7 +90,7 @@ class Dump extends Quant
 			{
 				this.path = '-';
 			}
-			else if(!string(this.path = path, false))
+			else if(!pathname(this.path = path))
 			{
 				console.error('Missing file path parameter (and also no stdin input).');
 				return process.exit(true);
@@ -101,9 +103,9 @@ class Dump extends Quant
 			//
 			this.radixDigits = Math.digits(this.radix, 256);
 
-			if(int(this.param.refresh) || bool(this.param.refresh))
+			if(int(this.param.get('refresh')) || bool(this.param.get('refresh')))
 			{
-				this.refresh = this.param.refresh;
+				this.refresh = this.param.get('refresh');
 			}
 			else
 			{
@@ -126,9 +128,9 @@ class Dump extends Quant
 			this.design = this.getConfig('design');
 			
 			//
-			if(bool(this.param.ansi))
+			if(bool(this.param.get('ansi')))
 			{
-				process.ansi = console.ansi = this.param.ansi;
+				process.ansi = console.ansi = this.param.get('ansi');
 			}
 			else
 			{
@@ -136,12 +138,12 @@ class Dump extends Quant
 			}
 			
 			//
-			if(!bool(this.head = this.param.head) && !int(this.head))
+			if(!bool(this.head = this.param.get('head')) && !int(this.head))
 			{
 				this.head = this.getConfig('head');
 			}
 			
-			if(!bool(this.tail = this.param.tail) && !int(this.tail))
+			if(!bool(this.tail = this.param.get('tail')) && !int(this.tail))
 			{
 				this.tail = this.getConfig('tail');
 			}
@@ -171,13 +173,14 @@ class Dump extends Quant
 			}
 
 			//
-			if(!bool(this.filter = this.param.filter))
+			if(!bool(this.filter = this.param.get('filter')))
 			{
 				this.filter = this.getConfig('filter');
 			}
 
 			//
-			if(!isRadix(this.replace = this.param.replace) && !bool(this.replace))
+			if(!isRadix(this.replace = this.param.get('replace')) &&
+					!bool(this.replace))
 			{
 				if(!isRadix(this.replace = this.getConfig('replace')) && !bool(this.replace))
 				{
@@ -185,9 +188,9 @@ class Dump extends Quant
 				}
 			}
 
-			if(!int(this.heat = this.param.heat))
+			if(!int(this.heat = this.param.get('heat')))
 			{
-				if(!int(this.heat = this.param.heat))
+				if(!int(this.heat = this.param.get('heat')))
 				{
 					this.heat = null;
 				}
@@ -214,7 +217,8 @@ class Dump extends Quant
 				}
 			}
 			
-			if(!string(this.color = this.param.color, false) && this.color !== null)
+			if(!string(this.color = this.param.get('color'), false) &&
+					this.color !== null)
 			{
 				if(!array(this.color = this.getConfig('design.color'), false) && !string(this.color, false) && this.color !== null)
 				{
@@ -236,14 +240,14 @@ class Dump extends Quant
 			}
 			
 			//
-			this.high = Helper.parseBytes(this.param.high);
+			this.high = Helper.parseBytes(this.param.get('high'));
 			
-			if((this.only = Helper.parseBytes(this.param.only)).size === 0)
+			if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
 			{
 				this.only = null;
 			}
 			
-			this.without = Helper.parseBytes(this.param.without);
+			this.without = Helper.parseBytes(this.param.get('without'));
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
@@ -267,15 +271,16 @@ class Dump extends Quant
 				}
 			}
 
-			if('start' in this.param)
+			if(this.param.has('start'))
 			{
 				if(this.stats.size)
 				{
-					this.start = Math.getIndex.number(this.param.start, this.stats.size);
+					this.start = Math.getIndex.number(
+						this.param.get('start'), this.stats.size);
 				}
-				else if(this.param.start >= 0)
+				else if(this.param.get('start') >= 0)
 				{
-					this.start = this.param.start;
+					this.start = this.param.get('start');
 				}
 				else
 				{
@@ -287,15 +292,16 @@ class Dump extends Quant
 				this.start = 0;
 			}
 
-			if('stop' in this.param)
+			if(this.param.has('stop'))
 			{
 				if(this.stats.size)
 				{
-					this.stop = Math.getIndex.number(this.param.stop, this.stats.size);
+					this.stop = Math.getIndex.number(
+						this.param.get('stop'), this.stats.size);
 				}
-				else if(this.param.stop >= 0)
+				else if(this.param.get('stop') >= 0)
 				{
-					this.stop = this.param.stop;
+					this.stop = this.param.get('stop');
 				}
 				else
 				{
@@ -322,7 +328,8 @@ class Dump extends Quant
 
 			//
 			this.print();
-		}, path.join(this.param.script, DEFAULT_PARAM_SCHEME_JSON), this.param);
+		}, path.join(this.param.get('script'),
+			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 	
 	destroy(_name, _code, ... _args)

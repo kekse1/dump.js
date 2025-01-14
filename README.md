@@ -41,12 +41,12 @@ know exactly how hard this will get when I will extend it (got a big TODO for th
 until now.
 
 ### Command Line Parameters
-See also [`param.json`](src/json/param.json) and [`param.util.json`](src/json/param.util.json).
-
-The default 'runtime' parameters are not listed here. They'll be inserted by the start shell script.
-Laters I'll also explain these switches here; was to lazy to create a table this time..
+The default 'runtime' parameters are not listed here. They got inserted by the startup
+[shell scripts](src/sh/).
 
 #### `dump`
+Look at the [**`param.json`**](src/json/param.json):
+
 * **`--refresh`** (Integer/Boolean)
 * **`--radix`** (Radix)
 * **`--path`** (File)
@@ -66,8 +66,10 @@ Laters I'll also explain these switches here; was to lazy to create a table this
 * **`--only`** (String/Integer)
 
 #### `dump.util`
+And here with the [**`param.util.json`**](src/json/param.util.json):
+
 * **`--radix`** (Radix)
-* **`--order`** (Boolean/null)
+* **`--sort`** (Boolean/null)
 * **`--offset`** (Integer)
 * **`--size`** (Integer)
 * **`--locale`** (Boolean)
