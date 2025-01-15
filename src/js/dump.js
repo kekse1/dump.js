@@ -628,7 +628,7 @@ class Dump extends Quant
 		{
 			var isSame = true;
 			
-			if(_buffer.length < this.bytes || this.bytes === 0)
+			if(_buffer.length < this.columns || this.columns === 0)
 			{
 				isSame = false;
 			}
@@ -640,7 +640,7 @@ class Dump extends Quant
 					break;
 				}
 			}
-		
+			
 			if(isSame)
 			{
 				if(this.sameByte !== null && this.sameByte !== _buffer[0])
