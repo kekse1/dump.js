@@ -11,17 +11,17 @@ the default within JavaScript. My own `radix.js` is already there, but not in th
 copy it over here **l8rs**.
 
 ## Index
-* [Introduction](#introduction)
+1. [Introduction](#introduction)
 	* [First words](#first-words)
 	* [Command Line Parameters](#command-line-parameters)
-* [Example Screenshots](#example-screenshots)
-* [Download](#download)
+2. [Example Screenshots](#example-screenshots)
+3. [Download](#download)
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
 		* [Contact me](#contact-me)
-* [Contact](#contact)
-* [Links](#links)
-* [Copyright and License](#copyright-and-license)
+4. [Links](#links)
+5. [Contact](#contact)
+6. [Copyright and License](#copyright-and-license)
 
 ## Introduction
 It became necessary since I wanted to inspect the changing data of my [Norbert](https://github.com/kekse1/norbert/).
@@ -186,14 +186,6 @@ here on GitHub.
 
 Once we have enough requests, I'll make the effort to get everything up and running for you all.
 
-## Contact
-
-<a href="https://github.com/kekse1/dump/issues/">
-    <img src="https://kekse.biz/github.php?override=github:dump&draw&text=Issues&angle=-4&size=21px&fg=110,20,150&font=OpenSans&ro&readonly&h=48&v=16" />
-</a>
-
-<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=6&size=24px&fg=150,20,90&font=OpenSans&ro&readonly&h=64&v=16" />
-
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
 
@@ -201,6 +193,14 @@ I mention this project here because I often used it before I came up with my own
 
 In the future, when I'm extending this code base, I think I'm going to see this foreign
 project as an example for me. Like more colors for different types of byte data, and more.
+
+# Contact
+
+<a href="https://github.com/kekse1/dump/issues/">
+    <img src="https://kekse.biz/github.php?override=github:dump&draw&text=Issues&angle=-4&size=21px&fg=110,20,150&font=OpenSans&ro&readonly&h=48&v=16" />
+</a>
+
+<img src="https://kekse.biz/github.php?override=github:dump&draw&text=kuchen@kekse.biz&angle=6&size=24px&fg=150,20,90&font=OpenSans&ro&readonly&h=64&v=16" />
 
 # Copyright and License
 The Copyright is [(c) Sebastian Kucharczyk](./COPYRIGHT.txt),
