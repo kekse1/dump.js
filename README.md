@@ -38,7 +38,7 @@ But it became necessary, so I invented it.
 
 I found out such a code like it's also the [**`hexyl`**](https://github.com/sharkdp/hexyl/) is really easy. Don't
 know exactly how hard this will get when I will extend it (got a big TODO for this one). But it was a cake of piece
-until now.
+until now (even without looking at the hexyl source code).
 
 ### Command Line Parameters
 The default 'runtime' parameters are not listed here. They got inserted by the startup
