@@ -673,15 +673,15 @@ class Dump extends Quant
 			//
 			if(this.only && !this.only.has(_buffer[i]))
 			{
-				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
+				column = String.none() + ' '.repeat(this.radixDigits);
 			}
 			else if(this.without.has(_buffer[i]))
 			{
-				column = String.none() + ' '.repeat(this.radixDigits) + ' ';
+				column = String.none() + ' '.repeat(this.radixDigits);
 			}
 			else
 			{
-				column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad) + ' ';
+				column = _buffer[i].toString(this.radix).padStart(this.radixDigits, this.design.right.pad);
 				
 				if(this.high.has(_buffer[i]))
 				{
@@ -721,6 +721,11 @@ class Dump extends Quant
 				}
 			}
 
+			if(i > 0)
+			{
+				column = ' ' + column;
+			}
+			
 			right += column;
 		}
 		
@@ -820,9 +825,9 @@ class Dump extends Quant
 
 		return columns;*/
 
-		return Math._floor(((console.width || 80) -
-			this.lineBegin.textLength - 1) /
-			(this.radixDigits + 2));
+		return Math._floor(
+			((console.width || 80) - this.lineBegin.textLength) /
+				(this.radixDigits + 2));
 	}
 
 	calculateLines()
