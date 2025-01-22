@@ -721,12 +721,7 @@ class Dump extends Quant
 				}
 			}
 
-			if(i > 0)
-			{
-				column = ' ' + column;
-			}
-			
-			right += column;
+			right += ' ' + column;
 		}
 		
 		var diff = (this.columns - i);
@@ -739,7 +734,7 @@ class Dump extends Quant
 			left += diff;
 		}
 		
-		const line = (this.lineBegin + left + String.none() + ' ' + right + String.none());
+		const line = (this.lineBegin + left + String.none() + right + String.none());
 
 		Dump.write(line + EOL); 
 		return ++this.linesPrint;
