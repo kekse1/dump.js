@@ -805,23 +805,10 @@ class Dump extends Quant
 	}
 
 	//
-	//TODO/TEST this more, pls.!1
-	//
 	calculateColumns()
 	{
-		/*var columns = 0;
-		var length = this.lineBegin.textLength;
-
-		while((length + columns + 3 + this.radixDigits) <= (console.width || 80))
-		{
-			length += ((255).toString(this.radix) + ' ').length;
-			++columns;
-		}
-
-		return columns;*/
-
-		return Math._floor(
-			((console.width || 80) - this.lineBegin.textLength) /
+		return Math._floor(((console.width || 80) -
+			this.lineBegin.textLength) /
 				(this.radixDigits + 2));
 	}
 
