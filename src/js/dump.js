@@ -805,9 +805,11 @@ class Dump extends Quant
 	}
 
 	//
+	//TODO/TEST this more, pls.!1
+	//
 	calculateColumns()
 	{
-		var columns = 0;
+		/*var columns = 0;
 		var length = this.lineBegin.textLength;
 
 		while((length + columns + 3 + this.radixDigits) <= (console.width || 80))
@@ -816,7 +818,11 @@ class Dump extends Quant
 			++columns;
 		}
 
-		return columns;
+		return columns;*/
+
+		return Math._floor(((console.width || 80) -
+			this.lineBegin.textLength - 1) /
+			(this.radixDigits + 2));
 	}
 
 	calculateLines()
