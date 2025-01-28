@@ -51,8 +51,8 @@ Look at the [**`param.json`**](src/json/param.json):
 * **`--radix`** (Radix)
 * **`--path`** (File)
 * **`--ansi`** (Boolean)
-* **`--head`** (Boolean/Integer)
-* **`--tail`** (Boolean/Integer)
+* **`--head`** (Boolean/Integer/String)
+* **`--tail`** (Boolean/Integer/String)
 * **`--start`** (Integer)
 * **`--stop`** (Integer)
 * **`--replace`** (Radix/Boolean)
@@ -98,6 +98,12 @@ the hexadecimal `f` (so all 15 bytes).
 
 The colors can be defined via three bytes separated by comma `,`; more colors separated via `;` as whole,
 or more comma `,`. It doesn't really matter, but please do not combine both in one parameter.
+
+#### `--head` and `--tail`
+If defined empty (or with `yes/no/on/off`), size will automatically be adapted to your console's height.
+
+It can also be an integer for the target line count; or a string with a '%' suffix, so you can define
+a percentage of your console's height.
 
 ## Example Screenshots
 

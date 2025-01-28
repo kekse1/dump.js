@@ -138,12 +138,12 @@ class Dump extends Quant
 			}
 			
 			//
-			if(!bool(this.head = this.param.get('head')) && !int(this.head))
+			if(!bool(this.head = this.param.get('head')) && !int(this.head) && !string(this.head, true))
 			{
 				this.head = this.getConfig('head');
 			}
 			
-			if(!bool(this.tail = this.param.get('tail')) && !int(this.tail))
+			if(!bool(this.tail = this.param.get('tail')) && !int(this.tail) && !string(this.tail, true))
 			{
 				this.tail = this.getConfig('tail');
 			}
@@ -153,11 +153,25 @@ class Dump extends Quant
 				console.error('The --head parameter needs to be positive');
 				return process.exit(true);
 			}
+			else if(string(this.head, true))
+			{
+				if(this.head.length < 2 || this.head[this.head.length - 1] !== '%')
+				{
+					this.head = false;
+				}
+			}
 			
 			if(int(this.tail) && this.tail < 1)
 			{
 				console.error('The --tail parameter needs to be positive');
 				return process.exit(true);
+			}
+			else if(string(this.tail, true))
+			{
+				if(this.tail.length < 2 || this.tail[this.tail.length - 1] !== '%')
+				{
+					this.tail = false;
+				}
 			}
 			
 			if(this.head && this.tail)
@@ -828,15 +842,71 @@ class Dump extends Quant
 		{
 			return 0;
 		}
-		
+
 		if(int(this.head))
 		{
 			return Math._floor(this.columns * this.head);
 		}
-		
+		else if(string(this.head, 2))
+		{
+			this.head = this.head.slice(0, -1);
+
+			if(Number.isNaN(this.head))
+			{
+				this.head = false;
+			}
+			else
+			{
+				if(this.head >= 100)
+				{
+					this.head = 100;
+				}
+				else if(this.head <= 0)
+				{
+					this.head = false;
+				}
+
+				if(this.head)
+				{
+					this.head = Math._floor((console.height -
+						this.consoleHeightSub) *
+						this.head / 100);
+					return Math._floor(this.columns * this.head);
+				}
+			}
+		}
+
 		if(int(this.tail))
 		{
 			return Math._floor(this.columns * this.tail);
+		}
+		else if(string(this.tail, 2))
+		{
+			this.tail = this.tail.slice(0, -1);
+
+			if(Number.isNaN(this.tail))
+			{
+				this.tail = false;
+			}
+			else
+			{
+				if(this.tail >= 100)
+				{
+					this.tail = 100;
+				}
+				else if(this.tail <= 0)
+				{
+					this.tail = false;
+				}
+
+				if(this.tail)
+				{
+					this.tail = Math._floor((console.height -
+						this.consoleHeightSub) *
+						this.tail / 100);
+					return Math._floor(this.columns * this.tail);
+				}
+			}
 		}
 		
 		if(this.head || this.tail)
