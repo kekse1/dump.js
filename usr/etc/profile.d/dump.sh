@@ -9,7 +9,7 @@
 #
 
 alias d="dump --tail 80% --replace no"
-alias c="dump.count --sort yes"
+alias c="dump.count --sort yes --chars yes"
 alias p="dump.printable"
 alias t="dump.text"
 
