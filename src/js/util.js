@@ -278,9 +278,9 @@ class Utility extends Quant
 			this.without = Helper.parseBytes(this.param.get('without'));
 
 			//
-			if(!bool(this.chars = this.param.get('chars')))
+			if(!bool(this.printable = this.param.get('printable')))
 			{
-				this.chars = this.getConfig('chars');
+				this.printable = this.getConfig('printable');
 			}
 
 			//
@@ -345,7 +345,7 @@ class Utility extends Quant
 		
 		for(var i = 0; i < this.counting.length; ++i)
 		{
-			if(this.chars && this.counting[i][1] >= 32 && this.counting[i][1] < 127)
+			if(this.printable && this.counting[i][1] >= 32 && this.counting[i][1] < 127)
 			{
 				this.counting[i][1] = '`'.defaultFG(true) +
 					String.fromCharCode(this.counting[i][1]).error(true) +

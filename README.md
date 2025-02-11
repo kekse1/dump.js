@@ -82,6 +82,7 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--high`** (String/Integer)
 * **`--without`** (String/Integer)
 * **`--only`** (String/Integer)
+* **`--printable`** (Boolean)
 
 #### Special Syntax
 There are (very less) parse functions to interprete your parameters.

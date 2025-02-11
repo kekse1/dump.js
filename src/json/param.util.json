@@ -71,7 +71,7 @@
 		"type": [ "string", "integer" ],
 		"required": false
 	},
-	"chars": {
+	"printable": {
 		"type": "boolean",
 		"required": false
 	}

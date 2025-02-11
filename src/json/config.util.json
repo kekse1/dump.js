@@ -34,6 +34,6 @@
 	"empty": false,
 
 	/* shows the characters (only printable ones) with their mapped character, not byte values.. */
-	"chars": false
+	"printable": false
 
 }
