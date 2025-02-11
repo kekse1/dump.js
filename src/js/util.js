@@ -278,6 +278,12 @@ class Utility extends Quant
 			this.without = Helper.parseBytes(this.param.get('without'));
 
 			//
+			if(!bool(this.chars = this.param.get('chars')))
+			{
+				this.chars = this.getConfig('chars');
+			}
+
+			//
 			this.prepare(this.util);
 
 			//
@@ -312,7 +318,8 @@ class Utility extends Quant
 				i,
 				this.counting[i],
 				(this.counting[i] > 0),
-				null
+				null,
+				false
 			];
 
 			if(this.only && !this.only.has(i))
@@ -338,25 +345,36 @@ class Utility extends Quant
 		
 		for(var i = 0; i < this.counting.length; ++i)
 		{
+			if(this.chars && this.counting[i][1] >= 32 && this.counting[i][1] < 127)
+			{
+				this.counting[i][1] = '`'.defaultFG(true) +
+					String.fromCharCode(this.counting[i][1]).error(true) +
+					'`'.defaultFG(true);
+				this.counting[i][5] = true;
+			}
+			
 			if(this.radix !== 10)
 			{
-				this.counting[i][1] = this.counting[i][1].toString(this.radix);
+				if(!this.counting[i][5])
+					this.counting[i][1] = this.counting[i][1].toString(this.radix);
 				this.counting[i][2] = this.counting[i][2].toString(this.radix);
 			}
 			else if(this.locale && !this.pairs)
 			{
-				this.counting[i][1] = this.counting[i][1].toLocaleString();
+				if(!this.counting[i][5])
+					this.counting[i][1] = this.counting[i][1].toLocaleString();
 				this.counting[i][2] = this.counting[i][2].toLocaleString();
 			}
 			else
 			{
-				this.counting[i][1] = this.counting[i][1].toString();
+				if(!this.counting[i][5])
+					this.counting[i][1] = this.counting[i][1].toString();
 				this.counting[i][2] = this.counting[i][2].toString();
 			}
 			
 			if(this.counting[i][1].length > maxKey)
 			{
-				maxKey = this.counting[i][1].length;
+				maxKey = this.counting[i][1].textLength;
 			}
 			
 			if(this.counting[i][2].length > maxValue)
@@ -369,19 +387,24 @@ class Utility extends Quant
 		{
 			if(!this.pairs)
 			{
-				this.counting[i][1] = this.counting[i][1].padStart(maxKey, ' ');
+				if(! (maxKey === 3 && this.counting[i][5]))
+				{
+					this.counting[i][1] = this.counting[i][1].pad(maxKey, ' ', true);
+				}
+
 				this.counting[i][2] = this.counting[i][2].padStart(maxValue, ' ');
 
 				if(process.ansi)
 				{
 					if(this.high.has(this.counting[i][0]))
 					{
-						this.counting[i][1] = this.counting[i][1].bold(true).fg(255, 255, 255, true).inverse(true);
+						this.counting[i][1] = this.counting[i][1].bold(true).fg(255, 255, 255, true);
+						if(!this.counting[i][5]) this.counting[i][1] = this.counting[i][1].inverse(true);
 						this.counting[i][2] = this.counting[i][2].fg(255, 255, 255, true).bold(true);
 					}
 					else
 					{
-						this.counting[i][1] = this.counting[i][1].debug(true).bold(true);
+						this.counting[i][1] = this.counting[i][1].debug(true);//.bold(true);
 						this.counting[i][2] = this.counting[i][2].info(true);
 					}
 				}

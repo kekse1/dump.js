@@ -31,6 +31,9 @@
 
 	/* also show empty items? comment: this won't happen always, depending
 		on output type and ansi (param/config) state.. */
-	"empty": false
+	"empty": false,
+
+	/* shows the characters (only printable ones) with their mapped character, not byte values.. */
+	"chars": false
 
 }

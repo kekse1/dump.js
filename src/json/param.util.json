@@ -70,5 +70,9 @@
 	"high": {
 		"type": [ "string", "integer" ],
 		"required": false
+	},
+	"chars": {
+		"type": "boolean",
+		"required": false
 	}
 }
