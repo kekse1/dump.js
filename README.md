@@ -123,6 +123,7 @@ a percentage of your console's height.
 ![Newest --color feature](img/screenshot.seven.png)
 
 This is a newer preview screenshot. Updated design, styles/colors, parameters, and more.
+
 ![Newest Screenshot](img/screenshot.null.png)
 
 Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
@@ -140,6 +141,7 @@ maybe).
 
 And this is showing the `--replace` feature.
 at least 
+
 ![Screenshot of `--replace` feature](img/screenshot.sechs.png)
 
 > [!WARNING]
@@ -156,14 +158,17 @@ My latest feature: I wanted to analyse some abstract complexity in my A.I. heade
 by doing a modulo operation. To directly see the structure or any abnormality or similarity or smth. like it, the
 last thing was to colorize the bits (other bases also possible..). That's the result (and I really figured my
 problem out) (and btw, superseded by the `--heat`, below):
+
 ![Third Screenshot](img/screenshot.drei.png)
 
 Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
 over the header data.
+
 ![Fourth Screenshot](img/screenshot.vier.png)
 
 And the **newest `rot13` utility** in action. **Yes**, I really had my data with -1 byte to less (output of
 my [Norbert](https://norbert.com.es/)), so I **really** had to add this tool here.. **^\_^**.
+
 ![rot13 utility](img/screenshot.rot13.png)
 
 ## Download
