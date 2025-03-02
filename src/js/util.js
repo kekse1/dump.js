@@ -11,6 +11,7 @@ const DEFAULT_SILENT = true;
 import Quant from '../shared/quant.js';
 import Application from '../shared/app.js';
 import Parameter from '../shared/param.js';
+import GetOpt from '../shared/getopt.js';
 import Helper from './helper.js';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -51,7 +52,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count' ];
+		return [ 'count', 'rot13' ];
 	}
 
 	static help(_exit = null)
@@ -96,7 +97,7 @@ class Utility extends Quant
 			{
 				process.ansi = null;
 			}
-			
+
 			//
 			var file = null, stats = null;
 			
@@ -179,111 +180,6 @@ class Utility extends Quant
 			}
 
 			//
-			if(this.param.has('radix'))
-			{
-				this.radix = this.param.get('radix');
-			}
-			else
-			{
-				this.radix = this.getConfig('radix');
-			}
-			
-			if(this.radix === 10)
-			{
-				if(this.param.has('locale'))
-				{
-					this.locale = this.param.get('locale');
-				}
-				else
-				{
-					this.locale = this.getConfig('locale');
-				}
-			}
-			else
-			{
-				this.locale = null;
-			}
-			
-			//
-			if(bool(this.param.get('sort')) || this.param.get('sort') === null)
-			{
-				this.sort = this.param.get('sort');
-			}
-			else
-			{
-				this.sort = this.getConfig('sort');
-			}
-
-			//
-			if(this.param.has('pairs'))
-			{
-				this.pairs = this.param.get('pairs');
-			}
-			else
-			{
-				this.pairs = this.getConfig('pairs');
-			}
-			
-			if(this.param.has('list'))
-			{
-				this.list = this.param.get('list');
-			}
-			else
-			{
-				this.list = this.getConfig('list');
-			}
-			
-			if(this.pairs)
-			{
-				this.list = null;
-			}
-			else if(this.list)
-			{
-				this.pairs = null;
-			}
-			
-			if(string(this.param.get('sep'), false))
-			{
-				this.sep = this.param.get('sep');
-			}
-			else
-			{
-				this.sep = this.getConfig('sep');
-			}
-
-			if(int(this.param.get('spaces')) && this.param.get('spaces') >= 0)
-			{
-				this.spaces = this.param.get('spaces');
-			}
-			else
-			{
-				this.spaces = this.getConfig('spaces');
-			}
-
-			this.space = ' '.repeat(this.spaces);
-
-			if(!bool(this.empty = this.param.get('empty')))
-			{
-				this.empty = this.getConfig('empty');
-			}
-
-			//
-			this.high = Helper.parseBytes(this.param.get('high'));
-
-			if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
-			{
-				this.only = null;
-			}
-
-			this.without = Helper.parseBytes(this.param.get('without'));
-
-			//
-			if(!bool(this.printable = this.param.get('printable')))
-			{
-				this.printable = this.getConfig('printable');
-			}
-
-			//
 			this.prepare(this.util);
 
 			//
@@ -301,7 +197,22 @@ class Utility extends Quant
 			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
 
-	count(_chunk)
+	rot13(_chunk, ... _args)
+	{
+		for(var i = 0; i < _chunk.length; ++i)
+		{
+			process.stdout.write(
+				String.fromCharCode(
+					_chunk[i] + this.move));
+		}
+	}
+	
+	showRot13()
+	{
+		//
+	}
+	
+	count(_chunk, ... _args)
 	{
 		for(var i = 0; i < _chunk.length; ++i)
 		{
@@ -499,6 +410,9 @@ class Utility extends Quant
 			case 'count':
 				this.showCount();
 				break;
+			case 'rot13':
+				this.showRot13();
+				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
 		}
@@ -512,9 +426,155 @@ class Utility extends Quant
 		{
 			case 'count':
 				this.counting = new Array(256).fill(0);
+				this.prepareCount();
+				break;
+			case 'rot13':
+				this.prepareRot13();
 				break;
 			default:
 				throw new Error('Invalid utility chosen');
+		}
+	}
+	
+	prepareRot13()
+	{
+		this.args = GetOpt(true, false, true, true, process.argv, 2);
+
+		var found = false;
+		this.move = 13;
+
+		for(var i = 0; i < this.args.length; ++i)
+		{
+			if(int(this.args[i]))
+			{
+				this.move = ((this.args[i] % 256) || 0);
+				found = true;
+				break;
+			}
+		}
+
+		if(!this.args.get('silent'))
+		{
+			if(found)
+			{
+				console.warn('Found move parameter: ' +
+					this.move.toString().error(true).bold(true));
+			}
+			else
+			{
+				console.warn('No move parameter found, so we guess you want the ' +
+					'13'.error(true).bold(true));
+			}
+			
+			process.stderr.write('\n');
+		}
+	}
+	
+	prepareCount()
+	{
+		//
+		if(this.param.has('radix'))
+		{
+			this.radix = this.param.get('radix');
+		}
+		else
+		{
+			this.radix = this.getConfig('radix');
+		}
+		
+		if(this.radix === 10)
+		{
+			if(this.param.has('locale'))
+			{
+				this.locale = this.param.get('locale');
+			}
+			else
+			{
+				this.locale = this.getConfig('locale');
+			}
+		}
+		else
+		{
+			this.locale = null;
+		}
+		
+		//
+		if(bool(this.param.get('sort')) || this.param.get('sort') === null)
+		{
+			this.sort = this.param.get('sort');
+		}
+		else
+		{
+			this.sort = this.getConfig('sort');
+		}
+
+		//
+		if(this.param.has('pairs'))
+		{
+			this.pairs = this.param.get('pairs');
+		}
+		else
+		{
+			this.pairs = this.getConfig('pairs');
+		}
+		
+		if(this.param.has('list'))
+		{
+			this.list = this.param.get('list');
+		}
+		else
+		{
+			this.list = this.getConfig('list');
+		}
+		
+		if(this.pairs)
+		{
+			this.list = null;
+		}
+		else if(this.list)
+		{
+			this.pairs = null;
+		}
+		
+		if(string(this.param.get('sep'), false))
+		{
+			this.sep = this.param.get('sep');
+		}
+		else
+		{
+			this.sep = this.getConfig('sep');
+		}
+
+		if(int(this.param.get('spaces')) && this.param.get('spaces') >= 0)
+		{
+			this.spaces = this.param.get('spaces');
+		}
+		else
+		{
+			this.spaces = this.getConfig('spaces');
+		}
+
+		this.space = ' '.repeat(this.spaces);
+
+		if(!bool(this.empty = this.param.get('empty')))
+		{
+			this.empty = this.getConfig('empty');
+		}
+
+		//
+		this.high = Helper.parseBytes(this.param.get('high'));
+
+		if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
+		{
+			this.only = null;
+		}
+
+		this.without = Helper.parseBytes(this.param.get('without'));
+
+		//
+		if(!bool(this.printable = this.param.get('printable')))
+		{
+			this.printable = this.getConfig('printable');
 		}
 	}
 	

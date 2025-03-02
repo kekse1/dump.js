@@ -83,6 +83,12 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--without`** (String/Integer)
 * **`--only`** (String/Integer)
 * **`--printable`** (Boolean)
+* **`--silent`** (Boolean)
+
+#### Boolean
+The Boolean values are either without any value assignment, which sometimes causes problems when the
+command line continues with non-key-parameters, then these would be assigned to the keys. Or they can
+be written out (which is my recommendation) as follows: [ **`yes`**, **`no`**, **`on`**, **`off`** ];
 
 #### Special Syntax
 There are (very less) parse functions to interprete your parameters.
@@ -124,6 +130,9 @@ maybe).
 
 > [!NOTE]
 > If you've other ideas for possible `dump` **utilities**, please mail me.
+
+> [!TIP]
+> Now there's also the `rot13` utility available. I **really** needed it here! ^\_^
 
 ![Second screenshot of newer version of the `dump.count` utility](img/screenshot.eight.png)
 ![Screenshot of the first utility of my dump](img/screenshot.eins.png)

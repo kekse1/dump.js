@@ -74,5 +74,9 @@
 	"printable": {
 		"type": "boolean",
 		"required": false
+	},
+	"silent": {
+		"type": "boolean",
+		"required": false
 	}
 }
