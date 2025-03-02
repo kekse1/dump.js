@@ -19,9 +19,10 @@ copy it over here **l8rs**.
 	* [Structure](#structure)
 	* [Infra-Structure](#infra-structure)
 		* [Contact me](#contact-me)
-4. [Links](#links)
-5. [Contact](#contact)
-6. [Copyright and License](#copyright-and-license)
+4. [Utilities](#utilities)
+5. [Links](#links)
+6. [Contact](#contact)
+7. [Copyright and License](#copyright-and-license)
 
 ## Introduction
 It became necessary since I wanted to inspect the changing data of my [Norbert](https://github.com/kekse1/norbert/).
@@ -138,7 +139,7 @@ maybe).
 ![Screenshot of the first utility of my dump](img/screenshot.eins.png)
 
 And this is showing the `--replace` feature.
-
+at least 
 ![Screenshot of `--replace` feature](img/screenshot.sechs.png)
 
 > [!WARNING]
@@ -202,6 +203,25 @@ please send me a [**mail**](#contact) expressing your interest, or create an [**
 here on GitHub.
 
 Once we have enough requests, I'll make the effort to get everything up and running for you all.
+
+## Utilities
+I also needed some helping utilities for my purposes, so I started here.
+
+Use the [**`dump.util.sh`**](src/sh/dump.util.sh) for an overview, and also to directly call the
+utilities which are shown in this script. But there are also [shell scripts](src/sh) for each
+available one.
+
+These are the only available utilties (**atm**):
+* [**`count`**](src/sh/dump.count.sh)
+* [**`rot13`**](src/sh/dump.rot13.sh)
+
+They all require at least a file path [parameter](#command-line-parameters) and can also
+make us of all the [available parameters](#command-line-parameters).
+
+> [!TIP]
+> The **`rot13`** utility is the newest one, and expects a single integer value (without any key)
+> for the value to add/sub to any input byte. With**out** this parameter it automatically uses
+> the **`13`** (see [**Rot13**](https://wikipedia.org/wiki/ROT13)).
 
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
