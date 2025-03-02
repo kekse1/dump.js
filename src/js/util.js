@@ -6,6 +6,7 @@
 //
 const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.util.json';
 const DEFAULT_SILENT = true;
+const DEFAULT_ENCODING = 'utf8';//'latin1';
 
 //
 import Quant from '../shared/quant.js';
@@ -184,7 +185,7 @@ class Utility extends Quant
 
 			//
 			this.stream = fs.createReadStream(file, {
-				encoding: null,
+				encoding: DEFAULT_ENCODING,
 				autoClose: true,
 				emitClose: true,
 				start: this.offset,
@@ -205,11 +206,6 @@ class Utility extends Quant
 				String.fromCharCode(
 					_chunk[i] + this.move));
 		}
-	}
-	
-	showRot13()
-	{
-		//
 	}
 	
 	count(_chunk, ... _args)
@@ -466,7 +462,10 @@ class Utility extends Quant
 					'13'.error(true).bold(true));
 			}
 			
-			process.stderr.write('\n');
+			if(process.stdout.isTTY)
+			{
+				process.stderr.write('\n');
+			}
 		}
 	}
 	
@@ -580,6 +579,16 @@ class Utility extends Quant
 	
 	onData(_chunk, ... _args)
 	{
+		if(!_chunk)
+		{
+			return this.onEnd(... _args);
+		}
+
+		if(typeof _chunk === 'string')
+		{
+			_chunk = Uint8Array.create(_chunk);
+		}
+
 		return this[this.util](_chunk, ... _args);
 	}
 	
