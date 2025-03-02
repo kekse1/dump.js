@@ -133,7 +133,7 @@ maybe).
 > If you've other ideas for possible `dump` **utilities**, please mail me.
 
 > [!TIP]
-> Now there's also the `rot13` utility available. I **really** needed it here! ^\_^
+> Now there's also the `rot13` utility available. I **really** needed it here! **^\_^**
 
 ![Second screenshot of newer version of the `dump.count` utility](img/screenshot.eight.png)
 ![Screenshot of the first utility of my dump](img/screenshot.eins.png)
@@ -161,6 +161,10 @@ problem out) (and btw, superseded by the `--heat`, below):
 Extended the latest feature to see kinda **heatmap**; this way I really saw how much my values are distributed
 over the header data.
 ![Fourth Screenshot](img/screenshot.vier.png)
+
+And the **newest `rot13` utility** in action. **Yes**, I really had my data with -1 byte to less (output of
+my [Norbert](https://norbert.com.es/)), so I **really** had to add this tool here.. **^\_^**.
+![rot13 utility](img/screenshot.rot13.png)
 
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
