@@ -6,7 +6,7 @@
 //
 const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.util.json';
 const DEFAULT_SILENT = true;
-const DEFAULT_ENCODING = 'utf8';//'latin1';
+const DEFAULT_ENCODING = 'latin1';//'utf8';
 
 //
 import Quant from '../shared/quant.js';
