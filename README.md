@@ -230,15 +230,21 @@ available one.
 
 These are the only available utilties (**atm**):
 * [**`count`**](src/sh/dump.count.sh)
+* [**`sum`**](src/sh/dump.sum.sh)
+* [**`product`**](src/sh/dump.product.sh)
 * [**`rot13`**](src/sh/dump.rot13.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
 make us of all the [available parameters](#command-line-parameters).
 
 > [!TIP]
-> The **`rot13`** utility is the newest one, and expects a single integer value (without any key)
-> for the value to add/sub to any input byte. With**out** this parameter it automatically uses
-> the **`13`** (see [**Rot13**](https://wikipedia.org/wiki/ROT13)).
+> The **`rot13`** utility expects a single integer value (without any key) for the value
+> to add/sub to any input byte. With**out** this parameter it automatically uses the
+> **`13`** (see [**Rot13**](https://wikipedia.org/wiki/ROT13)).
+
+> [!NOTE]
+> All the **utils** all supports some general parameters/arguments. The most important
+> should be `--only` and `--without`. For the rest see the [command line parameters](#command-line-parameters).
 
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
