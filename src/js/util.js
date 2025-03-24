@@ -53,7 +53,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'sum', 'product', 'rot13' ];
+		return [ 'count', 'sum', 'rot13' ];
 	}
 
 	static help(_exit = null)
@@ -313,76 +313,6 @@ class Utility extends Quant
 		console.info('Summed'.underline(true) + ' up ' + counting + ' bytes: ' + sum);
 	}
 	
-	product(_chunk, ... _args)
-	{
-		this.counting += _chunk.length;
-		this.length += _chunk.length;
-
-		var byte; for(var i = 0; i < _chunk.length; ++i)
-		{
-			if(this.only)
-			{
-				if(this.only.has(_chunk[i]))
-				{
-					byte = _chunk[i];
-				}
-				else
-				{
-					byte = null;
-				}
-			}
-			else if(this.without.has(_chunk[i]))
-			{
-				byte = null;
-			}
-			else
-			{
-				byte = _chunk[i];
-			}
-			
-			if(byte !== null)
-			{
-				this.result *= BigInt(byte + 1);
-			}
-			else
-			{
-				--this.counting;
-				++this.filteredBytes;
-			}
-		}
-	}
-	
-	showProduct()
-	{
-		var counting = this.counting;
-		var product = this.result;
-		
-		if(this.radix !== 10)
-		{
-			counting = counting.toString(this.radix);
-			product = product.toString(this.radix);
-		}
-		else if(this.locale)
-		{
-			counting = counting.toLocaleString();
-			product = product.toLocaleString();
-		}
-		else
-		{
-			counting = counting.toString();
-			product = product.toString();
-		}
-		
-		if(process.ansi)
-		{
-			counting = counting.bold(true).info(true);
-			product = product.bold(true).underline(true).error(true);
-		}
-
-		console.info('Calculated the ' + 'product'.underline(true) + ' of ' +
-			counting + ' Bytes' + '(+1)'.faint(true) + ': ' + product);
-	}
-
 	rot13(_chunk, ... _args)
 	{
 		this.length += _chunk.length;
@@ -632,10 +562,6 @@ class Utility extends Quant
 				this.checkFilter();
 				this.showSum();
 				break;
-			case 'product':
-				this.checkFilter();
-				this.showProduct();
-				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
 		}
@@ -658,11 +584,6 @@ class Utility extends Quant
 				this.filteredBytes = 0;
 				this.counting = 0;
 				this.result = 0n;
-				break;
-			case 'product':
-				this.filteredBytes = 0;
-				this.counting = 0;
-				this.result = 1n;
 				break;
 			case 'rot13':
 				this.filteredBytes = 0;

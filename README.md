@@ -7,7 +7,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
 
 ## News
-* \[**2025-03-24**\] Update: two new **util**s `sum` and `product`. ... and a bit more AFAIR..
+* \[**2025-03-24**\] Update: new **util**s `sum`. ... and a bit more, AFAIR.
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
 
 ## Index
@@ -231,7 +231,6 @@ available one.
 These are the only available utilties (**atm**):
 * [**`count`**](src/sh/dump.count.sh)
 * [**`sum`**](src/sh/dump.sum.sh)
-* [**`product`**](src/sh/dump.product.sh)
 * [**`rot13`**](src/sh/dump.rot13.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
