@@ -80,5 +80,13 @@
 	"without": {
 		"type": [ "string", "integer" ],
 		"required": false
+	},
+	"count": {
+		"type": [ "integer", "string", "boolean" ],
+		"required": false
+	},
+	"count-sort": {
+		"type": "string",
+		"required": false
 	}
 }

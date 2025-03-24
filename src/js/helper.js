@@ -9,7 +9,7 @@ const DEFAULT_THROW = true;
 //
 class Helper
 {
-	static parseBytes(_input)
+	static parseBytes(_input, _radix = 10)
 	{
 		const result = new Set();
 		
@@ -37,7 +37,7 @@ class Helper
 			
 			if(idx === -1)
 			{
-				radix = 10;
+				radix = _radix;
 			}
 			else
 			{
@@ -48,7 +48,7 @@ class Helper
 				
 				_input[i] = _input[i].substr(0, idx);
 			}
-			
+
 			if(_input[i].substr(1).includes('-'))
 			{
 				if((idx = _input[i].lastIndexOf('+')) === -1)

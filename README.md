@@ -65,6 +65,8 @@ Look at the [**`param.json`**](src/json/param.json):
 * **`--high`** (String/Integer)
 * **`--without`** (String/Integer)
 * **`--only`** (String/Integer)
+* **`--count`** (String/Integer/Boolean)
+* **`--count-sort`** (String)
 
 #### `dump.util`
 And here with the [**`param.util.json`**](src/json/param.util.json):
@@ -205,6 +207,12 @@ So you can only see the code of this **sub** project. It doesn't really run stan
 If you'd like to use it, you could bring in your own **polyfill**. .. in case you don't
 want to wait until I'm going to run my
 [**`init-sub-proj.sh`**](https://github.com/kekse1/scripts/?tab=readme-ov-file#init-sub-projsh).
+
+## Comments/F.A.Q.
+
+### Question: Why do we use `++this.linesPrint`/etc. in the code?
+I'm massively using [`tmux`](https://github.com/tmux/tmux/),
+and this doesn't seem to support cursor load (`\e[u`) nor save (`\e[s`)! **:-/**
 
 #### Contact me
 If you think this project could be beneficial to you, or if you're simply interested in trying it out,

@@ -12,6 +12,8 @@ const DEFAULT_BASE = 1024;
 const DEFAULT_PREC = 2;
 const DEFAULT_FIXED = true;
 const DEFAULT_THROW = true;
+const DEFAULT_SPACE = '   ';
+const DEFAULT_COUNT_SORT = 'values';//[ 'keys', 'values' ];
 
 //
 import Application from '../shared/app.js';
@@ -262,9 +264,104 @@ class Dump extends Quant
 			}
 			
 			this.without = Helper.parseBytes(this.param.get('without'));
+			
+			//
+			if(this.param.has('count'))
+			{
+				const count = this.param.get('count');
+				
+				if(typeof count === 'boolean')
+				{
+					if(this.count = count)
+					{
+						this.count = [];
+						this.COUNT = new Map();
+					}
+					else
+					{
+						this.count = null;
+						this.COUNT = null;
+					}
+				}
+				else if((this.count = Helper.parseBytes(this.param.get('count'),
+					this.effectiveReplaceRadix)).size === 0)
+				{
+					this.count = null;
+					this.COUNT = null;
+				}
+				else
+				{
+					this.count = [ ... this.count.values() ];
+					this.COUNT = new Map();
+				}
+			}
+			else
+			{
+				this.count = null;
+			}
+
+			if(this.count)
+			{
+				for(var i = 0; i < this.count.length; ++i)
+				{
+					if(this.replace)
+					{
+						this.count[i] = Dump.replace(this.count[i], this.replace);
+					}
+					else if(this.radix !== 10)
+					{
+						this.count[i] = this.count[i].toString(this.radix);
+					}
+					else if(this.locale)
+					{
+						this.count[i] = this.count[i].toLocaleString();
+					}
+					else
+					{
+						this.count[i] = this.count[i].toString();
+					}
+				}
+				
+				this.cc = '--count'.bold(true).warn(true);
+				
+				if(this.count.length === 0)
+				{
+					this.cc += '('.faint(true).debug(true) + 'true'.info(true).faint(true) + ')'.faint(true).debug(true);
+				}
+				else
+				{
+					this.cc += '['.faint(true).debug(true) + this.param.get('count').toString().info(true) + ']'.faint(true).debug(true);
+				}
+
+				var sort;
+
+				if(this.param.has('count-sort'))
+				{
+					sort = this.param.get('count-sort')[0];
+				}
+				else
+				{
+					sort = DEFAULT_COUNT_SORT[0];
+				}
+
+				switch(sort = sort.toLowerCase())
+				{
+					case 'k':
+					case 'v':
+						this.countSort = sort;
+						break;
+					default:
+						throw new Error('Invalid --count-sort parameter [ `keys`, `values` ]');
+				}
+			}
+			else
+			{
+				this.countSort = '';
+			}
 
 			//
 			this.consoleHeightSub = this.getConfig('consoleHeightSub');
+			this.linesPrint = 0;
 
 			//
 			this.open();
@@ -344,6 +441,21 @@ class Dump extends Quant
 			this.print();
 		}, path.join(this.param.get('script'),
 			DEFAULT_PARAM_SCHEME_JSON), this.param);
+	}
+	
+	get effectiveReplaceRadix()
+	{
+		if(this.replace)
+		{
+			if(this.replace === true)
+			{
+				return this.radix;
+			}
+			
+			return this.replace;
+		}
+		
+		return this.radix;
 	}
 	
 	destroy(_name, _code, ... _args)
@@ -679,8 +791,44 @@ class Dump extends Quant
 		var right = '';
 
 		//
-		var i = 0, column; for(; i < _buffer.length; ++i)
+		var i = 0, column, counting; for(; i < _buffer.length; ++i)
 		{
+			//
+			if(this.count)
+			{
+				counting = _buffer[i];
+				
+				if(this.replace)
+				{
+					counting = Dump.replace(counting, this.replace);
+				}
+				else if(this.radix !== 10)
+				{
+					counting = counting.toString(this.radix);
+				}
+				else if(this.locale)
+				{
+					counting = counting.toLocaleString();
+				}
+				else
+				{
+					counting = counting.toString();
+				}
+
+				if(this.count.length === 0 || this.count.includes(counting))
+				{
+					if(this.COUNT.has(counting))
+					{
+						this.COUNT.set(counting,
+							(this.COUNT.get(counting) + 1));
+					}
+					else
+					{
+						this.COUNT.set(counting, 1);
+					}
+				}
+			}
+			
 			//
 			left += this.renderChar(_buffer[i]);
 
@@ -918,15 +1066,113 @@ class Dump extends Quant
 	}
 
 	//
-	print()
+	printCount(_reset = true)
 	{
-		//
+		if(!this.hasCount)
+		{
+			return;
+		}
+		else if(_reset)
+		{
+			this.COUNT = new Map([ ... this.COUNT ].sort((_a, _b) => {
+				if(this.countSort === 'k')
+				{
+					return _a[0].localeCompare(_b[0]);
+				}
+
+				return (_b[1] - _a[1]); }));
+		}
+		
+		Dump.write(EOL);
+		Dump.write('\t\t' + '[ '.faint(true).debug(true) + 'translated'.debug(true).faint(true) +
+			' ' + this.cc + ' ]'.faint(true).debug(true) + EOL + ''.debug(false));
+		this.linesPrint += 3;
+		
+		const keys = [ ... this.COUNT.keys() ];
+		var w = DEFAULT_SPACE.length; const width = console.width;
+		var maxKeyLength = 0, maxValueLength = 0;
+		var s, l;
+		
+		for(const key of keys)
+		{
+			if((l = key.length) > maxKeyLength)
+			{
+				maxKeyLength = l;
+			}
+			
+			s = this.COUNT.get(key);
+			
+			if(this.radix !== 10)
+			{
+				s = s.toString(this.radix);
+			}
+			else if(this.locale)
+			{
+				s = s.toLocaleString();
+			}
+			else
+			{
+				s = s.toString();
+			}
+			
+			if((l = s.length) > maxValueLength)
+			{
+				maxValueLength = l;
+			}
+			
+			this.COUNT.set(key, s);
+		}
+
+		for(const key of keys)
+		{
+			s = (('['.faint(true) + key.padStart(maxKeyLength, ' ') + ']'.faint(true)) +
+				' ' + this.COUNT.get(key).padStart(maxValueLength, ' ').bold(true));
+
+			if((w += (l = s.textLength)) >= (width - 2))
+			{
+				++this.linesPrint;
+				Dump.write(EOL);
+				w = l;
+			}
+			
+			w += DEFAULT_SPACE.length;
+			Dump.write(DEFAULT_SPACE + s);
+		}
+		
+		if(_reset)
+		{
+			this.COUNT.clear();
+		}
+		
+		Dump.write(String.none() + EOL);
+	}
+	
+	clearAgain()
+	{
+		const result = this.linesPrint;
+		
 		if(this.linesPrint)
+		{
 			Dump.write(
 				String.up(this.linesPrint) +
 					String.clearAfter());
-		this.linesPrint = 0;
+			this.linesPrint = 0;
+		}
 		
+		return result;
+	}
+	
+	get hasCount()
+	{
+		return (this.count && this.COUNT.size > 0);
+	}
+	
+	print()
+	{
+		//
+		this.clearAgain();
+		
+		//
 		if(this.filter)
 		{
 			this.sameByte = null;
@@ -1011,6 +1257,8 @@ class Dump extends Quant
 			process.stdin.once('end', () => {
 				if(this.filter && this.sameByte !== null)
 					this.printSame();
+				if(this.hasCount)
+					this.printCount();
 				process.exit(0);
 			});
 		}
@@ -1070,6 +1318,8 @@ class Dump extends Quant
 				{
 					if(this.filter && this.sameByte !== null)
 						this.printSame();
+					if(this.hasCount)
+						this.printCount();
 					break;
 				}
 			}
