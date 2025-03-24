@@ -1,14 +1,10 @@
 <img src="https://kekse.biz/github.php?draw&override=github:dump.js" />
 
 # The **`dump`** utility
-My own **Radix viewer** (JavaScript version).
+My own **Radix viewer** (JavaScript version). First version only w/ **viewing** functionality..
 
 > [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
-
-First version with only **viewing** functionality. And it only supports radix/base **2** to **36**,
-the default within JavaScript. My own `radix.js` is already there, but not in this project.. gonna
-copy it over here **l8rs**.
 
 ## News
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
