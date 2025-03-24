@@ -37,7 +37,7 @@ class Helper
 			
 			if(idx === -1)
 			{
-				radix = _radix;
+				radix = _radix || 10;
 			}
 			else
 			{
