@@ -7,6 +7,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
 
 ## News
+* \[**2025-03-24**\] Update: two new **util**s `sum` and `product`. ... and a bit more AFAIR..
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
 
 ## Index

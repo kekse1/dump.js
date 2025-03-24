@@ -53,7 +53,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'rot13' ];
+		return [ 'count', 'sum', 'product', 'rot13' ];
 	}
 
 	static help(_exit = null)
@@ -197,19 +197,235 @@ class Utility extends Quant
 		}, path.join(this.param.get('script'),
 			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
+	
+	sum(_chunk, ... _args)
+	{
+		this.counting += _chunk.length;
+		this.length += _chunk.length;
+		
+		var byte; for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(this.only)
+			{
+				if(this.only.has(_chunk[i]))
+				{
+					byte = _chunk[i];
+				}
+				else
+				{
+					byte = null;
+				}
+			}
+			else if(this.without.has(_chunk[i]))
+			{
+				byte = null;
+			}
+			else
+			{
+				byte = _chunk[i];
+			}
+			
+			if(byte !== null)
+			{
+				this.result += BigInt(byte);
+			}
+			else
+			{
+				--this.counting;
+				++this.filteredBytes;
+			}
+		}
+	}
+
+	get filtered()
+	{
+		if(this.only || this.without.size > 0)
+		{
+			return this.filteredBytes;
+		}
+		
+		return 0;
+	}
+
+	checkFilter()
+	{
+		var filtered = this.filtered;
+		var total = this.length;
+
+		if(!filtered)
+		{
+			return false;
+		}
+		else if(this.radix !== 10)
+		{
+			filtered = filtered.toString(this.radix);
+			total = total.toString(this.radix);
+		}
+		else if(this.locale)
+		{
+			filtered = filtered.toLocaleString();
+			total = total.toLocaleString();
+		}
+		else
+		{
+			filtered = filtered.toString();
+			total = total.toString();
+		}
+		
+		if(process.ansi)
+		{
+			filtered = filtered.bold(true).error(true);
+			total = total.bold(true).warn(true);
+		}
+		
+		console.warn('Input was filtered (' + '--only'.info(true) + '/'.debug(true) + '--without'.info(true) +
+			'): ' + (filtered + ' Bytes'.faint(true) +
+			(' of ' + total + ' Bytes'.faint(true)).debug(true)));
+	}
+	
+	showSum()
+	{
+		var counting = this.counting;
+		var sum = this.result;
+		
+		if(this.radix !== 10)
+		{
+			counting = counting.toString(this.radix);
+			sum = sum.toString(this.radix);
+		}
+		else if(this.locale)
+		{
+			counting = counting.toLocaleString();
+			sum = sum.toLocaleString();
+		}
+		else
+		{
+			counting = counting.toString();
+			sum = sum.toString();
+		}
+		
+		if(process.ansi)
+		{
+			counting = counting.bold(true).info(true);
+			sum = sum.bold(true).underline(true).error(true);
+		}
+
+		console.info('Summed'.underline(true) + ' up ' + counting + ' bytes: ' + sum);
+	}
+	
+	product(_chunk, ... _args)
+	{
+		this.counting += _chunk.length;
+		this.length += _chunk.length;
+
+		var byte; for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(this.only)
+			{
+				if(this.only.has(_chunk[i]))
+				{
+					byte = _chunk[i];
+				}
+				else
+				{
+					byte = null;
+				}
+			}
+			else if(this.without.has(_chunk[i]))
+			{
+				byte = null;
+			}
+			else
+			{
+				byte = _chunk[i];
+			}
+			
+			if(byte !== null)
+			{
+				this.result *= BigInt(byte + 1);
+			}
+			else
+			{
+				--this.counting;
+				++this.filteredBytes;
+			}
+		}
+	}
+	
+	showProduct()
+	{
+		var counting = this.counting;
+		var product = this.result;
+		
+		if(this.radix !== 10)
+		{
+			counting = counting.toString(this.radix);
+			product = product.toString(this.radix);
+		}
+		else if(this.locale)
+		{
+			counting = counting.toLocaleString();
+			product = product.toLocaleString();
+		}
+		else
+		{
+			counting = counting.toString();
+			product = product.toString();
+		}
+		
+		if(process.ansi)
+		{
+			counting = counting.bold(true).info(true);
+			product = product.bold(true).underline(true).error(true);
+		}
+
+		console.info('Calculated the ' + 'product'.underline(true) + ' of ' +
+			counting + ' Bytes' + '(+1)'.faint(true) + ': ' + product);
+	}
 
 	rot13(_chunk, ... _args)
 	{
-		for(var i = 0; i < _chunk.length; ++i)
+		this.length += _chunk.length;
+		
+		var byte; for(var i = 0; i < _chunk.length; ++i)
 		{
-			process.stdout.write(
-				String.fromCharCode(
-					_chunk[i] + this.move));
+			if(this.only)
+			{
+				if(this.only.has(_chunk[i]))
+				{
+					byte = _chunk[i];
+				}
+				else
+				{
+					byte = null;
+				}
+			}
+			else if(this.without.has(_chunk[i]))
+			{
+				byte = null;
+			}
+			else
+			{
+				byte = _chunk[i];
+			}
+			
+			if(byte !== null)
+			{
+				process.stdout.write(
+					String.fromCharCode(
+						byte + this.move));
+			}
+			else
+			{
+				++this.filteredBytes;
+			}
 		}
 	}
 	
 	count(_chunk, ... _args)
 	{
+		this.length += _chunk.length;
+		
 		for(var i = 0; i < _chunk.length; ++i)
 		{
 			++this.counting[_chunk[i]];
@@ -401,13 +617,24 @@ class Utility extends Quant
 	
 	finish(_util = this.util)
 	{
+		console.silent = false;
+		
 		switch(_util)
 		{
 			case 'count':
+				this.checkFilter();
 				this.showCount();
 				break;
 			case 'rot13':
-				this.showRot13();
+				this.checkFilter();
+				break;
+			case 'sum':
+				this.checkFilter();
+				this.showSum();
+				break;
+			case 'product':
+				this.checkFilter();
+				this.showProduct();
 				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
@@ -418,13 +645,27 @@ class Utility extends Quant
 	
 	prepare(_util = this.util)
 	{
+		this.length = 0;
+		this.prepareUtil();
+		
 		switch(_util)
 		{
 			case 'count':
 				this.counting = new Array(256).fill(0);
 				this.prepareCount();
 				break;
+			case 'sum':
+				this.filteredBytes = 0;
+				this.counting = 0;
+				this.result = 0n;
+				break;
+			case 'product':
+				this.filteredBytes = 0;
+				this.counting = 0;
+				this.result = 1n;
+				break;
 			case 'rot13':
+				this.filteredBytes = 0;
 				this.prepareRot13();
 				break;
 			default:
@@ -469,7 +710,7 @@ class Utility extends Quant
 		}
 	}
 	
-	prepareCount()
+	prepareUtil()
 	{
 		//
 		if(this.param.has('radix'))
@@ -496,7 +737,17 @@ class Utility extends Quant
 		{
 			this.locale = null;
 		}
-		
+
+		if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
+		{
+			this.only = null;
+		}
+
+		this.without = Helper.parseBytes(this.param.get('without'));
+	}
+	
+	prepareCount()
+	{
 		//
 		if(bool(this.param.get('sort')) || this.param.get('sort') === null)
 		{
@@ -562,13 +813,6 @@ class Utility extends Quant
 
 		//
 		this.high = Helper.parseBytes(this.param.get('high'));
-
-		if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
-		{
-			this.only = null;
-		}
-
-		this.without = Helper.parseBytes(this.param.get('without'));
 
 		//
 		if(!bool(this.printable = this.param.get('printable')))
