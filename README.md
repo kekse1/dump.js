@@ -10,6 +10,9 @@ First version with only **viewing** functionality. And it only supports radix/ba
 the default within JavaScript. My own `radix.js` is already there, but not in this project.. gonna
 copy it over here **l8rs**.
 
+## News
+* \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
+
 ## Index
 1. [Introduction](#introduction)
 	* [First words](#first-words)
