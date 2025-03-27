@@ -136,7 +136,7 @@ maybe).
 > If you've other ideas for possible `dump` **utilities**, please mail me.
 
 > [!TIP]
-> Now there's also the `rot13` utility available. I **really** needed it here! **^\_^**
+> Now there's also the `rot13` and the `sum` utility available. I **really** needed it here! **^\_^**
 
 ![Second screenshot of newer version of the `dump.count` utility](img/screenshot.eight.png)
 ![Screenshot of the first utility of my dump](img/screenshot.eins.png)
