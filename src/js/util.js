@@ -250,37 +250,48 @@ class Utility extends Quant
 	checkFilter()
 	{
 		var filtered = this.filtered;
+		var counting = this.counting;
 		var total = this.length;
 
 		if(!filtered)
 		{
 			return false;
 		}
-		else if(this.radix !== 10)
+		
+		if(this.radix !== 10)
 		{
 			filtered = filtered.toString(this.radix);
+			counting = counting.toString(this.radix);
 			total = total.toString(this.radix);
 		}
 		else if(this.locale)
 		{
 			filtered = filtered.toLocaleString();
+			counting = counting.toLocaleString();
 			total = total.toLocaleString();
 		}
 		else
 		{
 			filtered = filtered.toString();
+			counting = counting.toString();
 			total = total.toString();
 		}
 		
 		if(process.ansi)
 		{
-			filtered = filtered.bold(true).error(true);
-			total = total.bold(true).warn(true);
+			filtered = filtered.bold(true).warn(true);
+			counting = counting.bold(true).info(true);
+			total = total.bold(true).error(true);
 		}
+
+		console.debug('Data ' + 'filtered'.bold(true) + ': ' + counting + ' Bytes counted (' +
+			total + ' in total; '.debug(true) + filtered + ' filtered out)'.
+			debug(true));
 		
-		console.warn('Input was filtered (' + '--only'.info(true) + '/'.debug(true) + '--without'.info(true) +
-			'): ' + (filtered + ' Bytes'.faint(true) +
-			(' of ' + total + ' Bytes'.faint(true)).debug(true)));
+		console.debug('               ' + Math.size.styled(this.counting).
+			info(true) + ' counted (' + Math.size.styled(this.length).
+			error(true) + ' in total; '.debug(true) + Math.size.styled(
+				this.filtered).warn(true) + ' filtered out)'.debug(true));
 	}
 	
 	showSum()
@@ -310,7 +321,7 @@ class Utility extends Quant
 			sum = sum.bold(true).underline(true).error(true);
 		}
 
-		console.info('Summed'.underline(true) + ' up ' + counting + ' bytes: ' + sum);
+		console.info('Summed'.bold(true) + ' up ' + counting + ' bytes: ' + sum);
 	}
 	
 	rot13(_chunk, ... _args)
@@ -358,107 +369,127 @@ class Utility extends Quant
 		
 		for(var i = 0; i < _chunk.length; ++i)
 		{
-			++this.counting[_chunk[i]];
+			++this.result[_chunk[i]];
+			
+			if(this.only)
+			{
+				if(!this.only.has(_chunk[i]))
+				{
+					++this.filteredBytes;
+				}
+				else
+				{
+					++this.counting;
+				}
+			}
+			else if(this.without.has(_chunk[i]))
+			{
+				++this.filteredBytes;
+			}
+			else
+			{
+				++this.counting;
+			}
 		}
 	}
 	
 	showCount()
 	{
-		for(var i = 0; i < this.counting.length; ++i)
+		for(var i = 0; i < this.result.length; ++i)
 		{
-			this.counting[i] = [
+			this.result[i] = [
 				i,
 				i,
-				this.counting[i],
-				(this.counting[i] > 0),
+				this.result[i],
+				(this.result[i] > 0),
 				null,
 				false
 			];
 
 			if(this.only && !this.only.has(i))
 			{
-				this.counting[i][4] = false;
+				this.result[i][4] = false;
 			}
 			else if(this.without.has(i))
 			{
-				this.counting[i][4] = false;
+				this.result[i][4] = false;
 			}
 			else
 			{
-				this.counting[i][4] = true;
+				this.result[i][4] = true;
 			}
 		}
 		
 		if(bool(this.sort))
 		{
-			this.counting.sort(2, !this.sort);
+			this.result.sort(2, !this.sort);
 		}
 		
 		var maxKey = 0, maxValue = 0;
 		
-		for(var i = 0; i < this.counting.length; ++i)
+		for(var i = 0; i < this.result.length; ++i)
 		{
-			if(this.printable && this.counting[i][1] >= 32 && this.counting[i][1] < 127)
+			if(this.printable && this.result[i][1] >= 32 && this.result[i][1] < 127)
 			{
-				this.counting[i][1] = '`'.defaultFG(true) +
-					String.fromCharCode(this.counting[i][1]).error(true) +
+				this.result[i][1] = '`'.defaultFG(true) +
+					String.fromCharCode(this.result[i][1]).error(true) +
 					'`'.defaultFG(true);
-				this.counting[i][5] = true;
+				this.result[i][5] = true;
 			}
 			
 			if(this.radix !== 10)
 			{
-				if(!this.counting[i][5])
-					this.counting[i][1] = this.counting[i][1].toString(this.radix);
-				this.counting[i][2] = this.counting[i][2].toString(this.radix);
+				if(!this.result[i][5])
+					this.result[i][1] = this.result[i][1].toString(this.radix);
+				this.result[i][2] = this.result[i][2].toString(this.radix);
 			}
 			else if(this.locale && !this.pairs)
 			{
-				if(!this.counting[i][5])
-					this.counting[i][1] = this.counting[i][1].toLocaleString();
-				this.counting[i][2] = this.counting[i][2].toLocaleString();
+				if(!this.result[i][5])
+					this.result[i][1] = this.result[i][1].toLocaleString();
+				this.result[i][2] = this.result[i][2].toLocaleString();
 			}
 			else
 			{
-				if(!this.counting[i][5])
-					this.counting[i][1] = this.counting[i][1].toString();
-				this.counting[i][2] = this.counting[i][2].toString();
+				if(!this.result[i][5])
+					this.result[i][1] = this.result[i][1].toString();
+				this.result[i][2] = this.result[i][2].toString();
 			}
 			
-			if(this.counting[i][1].length > maxKey)
+			if(this.result[i][1].length > maxKey)
 			{
-				maxKey = this.counting[i][1].textLength;
+				maxKey = this.result[i][1].textLength;
 			}
 			
-			if(this.counting[i][2].length > maxValue)
+			if(this.result[i][2].length > maxValue)
 			{
-				maxValue = this.counting[i][2].length;
+				maxValue = this.result[i][2].length;
 			}
 		}
 
-		for(var i = 0; i < this.counting.length; ++i)
+		for(var i = 0; i < this.result.length; ++i)
 		{
 			if(!this.pairs)
 			{
-				if(! (maxKey === 3 && this.counting[i][5]))
+				if(! (maxKey === 3 && this.result[i][5]))
 				{
-					this.counting[i][1] = this.counting[i][1].pad(maxKey, ' ', true);
+					this.result[i][1] = this.result[i][1].pad(maxKey, ' ', true);
 				}
 
-				this.counting[i][2] = this.counting[i][2].padStart(maxValue, ' ');
+				this.result[i][2] = this.result[i][2].padStart(maxValue, ' ');
 
 				if(process.ansi)
 				{
-					if(this.high.has(this.counting[i][0]))
+					if(this.high.has(this.result[i][0]))
 					{
-						this.counting[i][1] = this.counting[i][1].bold(true).fg(255, 255, 255, true);
-						this.counting[i][1] = this.counting[i][1].inverse(true);
-						this.counting[i][2] = this.counting[i][2].fg(255, 255, 255, true).bold(true);
+						this.result[i][1] = this.result[i][1].bold(true).fg(255, 255, 255, true);
+						this.result[i][1] = this.result[i][1].inverse(true);
+						this.result[i][2] = this.result[i][2].fg(255, 255, 255, true).bold(true);
 					}
 					else
 					{
-						this.counting[i][1] = this.counting[i][1].debug(true);//.bold(true);
-						this.counting[i][2] = this.counting[i][2].info(true);
+						this.result[i][1] = this.result[i][1].debug(true);//.bold(true);
+						this.result[i][2] = this.result[i][2].info(true);
 					}
 				}
 			}
@@ -479,12 +510,12 @@ class Utility extends Quant
 		{
 			String.TAB = 0;
 
-			for(var i = 0; i < this.counting.length; ++i)
+			for(var i = 0; i < this.result.length; ++i)
 			{
-				if(!this.empty && !this.counting[i][3]) continue;
-				else if(!this.counting[i][4]) continue;
-				key = this.counting[i][1];
-				value = this.counting[i][2];
+				if(!this.empty && !this.result[i][3]) continue;
+				else if(!this.result[i][4]) continue;
+				key = this.result[i][1];
+				value = this.result[i][2];
 				process.stdout.write(key + '=' + value + this.sep);
 			}
 			
@@ -492,12 +523,12 @@ class Utility extends Quant
 		}
 		else if(this.list || !process.stdout.isTTY)
 		{
-			for(var i = 0; i < this.counting.length; ++i)
+			for(var i = 0; i < this.result.length; ++i)
 			{
-				if(!this.empty && !this.counting[i][3]) continue;
-				else if(!this.counting[i][4]) continue;
-				key = open + this.counting[i][1] + close;
-				value = this.counting[i][2];
+				if(!this.empty && !this.result[i][3]) continue;
+				else if(!this.result[i][4]) continue;
+				key = open + this.result[i][1] + close;
+				value = this.result[i][2];
 				process.stdout.write(key + ' ' + value + this.sep);
 			}
 			
@@ -510,23 +541,23 @@ class Utility extends Quant
 		var item, w = 0, l;
 		const lines = [''];
 
-		for(var i = 0, j = 0; i < this.counting.length; ++i)
+		for(var i = 0, j = 0; i < this.result.length; ++i)
 		{
-			if(!this.counting[i][3] && !process.ansi)
+			if(!this.result[i][3] && !process.ansi)
 			{
 				item = empty;
 			}
-			else if(!this.counting[i][4])
+			else if(!this.result[i][4])
 			{
 				item = empty;
 			}
 			else
 			{
-				key = open + this.counting[i][1] + close;
-				value = this.counting[i][2];
+				key = open + this.result[i][1] + close;
+				value = this.result[i][2];
 				item = key + ' ' + value;
 
-				if(process.ansi && !this.counting[i][3] && !this.empty)
+				if(process.ansi && !this.result[i][3] && !this.empty)
 					item = item.text.fg(88, 88, 88, true);
 			}
 
@@ -542,7 +573,6 @@ class Utility extends Quant
 		}
 
 		process.stdout.write(lines.join(EOL) + EOL);
-		process.exit();
 	}
 	
 	finish(_util = this.util)
@@ -552,8 +582,9 @@ class Utility extends Quant
 		switch(_util)
 		{
 			case 'count':
-				this.checkFilter();
 				this.showCount();
+				if(this.summary)
+					this.checkFilter();
 				break;
 			case 'rot13':
 				this.checkFilter();
@@ -577,7 +608,10 @@ class Utility extends Quant
 		switch(_util)
 		{
 			case 'count':
-				this.counting = new Array(256).fill(0);
+				this.result = new Array(256).fill(0);
+				this.filteredBytes = 0;
+				this.counting = 0;
+
 				this.prepareCount();
 				break;
 			case 'sum':
@@ -587,6 +621,7 @@ class Utility extends Quant
 				break;
 			case 'rot13':
 				this.filteredBytes = 0;
+
 				this.prepareRot13();
 				break;
 			default:
@@ -665,6 +700,16 @@ class Utility extends Quant
 		}
 
 		this.without = Helper.parseBytes(this.param.get('without'));
+		
+		//
+		if(this.param.has('summary'))
+		{
+			this.summary = this.param.get('summary');
+		}
+		else
+		{
+			this.summary = this.getConfig('summary');
+		}
 	}
 	
 	prepareCount()

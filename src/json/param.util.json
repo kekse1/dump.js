@@ -78,5 +78,9 @@
 	"silent": {
 		"type": "boolean",
 		"required": false
+	},
+	"summary": {
+		"type": "boolean",
+		"required": false
 	}
 }

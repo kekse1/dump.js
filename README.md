@@ -87,6 +87,7 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--only`** (String/Integer)
 * **`--printable`** (Boolean)
 * **`--silent`** (Boolean)
+* **`--summary`** (Boolean)
 
 #### Boolean
 The Boolean values are either without any value assignment, which sometimes causes problems when the
