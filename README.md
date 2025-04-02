@@ -168,11 +168,6 @@ over the header data.
 
 ![Fourth Screenshot](img/screenshot.vier.png)
 
-And the **newest `rot13` utility** in action. **Yes**, I really had my data with -1 byte to less (output of
-my [Norbert](https://norbert.com.es/)), so I **really** had to add this tool here.. **^\_^**.
-
-![rot13 utility](img/screenshot.rot13.png)
-
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
 
