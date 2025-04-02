@@ -7,6 +7,7 @@
 const DEFAULT_PARAM_SCHEME_JSON = '../../json/param/dump.util.json';
 const DEFAULT_SILENT = true;
 const DEFAULT_ENCODING = 'latin1';//'utf8';
+const DEFAULT_PRECISION = 2;
 
 //
 import Quant from '../shared/quant.js';
@@ -252,7 +253,9 @@ class Utility extends Quant
 		var filtered = this.filtered;
 		var counting = this.counting;
 		var total = this.length;
-
+		var percent = Math.round(counting / total * 100,
+			DEFAULT_PRECISION);
+		
 		if(!filtered)
 		{
 			return false;
@@ -263,18 +266,21 @@ class Utility extends Quant
 			filtered = filtered.toString(this.radix);
 			counting = counting.toString(this.radix);
 			total = total.toString(this.radix);
+			percent = percent.toString(this.radix);
 		}
 		else if(this.locale)
 		{
 			filtered = filtered.toLocaleString();
 			counting = counting.toLocaleString();
 			total = total.toLocaleString();
+			percent = percent.toLocaleString();
 		}
 		else
 		{
 			filtered = filtered.toString();
 			counting = counting.toString();
 			total = total.toString();
+			percent = percent.toString();
 		}
 		
 		if(process.ansi)
@@ -282,16 +288,22 @@ class Utility extends Quant
 			filtered = filtered.bold(true).warn(true);
 			counting = counting.bold(true).info(true);
 			total = total.bold(true).error(true);
+			percent = percent.bold(true).info(true);
+			percent += '%'.error(true);
+		}
+		else
+		{
+			percent += '%';
 		}
 
 		console.debug('Data ' + 'filtered'.bold(true) + ': ' + counting + ' Bytes counted (' +
 			total + ' in total; '.debug(true) + filtered + ' filtered out)'.
 			debug(true));
-		
 		console.debug('               ' + Math.size.styled(this.counting).
 			info(true) + ' counted (' + Math.size.styled(this.length).
 			error(true) + ' in total; '.debug(true) + Math.size.styled(
 				this.filtered).warn(true) + ' filtered out)'.debug(true));
+		console.debug('            => ' + percent);
 	}
 	
 	showSum()
