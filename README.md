@@ -227,21 +227,6 @@ want to wait until I'm going to run my
 
 <br><br>
 
-## Comments/F.A.Q.
-
-### Question: Why do we use `++this.linesPrint`/etc. in the code?
-I'm massively using [`tmux`](https://github.com/tmux/tmux/),
-and this doesn't seem to support cursor load (`\e[u`) nor save (`\e[s`)! **:-/**
-
-#### Contact me
-If you think this project could be beneficial to you, or if you're simply interested in trying it out,
-please send me a [**mail**](#contact) expressing your interest, or create an [**issue**](#contact)
-here on GitHub.
-
-Once we have enough requests, I'll make the effort to get everything up and running for you all.
-
-<br><br>
-
 ## Utilities
 I also needed some helping utilities for my purposes, so I started here.
 
@@ -265,6 +250,21 @@ make us of all the [available parameters](#command-line-parameters).
 > [!NOTE]
 > All the **utils** all supports some general parameters/arguments. The most important
 > should be `--only` and `--without`. For the rest see the [command line parameters](#command-line-parameters).
+
+<br><br>
+
+## Comments/F.A.Q.
+
+### Question: Why do we use `++this.linesPrint`/etc. in the code?
+I'm massively using [`tmux`](https://github.com/tmux/tmux/),
+and this doesn't seem to support cursor load (`\e[u`) nor save (`\e[s`)! **:-/**
+
+#### Contact me
+If you think this project could be beneficial to you, or if you're simply interested in trying it out,
+please send me a [**mail**](#contact) expressing your interest, or create an [**issue**](#contact)
+here on GitHub.
+
+Once we have enough requests, I'll make the effort to get everything up and running for you all.
 
 <br><br>
 
