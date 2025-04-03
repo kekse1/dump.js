@@ -6,10 +6,14 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 > [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
 
+<br><br>
+
 ## News
 * \[**2025-04-02**\] Update: better [`util.js`](src/js/util.js); and now also w/ new [parameter](#command-line-parameters) `--summary`;
 * \[**2025-03-24**\] Update: new **util**s `sum`. ... and a bit more, AFAIR.
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
+
+<br>
 
 ## Index
 1. [Introduction](#introduction)
@@ -25,8 +29,12 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 6. [Contact](#contact)
 7. [Copyright and License](#copyright-and-license)
 
+<br><br>
+
 ## Introduction
 It became necessary since I wanted to inspect the changing data of my [Norbert](https://github.com/kekse1/norbert/).
+
+<br>
 
 ### First words
 It's more than a **Hex viewer**.. it's rather a **Radix viewer**; which will become a **Radix Editor** in some
@@ -41,6 +49,8 @@ But it became necessary, so I invented it.
 I found out such a code like it's also the [**`hexyl`**](https://github.com/sharkdp/hexyl/) is really easy. Don't
 know exactly how hard this will get when I will extend it (got a big TODO for this one). But it was a cake of piece
 until now (even without looking at the hexyl source code).
+
+<br>
 
 ### Command Line Parameters
 The default 'runtime' parameters are not listed here. They got inserted by the startup
@@ -117,6 +127,8 @@ If defined empty (or with `yes/no/on/off`), size will automatically be adapted t
 It can also be an integer for the target line count; or a string with a '%' suffix, so you can define
 a percentage of your console's height.
 
+<br><br>
+
 ## Example Screenshots
 
 > [!TIP]
@@ -170,8 +182,12 @@ over the header data.
 
 ![Fourth Screenshot](img/screenshot.vier.png)
 
+<br><br>
+
 ## Download
 You can download it by browsing the [**`./src/`**](./src/). It's a [`Node.js`](https://nodejs.org/) **sub** project.
+
+<br>
 
 ### Structure
 * [**`js/`**](./src/js/): the 'real' code; one **startup** script [`main.js`](src/js/main.js) (for [`dump.sh`](src/sh/dump.sh)), the [`dump.js`](src/js/dump.js), [`util.js`](src/js/util.js) and the [`helper.js`](src/js/helper.js);
@@ -195,6 +211,8 @@ but the more config parameters will come, the more structure they need .. and go
 > I'm also using my own [**`JSON.js`**](https://github.com/kekse1/json.js/) project in here.
 > This is why you can see the comments in my [`config.json`](./src/json/config.json).
 
+<br>
+
 ### Infra-Structure
 > [!IMPORTANT]
 > This project relies on my own JavaScript infrastructure.
@@ -204,6 +222,8 @@ So you can only see the code of this **sub** project. It doesn't really run stan
 If you'd like to use it, you could bring in your own **polyfill**. .. in case you don't
 want to wait until I'm going to run my
 [**`init-sub-proj.sh`**](https://github.com/kekse1/scripts/?tab=readme-ov-file#init-sub-projsh).
+
+<br><br>
 
 ## Comments/F.A.Q.
 
@@ -217,6 +237,8 @@ please send me a [**mail**](#contact) expressing your interest, or create an [**
 here on GitHub.
 
 Once we have enough requests, I'll make the effort to get everything up and running for you all.
+
+<br><br>
 
 ## Utilities
 I also needed some helping utilities for my purposes, so I started here.
@@ -242,6 +264,8 @@ make us of all the [available parameters](#command-line-parameters).
 > All the **utils** all supports some general parameters/arguments. The most important
 > should be `--only` and `--without`. For the rest see the [command line parameters](#command-line-parameters).
 
+<br><br>
+
 ## Links
 * [`hexyl`](https://github.com/sharkdp/hexyl/)
 
@@ -249,6 +273,8 @@ I mention this project here because I often used it before I came up with my own
 
 In the future, when I'm extending this code base, I think I'm going to see this foreign
 project as an example for me. Like more colors for different types of byte data, and more.
+
+<br>
 
 # Contact
 
