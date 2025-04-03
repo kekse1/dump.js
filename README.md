@@ -27,9 +27,10 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 	* [Infra-Structure](#infra-structure)
 		* [Contact me](#contact-me)
 4. [Utilities](#utilities)
-5. [Links](#links)
-6. [Contact](#contact)
-7. [Copyright and License](#copyright-and-license)
+5. [Comments/F.A.Q.](#commentsfaq)
+6. [Links](#links)
+7. [Contact](#contact)
+8. [Copyright and License](#copyright-and-license)
 
 <br><br>
 
