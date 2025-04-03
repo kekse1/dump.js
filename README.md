@@ -1,5 +1,7 @@
 <img src="https://kekse.biz/github.php?draw&override=github:dump.js" />
 
+<br>
+
 # The **`dump`** utility
 My own **Radix viewer** (JavaScript version). First version only w/ **viewing** functionality..
 
