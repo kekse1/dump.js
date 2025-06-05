@@ -82,5 +82,9 @@
 	"summary": {
 		"type": "boolean",
 		"required": false
+	},
+	"above": {
+		"type": "boolean",
+		"required": false
 	}
 }

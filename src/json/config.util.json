@@ -38,6 +38,9 @@
 
 	/* summary .. eingefuehrt wg. `util.count`, dass die anzahl an bytes w/ math.size; ..
 		... v.a. wg. '--only' bzw. '--without' sinnvoll! ;-) ... */
-	"summary": true
+	"summary": true,
+
+	/* the 'print' utility can also print 'ansi' characters, so these *above* 127... */
+	"above": true
 
 }

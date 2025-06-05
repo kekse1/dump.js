@@ -54,7 +54,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'sum', 'rot13' ];
+		return [ 'count', 'sum', 'rot13', 'print' ];
 	}
 
 	static help(_exit = null)
@@ -250,7 +250,7 @@ class Utility extends Quant
 
 	checkFilter()
 	{
-		var filtered = this.filtered;
+		var filtered = this.filteredBytes;
 		var counting = this.counting;
 		var total = this.length;
 		var percent = Math.round(counting / total * 100,
@@ -296,13 +296,18 @@ class Utility extends Quant
 			percent += '%';
 		}
 
-		console.debug('Data ' + 'filtered'.bold(true) + ': ' + counting + ' Bytes counted (' +
-			total + ' in total; '.debug(true) + filtered + ' filtered out)'.
-			debug(true));
-		console.debug('               ' + Math.size.styled(this.counting).
-			info(true) + ' counted (' + Math.size.styled(this.length).
-			error(true) + ' in total; '.debug(true) + Math.size.styled(
-				this.filtered).warn(true) + ' filtered out)'.debug(true));
+		console.info(('Data ' + 'filtered'.bold(true)).debug(true) +
+			': ' + counting + ' Bytes counted (' + total + ' in total; '.
+				debug(true) + filtered + ' filtered out)'.debug(true));
+		
+		if(this.counting >= 1024 || this.length >= 1024 || this.filtered >= 1024)
+		{
+			console.debug('               ' + Math.size.styled(this.counting).
+				info(true) + ' counted (' + Math.size.styled(this.length).
+				error(true) + ' in total; '.debug(true) + Math.size.styled(
+					this.filtered).warn(true) + ' filtered out)'.debug(true));
+		}
+		
 		console.debug('            => ' + percent);
 	}
 	
@@ -401,6 +406,52 @@ class Utility extends Quant
 			else
 			{
 				++this.counting;
+			}
+		}
+	}
+	
+	showPrint()
+	{
+		if(this.controlBytes > 0)
+		{
+			console.info('Input had ' +
+				this.controlBytes.toLocaleString().
+					bold(true).warn(true) +
+				' ' + 'allowed'.underline(true) +
+				' control bytes.');
+		}
+	}
+	
+	print(_chunk, ... _args)
+	{
+		this.length += _chunk.length;
+
+		for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(_chunk[i] === 9 || _chunk[i] === 10)
+			{
+				++this.controlBytes;
+				process.stdout.write(
+					String.fromCharCode(
+						_chunk[i]));
+			}
+			else if(_chunk[i] >= 32 && _chunk[i] < 127)
+			{
+				++this.counting;
+				process.stdout.write(
+					String.fromCharCode(
+						_chunk[i]));
+			}
+			else if(this.above && _chunk[i] > 127)
+			{
+				++this.counting;
+				process.stdout.write(
+					String.fromCharCode(
+						_chunk[i]));
+			}
+			else
+			{
+				++this.filteredBytes;
 			}
 		}
 	}
@@ -595,8 +646,7 @@ class Utility extends Quant
 		{
 			case 'count':
 				this.showCount();
-				if(this.summary)
-					this.checkFilter();
+				if(this.summary) this.checkFilter();
 				break;
 			case 'rot13':
 				this.checkFilter();
@@ -604,6 +654,17 @@ class Utility extends Quant
 			case 'sum':
 				this.checkFilter();
 				this.showSum();
+				break;
+			case 'print':
+				if(!this.summary)
+				{
+					console.eol();
+					break;
+				}
+				
+				console.eol(2);
+				this.checkFilter();
+				this.showPrint();
 				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
@@ -623,7 +684,6 @@ class Utility extends Quant
 				this.result = new Array(256).fill(0);
 				this.filteredBytes = 0;
 				this.counting = 0;
-
 				this.prepareCount();
 				break;
 			case 'sum':
@@ -633,11 +693,28 @@ class Utility extends Quant
 				break;
 			case 'rot13':
 				this.filteredBytes = 0;
-
 				this.prepareRot13();
+				break;
+			case 'print':
+				this.filteredBytes = 0;
+				this.controlBytes = 0;
+				this.counting = 0;
+				this.preparePrint();
 				break;
 			default:
 				throw new Error('Invalid utility chosen');
+		}
+	}
+	
+	preparePrint()
+	{
+		if(this.param.has('above'))
+		{
+			this.above = this.param.get('above');
+		}
+		else
+		{
+			this.above = this.getConfig('above');
 		}
 	}
 	

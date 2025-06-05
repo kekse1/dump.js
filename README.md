@@ -11,6 +11,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
+* \[**2025-06-05**\] New [`util.js`](src/js/util.js): after **counting** printables, now I also can just print out only **printables**!
 * \[**2025-04-02**\] Update: better [`util.js`](src/js/util.js); and now also w/ new [parameter](#command-line-parameters) `--summary`;
 * \[**2025-03-24**\] Update: new **util**s `sum`. ... and a bit more, AFAIR.
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
@@ -102,6 +103,7 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--printable`** (Boolean)
 * **`--silent`** (Boolean)
 * **`--summary`** (Boolean)
+* **`--above`** (Boolean)
 
 #### Boolean
 The Boolean values are either without any value assignment, which sometimes causes problems when the
@@ -146,16 +148,12 @@ This is a newer preview screenshot. Updated design, styles/colors, parameters, a
 ![Newest Screenshot](img/screenshot.null.png)
 
 Here's a newer dump/utility, one to count any bytes in a file (for possible parameters see the
-[`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json)
-maybe).
+[`param.util.json`](src/json/param.util.json), and the [`config.util.json`](src/json/config.util.json) maybe).
 
 > [!NOTE]
 > If you've other ideas for possible `dump` **utilities**, please mail me.
 
-> [!TIP]
-> Now there's also the `rot13` and the `sum` utility available. I **really** needed it here! **^\_^**
-
-![Second screenshot of newer version of the `dump.count` utility](img/screenshot.eight.png)
+![Second screenshot of newer version of the `dump.count` `ity](img/screenshot.eight.png)
 ![Screenshot of the first utility of my dump](img/screenshot.eins.png)
 
 And this is showing the `--replace` feature.
@@ -239,6 +237,7 @@ These are the only available utilties (**atm**):
 * [**`count`**](src/sh/dump.count.sh)
 * [**`sum`**](src/sh/dump.sum.sh)
 * [**`rot13`**](src/sh/dump.rot13.sh)
+* [**`print`**](src/sh/dump.print.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
 make us of all the [available parameters](#command-line-parameters).
