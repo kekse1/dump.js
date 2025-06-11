@@ -345,7 +345,7 @@ class Utility extends Quant
 	{
 		this.length += _chunk.length;
 		
-		var byte, b; for(var i = 0; i < _chunk.length; ++i)
+		var byte; for(var i = 0; i < _chunk.length; ++i)
 		{
 			if(this.only)
 			{
@@ -367,7 +367,7 @@ class Utility extends Quant
 				byte = _chunk[i];
 			}
 
-			if(this.filter && (b < 32 || b === 127))
+			if(this.filter && (_chunk[i] < 32 || _chunk[i] === 127))
 			{
 				byte = null;
 			}
