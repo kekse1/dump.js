@@ -345,7 +345,7 @@ class Utility extends Quant
 	{
 		this.length += _chunk.length;
 		
-		var byte; for(var i = 0; i < _chunk.length; ++i)
+		var byte, b; for(var i = 0; i < _chunk.length; ++i)
 		{
 			if(this.only)
 			{
@@ -365,6 +365,11 @@ class Utility extends Quant
 			else
 			{
 				byte = _chunk[i];
+			}
+
+			if(this.filter && (b < 32 || b === 127))
+			{
+				byte = null;
 			}
 			
 			if(byte !== null)
@@ -676,29 +681,25 @@ class Utility extends Quant
 	prepare(_util = this.util)
 	{
 		this.length = 0;
+		this.counting = 0;
+		this.filteredBytes = 0;
+
 		this.prepareUtil();
 		
 		switch(_util)
 		{
 			case 'count':
 				this.result = new Array(256).fill(0);
-				this.filteredBytes = 0;
-				this.counting = 0;
 				this.prepareCount();
 				break;
 			case 'sum':
-				this.filteredBytes = 0;
-				this.counting = 0;
 				this.result = 0n;
 				break;
 			case 'rot13':
-				this.filteredBytes = 0;
 				this.prepareRot13();
 				break;
 			case 'print':
-				this.filteredBytes = 0;
 				this.controlBytes = 0;
-				this.counting = 0;
 				this.preparePrint();
 				break;
 			default:
@@ -752,6 +753,15 @@ class Utility extends Quant
 			{
 				process.stderr.write('\n');
 			}
+		}
+
+		if(this.param.has('filter'))
+		{
+			this.filter = this.param.get('filter');
+		}
+		else
+		{
+			this.filter = this.getConfig('filter');
 		}
 	}
 	

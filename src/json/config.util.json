@@ -41,6 +41,9 @@
 	"summary": true,
 
 	/* the 'print' utility can also print 'ansi' characters, so these *above* 127... */
-	"above": true
+	"above": true,
+
+	/* when e.g. `rot13` should be outputted without control characters, ... */
+	"filter": true
 
 }
