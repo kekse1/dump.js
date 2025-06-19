@@ -108,7 +108,9 @@ class Utility extends Quant
 				if(string(this.param[i], false)) try
 				{
 					file = path.resolve(this.param[i]);
-					stats = fs.statSync(file, { bigint: false, throwIfNoEntry: true });
+					stats = fs.statSync(file, {
+						bigint: false, throwIfNoEntry: true });
+
 					if(! (stats.isFile() || stats.isBlockDevice() || stats.isCharacterDevice()))
 					{
 						file = null;
@@ -195,6 +197,11 @@ class Utility extends Quant
 			//
 			this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
 			this.stream.on('end', (... _a) => this.onEnd(... _a));
+			const _destroy = this.stream.destroy.bind(this.stream);
+			this.stream.destroy = (... _a) => {
+				_destroy(... _a);
+				this.onEnd(... _a);
+			};
 		}, path.join(this.param.get('script'),
 			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
@@ -310,6 +317,126 @@ class Utility extends Quant
 		
 		console.debug('            => ' + percent);
 	}
+
+	countLines(_char)
+	{
+		if(this.lines[EOL[0]] === 0)
+		{
+			this.lines[EOL[0]] = 1;
+
+			if('rows' in this.lines)
+			{
+				this.lines.rows = 1;
+			}
+		}
+
+		if(typeof _char === 'number')
+		{
+			_char = String.fromCodePoint(_char);
+		}
+
+		const ret = (_res) => {
+			if(!_res && this.stream) setTimeout(() => {
+				this.stream.destroy();
+				this.stream = null;
+			});
+	
+			return _res;
+		};
+
+		var newLine = false;
+		var result = true;
+
+		if(_char in this.lines)
+		{
+			newLine = true;
+			++this.lines[_char];
+
+			if(this.lineLimit !== null && this.lines[_char] > this.lineLimit)
+			{
+				result = false;
+			}
+		}
+
+		if(this.column !== null && ++this.column >= this.width)
+		{
+			newLine = true;
+		}
+
+		if(newLine)
+		{
+			++this.lines.rows;
+			this.column = 0;
+
+			if(result && this.lineLimit !== null && this.lines.rows > this.lineLimit)
+			{
+				result = false;
+			}
+		}
+		
+		return ret(result);
+	}
+
+	checkLines()
+	{
+		var str;
+
+		if(this.reachedLineLimit !== null && this.reachedLineLimit < this.stats.size)
+		{
+			str = 'Output stopped because line limit ('.debug(true) +
+				this.lineLimit.toLocaleString().bold(true).error(true) +
+				') has been reached!'.debug(true) + EOL;
+		}
+		else
+		{
+			str = '';
+		}
+
+		if(this.lines['\n'])
+		{
+			if(this.lines['\n'] > 1)
+			{
+				--this.lines['\n'];
+			}
+
+			str += '   ['.debug(true) + '\\n'.error(true) +
+				']'.debug(true) + ' ';
+			str += this.lines['\n'].toLocaleString().
+				bold(true).info(true) + EOL;
+		}
+
+		if(this.lines['\r'])
+		{
+			if(this.lines['\r'] > 1)
+			{
+				--this.lines['\r'];
+			}
+
+			str += '   ['.debug(true) + '\\r'.error(true) +
+				']'.debug(true) + ' ';
+			str += this.lines['\r'].toLocaleString().
+				bold(true).info(true) + EOL;
+		}
+
+		if(this.lines['rows'])
+		{
+			if(this.lines.rows > 1)
+			{
+				--this.lines.rows;
+			}
+
+			str += ' ['.debug(true) + 'rows'.error(true) + ']'.debug(true) + ' ';
+			str += this.lines['rows'].toLocaleString().
+				bold(true).info(true) + EOL;
+		}
+
+		if(str.length > 0)
+		{
+			console.log(str);
+		}
+
+		return str;
+	}
 	
 	showSum()
 	{
@@ -343,6 +470,11 @@ class Utility extends Quant
 	
 	rot13(_chunk, ... _args)
 	{
+		if(this.reachedLineLimit !== null)
+		{
+			return;
+		}
+
 		this.length += _chunk.length;
 		
 		var byte; for(var i = 0; i < _chunk.length; ++i)
@@ -374,6 +506,12 @@ class Utility extends Quant
 			
 			if(byte !== null)
 			{
+				if(!this.countLines(_chunk[i]))
+				{
+					this.reachedLineLimit = (this.length - _chunk.length + i);
+					break;
+				}
+
 				process.stdout.write(
 					String.fromCharCode(
 						byte + this.move));
@@ -429,30 +567,53 @@ class Utility extends Quant
 	
 	print(_chunk, ... _args)
 	{
+		if(this.reachedLineLimit !== null)
+		{
+			return;
+		}
+
 		this.length += _chunk.length;
+
+		const count = (_byte, _i) => {
+			if(!this.countLines(_byte))
+			{
+				this.reachedLineLimit = (this.length - _chunk.length + _i);
+				return false;
+			}
+
+			process.stdout.write(String.fromCodePoint(_byte));
+			return true;
+		};
+
 
 		for(var i = 0; i < _chunk.length; ++i)
 		{
 			if(_chunk[i] === 9 || _chunk[i] === 10)
 			{
 				++this.controlBytes;
-				process.stdout.write(
-					String.fromCharCode(
-						_chunk[i]));
+
+				if(!count(_chunk[i], i))
+				{
+					break;
+				}
 			}
 			else if(_chunk[i] >= 32 && _chunk[i] < 127)
 			{
 				++this.counting;
-				process.stdout.write(
-					String.fromCharCode(
-						_chunk[i]));
+
+				if(!count(_chunk[i], i))
+				{
+					break;
+				}
 			}
 			else if(this.above && _chunk[i] > 127)
 			{
 				++this.counting;
-				process.stdout.write(
-					String.fromCharCode(
-						_chunk[i]));
+
+				if(!count(_chunk[i], i))
+				{
+					break;
+				}
 			}
 			else
 			{
@@ -654,21 +815,32 @@ class Utility extends Quant
 				if(this.summary) this.checkFilter();
 				break;
 			case 'rot13':
+				console.eol();
+				
+				if(!this.summary)
+				{
+					break;
+				}
+
+				console.eol();
 				this.checkFilter();
+				this.checkLines();
 				break;
 			case 'sum':
 				this.checkFilter();
 				this.showSum();
 				break;
 			case 'print':
+				console.eol();
+
 				if(!this.summary)
 				{
-					console.eol();
 					break;
 				}
 				
-				console.eol(2);
+				console.eol();
 				this.checkFilter();
+				this.checkLines();
 				this.showPrint();
 				break;
 			default:
@@ -717,6 +889,35 @@ class Utility extends Quant
 		{
 			this.above = this.getConfig('above');
 		}
+
+		if(this.param.has('lines'))
+		{
+			this.lineLimit = this.param.get('lines');
+		}
+		else
+		{
+			this.lineLimit = this.getConfig('lines');
+		}
+
+		if(this.lineLimit !== null && this.lineLimit < 1)
+		{
+			this.lineLimit = null;
+		}
+
+		this.lines = { '\n': 0, '\r': 0 };
+		
+		if((this.width = console.width) < 1)
+		{
+			this.width = 0;
+			this.column = null;
+		}
+		else
+		{
+			this.lines.rows = 0;
+			this.column = 0;
+		}
+
+		this.reachedLineLimit = null;
 	}
 	
 	prepareRot13()
@@ -763,6 +964,35 @@ class Utility extends Quant
 		{
 			this.filter = this.getConfig('filter');
 		}
+
+		if(this.param.has('lines'))
+		{
+			this.lineLimit = this.param.get('lines');
+		}
+		else
+		{
+			this.lineLimit = this.getConfig('lines');
+		}
+
+		if(this.lineLimit !== null && this.lineLimit < 1)
+		{
+			this.lineLimit = null;
+		}
+
+		this.lines = { '\n': 0, '\r': 0 };
+
+		if((this.width = console.width) < 1)
+		{
+			this.width = 0;
+			this.column = null;
+		}
+		else
+		{
+			this.lines.rows = 0;
+			this.column = 0;
+		}
+
+		this.reachedLineLimit = null;
 	}
 	
 	prepareUtil()

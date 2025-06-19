@@ -44,6 +44,11 @@
 	"above": true,
 
 	/* when e.g. `rot13` should be outputted without control characters, ... */
-	"filter": true
+	"filter": true,
+
+	/* optional integer, also `--lines`, to limit output to (n) terminal rows.
+		... counts *effectively*: not only by `\n` occurences, also the
+		real row count of the terminal!1 .. */
+	"lines": null
 
 }

@@ -90,5 +90,9 @@
 	"filter": {
 		"type": "boolean",
 		"required": false
+	},
+	"lines": {
+		"type": [ "integer", "null" ],
+		"required": false
 	}
 }
