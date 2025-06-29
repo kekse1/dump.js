@@ -14,6 +14,7 @@ import Quant from '../shared/quant.js';
 import Application from '../shared/app.js';
 import Parameter from '../shared/param.js';
 import GetOpt from '../shared/getopt.js';
+import XML from '../shared/xml.js';
 import Helper from './helper.js';
 import path from 'node:path';
 import fs from 'node:fs';
@@ -54,7 +55,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'sum', 'rot13', 'print' ];
+		return [ 'count', 'sum', 'rot13', 'print', 'xml' ];
 	}
 
 	static help(_exit = null)
@@ -184,24 +185,26 @@ class Utility extends Quant
 			}
 
 			//
-			this.prepare(this.util);
+			const prepareCallback = () => {
+				this.stream = fs.createReadStream(file, {
+					encoding: DEFAULT_ENCODING,
+					autoClose: true,
+					emitClose: true,
+					start: this.offset,
+					end: (this.offset + this.size - 1) });
 
-			//
-			this.stream = fs.createReadStream(file, {
-				encoding: DEFAULT_ENCODING,
-				autoClose: true,
-				emitClose: true,
-				start: this.offset,
-				end: (this.offset + this.size - 1) });
-
-			//
-			this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
-			this.stream.on('end', (... _a) => this.onEnd(... _a));
-			const _destroy = this.stream.destroy.bind(this.stream);
-			this.stream.destroy = (... _a) => {
-				_destroy(... _a);
-				this.onEnd(... _a);
+				this.stream.on('data', (_c, ... _a) => this.onData(_c, ... _a));
+				this.stream.on('end', (... _a) => this.onEnd(... _a));
+				const _destroy = this.stream.destroy.bind(this.stream);
+			
+				this.stream.destroy = (... _a) => {
+					_destroy(... _a);
+					this.onEnd(... _a);
+				};
 			};
+
+			//
+			this.prepare(this.util, prepareCallback);
 		}, path.join(this.param.get('script'),
 			DEFAULT_PARAM_SCHEME_JSON), this.param);
 	}
@@ -621,6 +624,245 @@ class Utility extends Quant
 			}
 		}
 	}
+
+	static get xmlEscaping()
+	{
+		return [
+			[ '&', '&amp;' ],
+			[ '"', '&quot;' ],
+			[ '\'', '&#39;' ],
+			[ '<', '&lt;' ],
+			[ '>', '&gt;' ]
+		];
+	}
+
+	xmlEscape(_chunk)
+	{
+		if(this.all)
+		{
+			const seq = ('&#' + (this.hex ? 'x' : ''));
+			const rdx = (this.hex ? 16 : 10);
+			var data;
+
+			for(var i = 0; i < _chunk.length; ++i)
+			{
+				data = (seq + _chunk[i].toString(rdx) + ';');
+				this.added += data.length;
+				--this.removed;
+				process.stdout.write(data);
+			}
+
+			return;
+		}
+
+		const escaping = this.constructor.xmlEscaping;
+		const from = [], to = [];
+
+		for(const item of escaping)
+		{
+			from.push(item[0]);
+			to.push(item[1]);
+		}
+
+		var char, idx, diff;
+		for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(_chunk[i] >= 34 && _chunk[i] <= 62)
+			{
+				if((idx = from.indexOf(char = String.fromCodePoint(
+					_chunk[i]))) === -1)
+				{
+					process.stdout.write(char);
+				}
+				else
+				{
+					--this.removed;
+					this.added += (char = to[idx]).length;
+					process.stdout.write(char);
+				}
+			}
+			else
+			{
+				process.stdout.write(
+					String.fromCodePoint(
+						_chunk[i]));
+			}
+		}
+	}
+	
+	xmlUnEscape(_chunk)
+	{
+		var origLen;
+
+		if(this.all)
+		{
+			for(var i = 0; i < _chunk.length; ++i)
+			{
+				if(this.entity)
+				{
+					if(_chunk[i] === 59)
+					{
+						origLen = (this.entity.length + 1);
+						this.entity = this._xml.renderEntity(
+							this.entity + ';');
+						this.added += this.entity.length;
+						this.removed += origLen;
+						process.stdout.write(this.entity);
+						this.entity = '';
+					}
+					else
+					{
+						this.entity += String.fromCodePoint(
+							_chunk[i]);
+					}
+				}
+				else if(_chunk[i] === 38)
+				{
+					this.entity = '&';
+				}
+				else
+				{
+					process.stdout.write(
+						String.fromCodePoint(
+							_chunk[i]));
+				}
+			}
+
+			return;
+		}
+
+		const escaping = this.constructor.xmlEscaping;
+		const from = [], to = [];
+
+		for(const item of escaping)
+		{
+			from.push(item[1]);
+			to.push(item[0]);
+		}
+
+		loop: for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(_chunk[i] === 38)
+			{
+				for(var j = 0; j < from.length; ++j) if(_chunk.at(i, from[j]))
+				{
+					process.stdout.write(to[j]);
+					this.added += to[j].length;
+					this.removed += from[j].length;
+					i += from[j].length - 1;
+					continue loop;
+				}
+
+				process.stdout.write(String.fromCharCode(
+					_chunk[i]));
+			}
+			else
+			{
+				process.stdout.write(String.fromCodePoint(
+					_chunk[i]));
+			}
+		}
+	}
+	
+	xml(_chunk)
+	{
+		this.length += _chunk.length;
+
+		if(this.mode)
+		{
+			switch(this.mode)
+			{
+				case 'escape':
+					return this.xmlEscape(_chunk);
+				case 'unescape':
+					return this.xmlUnEscape(_chunk);
+			}
+		}
+		
+		var origLen; for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(this.openState)
+			{
+				if(_chunk[i] === 62)
+				{
+					this.openState = false;
+				}
+
+				++this.filteredBytes;
+			}
+			else if(_chunk[i] === 60)
+			{
+				this.openState = true;
+				++this.filteredBytes;
+				++this.tags;
+			}
+			else if(this.entity)
+			{
+				if(_chunk[i] === 59)
+				{
+					origLen = (this.entity.length + 1);
+					this.entity = this._xml.renderEntity(
+						this.entity + ';');
+					++this.entities;
+					this.counting += this.entity.length;
+					process.stdout.write(this.entity);
+					this.filteredBytes += (origLen -
+						this.entity.length);
+					this.entity = '';
+				}
+				else
+				{
+					this.entity += String.fromCodePoint(
+						_chunk[i]);
+				}
+			}
+			else if(_chunk[i] === 38)
+			{
+				this.entity = '&';
+			}
+			else
+			{
+				process.stdout.write(String.
+					fromCodePoint(
+						_chunk[i]));
+				++this.counting;
+			}
+		}
+	}
+
+	xmlSummary()
+	{
+		if(!this.mode)
+		{
+			if(this.tags > 0)
+			{
+				console.info('Found ' + this.tags.toLocaleString().
+					bold(true).debug(true) + ' tags (which were removed).');
+			}
+
+			if(this.entities > 0)
+			{
+				console.info('Converted ' + this.entities.toLocaleString().
+					bold(true).debug(true) + ' entities, in total.');
+			}
+		}
+		else
+		{
+			if(this.removed > 0)
+			{
+				console.info('Removed ' + this.removed.toLocaleString().
+					bold(true).debug(true) + ' Bytes: ' +
+					Math.size.styled(this.removed).error(true));
+			}
+
+			if(this.added > 0)
+			{
+				console.info('Added ' + this.added.toLocaleString().
+					bold(true).debug(true) + ' Bytes: ' +
+					Math.size.styled(this.added).error(true));
+			}
+		}
+	}
 	
 	showCount()
 	{
@@ -812,7 +1054,11 @@ class Utility extends Quant
 		{
 			case 'count':
 				this.showCount();
-				if(this.summary) this.checkFilter();
+
+				if(this.summary)
+				{
+					this.checkFilter();
+				}
 				break;
 			case 'rot13':
 				console.eol();
@@ -843,6 +1089,19 @@ class Utility extends Quant
 				this.checkLines();
 				this.showPrint();
 				break;
+			case 'xml':
+				console.eol();
+
+				if(this.summary)
+				{
+					if(!this.mode)
+					{
+						this.checkFilter();
+					}
+
+					this.xmlSummary();
+				}
+				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
 		}
@@ -850,13 +1109,15 @@ class Utility extends Quant
 		return process.exit();
 	}
 	
-	prepare(_util = this.util)
+	prepare(_util = this.util, _callback)
 	{
 		this.length = 0;
 		this.counting = 0;
 		this.filteredBytes = 0;
-
+		
 		this.prepareUtil();
+
+		var handledCallback = true;
 		
 		switch(_util)
 		{
@@ -874,8 +1135,17 @@ class Utility extends Quant
 				this.controlBytes = 0;
 				this.preparePrint();
 				break;
+			case 'xml':
+				this.prepareXML(_callback);
+				handledCallback = true;
+				break;
 			default:
 				throw new Error('Invalid utility chosen');
+		}
+		
+		if(!handledCallback)
+		{
+			setImmediate(_callback);
 		}
 	}
 	
@@ -918,6 +1188,84 @@ class Utility extends Quant
 		}
 
 		this.reachedLineLimit = null;
+	}
+
+	//
+	//TODO/MAYBE w/ `--lines`/...?
+	//
+	prepareXML(_callback)
+	{
+		//
+		this.tags = 0;
+
+		if(this.param.has('summary'))
+		{
+			this.summary = this.param.get('summary');
+		}
+		else
+		{
+			this.summary = this.getConfig('summary');
+		}
+
+		if(this.param.has('mode'))
+		{
+			switch(this.mode = this.param.get('mode').toLowerCase())
+			{
+				case 'escape':
+				case 'unescape':
+					break;
+				default:
+					console.error('Invalid ' + '--mode'.warn(true).
+						quote() + ' [ '.debug(true) +
+						'escape'.info(true).quote() + ', ' +
+						'unescape'.info(true).quote() + ' ]'.
+						debug(true));
+					return process.exit(true);
+			}
+
+			this.removed = 0;
+			this.added = 0;
+
+			if(this.param.has('all'))
+			{
+				this.all = this.param.get('all');
+			}
+			else
+			{
+				this.all = this.getConfig('all');
+			}
+
+			if(this.param.has('hex'))
+			{
+				this.hex = this.param.get('hex');
+			}
+			else
+			{
+				this.hex = this.getConfig('hex');
+			}
+		}
+		else
+		{
+			this.mode = '';
+			this.entities = 0;
+		}
+
+		this.openState = false;
+		this.entity = '';
+
+		//
+		this._xml = new XML(true);
+
+		this._xml.once('error', (_p) => {
+			console.error('Unable to load ' + 'entities.json'.
+				warn(true).quote() + '!');
+			process.exit(true);
+		});
+
+		this._xml.once('ready', (_p) => {
+			this._xml.removeAllListeners();
+			setImmediate(() => _callback());
+		});
 	}
 	
 	prepareRot13()

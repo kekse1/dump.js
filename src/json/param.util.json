@@ -94,5 +94,17 @@
 	"lines": {
 		"type": [ "integer", "null" ],
 		"required": false
+	},
+	"mode": {
+		"type": "string",
+		"required": false
+	},
+	"all": {
+		"type": "boolean",
+		"required": false
+	},
+	"hex": {
+		"type": "boolean",
+		"required": false
 	}
 }

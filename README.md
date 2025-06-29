@@ -11,6 +11,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
+* \[**2025-06-30**\] New **util `xml`** (w/ three more cmd-line-params, plus config changes);
 * \[**2025-06-19**\] New `--lines` [parameter](#command-line-parameters) **and** config item!
 * \[**2025-06-11**\] New `--filter` parameter/configuration (to output without control characters);
 * \[**2025-06-05**\] New [`util.js`](src/js/util.js): after **counting** printables, now I also can just print out only **printables**!
@@ -108,6 +109,9 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--above`** (Boolean)
 * **`--filter`** (Boolean)
 * **`--lines`** (Integer/null)
+* **`--mode`** (String)
+* **`--all`** (Boolean)
+* **`--hex`** (Boolean)
 
 #### Boolean
 The Boolean values are either without any value assignment, which sometimes causes problems when the
