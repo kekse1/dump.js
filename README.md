@@ -246,6 +246,7 @@ These are the only available utilties (**atm**):
 * [**`sum`**](src/sh/dump.sum.sh)
 * [**`rot13`**](src/sh/dump.rot13.sh)
 * [**`print`**](src/sh/dump.print.sh)
+* [**`xml`**](src/sh/dump.xml.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
 make us of all the [available parameters](#command-line-parameters).
