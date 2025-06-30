@@ -11,6 +11,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
+* \[**2025-06-30**\] New **util `ansi`** (filtering);
 * \[**2025-06-30**\] New **util `xml`** (w/ three more cmd-line-params, plus config changes);
 * \[**2025-06-19**\] New `--lines` [parameter](#command-line-parameters) **and** config item!
 * \[**2025-06-11**\] New `--filter` parameter/configuration (to output without control characters);
@@ -247,6 +248,7 @@ These are the only available utilties (**atm**):
 * [**`rot13`**](src/sh/dump.rot13.sh)
 * [**`print`**](src/sh/dump.print.sh)
 * [**`xml`**](src/sh/dump.xml.sh)
+* [**`ansi`**](src/sh/dump.ansi.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
 make us of all the [available parameters](#command-line-parameters).
