@@ -646,6 +646,12 @@ class Utility extends Quant
 
 			for(var i = 0; i < _chunk.length; ++i)
 			{
+				if(!this.countLines(_chunk[i]))
+				{
+					this.reachedLineLimit = (this.length - _chunk.length + i);
+					return false;
+				}
+
 				data = (seq + _chunk[i].toString(rdx) + ';');
 				this.added += data.length;
 				--this.removed;
@@ -667,6 +673,12 @@ class Utility extends Quant
 		var char, idx, diff;
 		for(var i = 0; i < _chunk.length; ++i)
 		{
+			if(!this.countLines(_chunk[i]))
+			{
+				this.reachedLineLimit = (this.length - _chunk.length + i);
+				return false;
+			}
+
 			if(_chunk[i] >= 34 && _chunk[i] <= 62)
 			{
 				if((idx = from.indexOf(char = String.fromCodePoint(
@@ -698,6 +710,12 @@ class Utility extends Quant
 		{
 			for(var i = 0; i < _chunk.length; ++i)
 			{
+				if(!this.countLines(_chunk[i]))
+				{
+					this.reachedLineLimit = (this.length - _chunk.length + i);
+					return false;
+				}
+
 				if(this.entity)
 				{
 					if(_chunk[i] === 59)
@@ -742,6 +760,12 @@ class Utility extends Quant
 
 		loop: for(var i = 0; i < _chunk.length; ++i)
 		{
+			if(!this.countLines(_chunk[i]))
+			{
+				this.reachedLineLimit = (this.length - _chunk.length + i);
+				return false;
+			}
+
 			if(_chunk[i] === 38)
 			{
 				for(var j = 0; j < from.length; ++j) if(_chunk.at(i, from[j]))
@@ -781,6 +805,12 @@ class Utility extends Quant
 		
 		var origLen; for(var i = 0; i < _chunk.length; ++i)
 		{
+			if(!this.countLines(_chunk[i]))
+			{
+				this.reachedLineLimit = (this.length - _chunk.length + i);
+				return false;
+			}
+
 			if(this.openState)
 			{
 				if(_chunk[i] === 62)
@@ -1160,6 +1190,11 @@ class Utility extends Quant
 			this.above = this.getConfig('above');
 		}
 
+		this.tryLineLimitInit();
+	}
+
+	tryLineLimitInit()
+	{
 		if(this.param.has('lines'))
 		{
 			this.lineLimit = this.param.get('lines');
@@ -1253,6 +1288,8 @@ class Utility extends Quant
 		this.openState = false;
 		this.entity = '';
 
+		this.tryLineLimitInit();
+
 		//
 		this._xml = new XML(true);
 
@@ -1312,35 +1349,8 @@ class Utility extends Quant
 		{
 			this.filter = this.getConfig('filter');
 		}
-
-		if(this.param.has('lines'))
-		{
-			this.lineLimit = this.param.get('lines');
-		}
-		else
-		{
-			this.lineLimit = this.getConfig('lines');
-		}
-
-		if(this.lineLimit !== null && this.lineLimit < 1)
-		{
-			this.lineLimit = null;
-		}
-
-		this.lines = { '\n': 0, '\r': 0 };
-
-		if((this.width = console.width) < 1)
-		{
-			this.width = 0;
-			this.column = null;
-		}
-		else
-		{
-			this.lines.rows = 0;
-			this.column = 0;
-		}
-
-		this.reachedLineLimit = null;
+		
+		this.tryLineLimitInit();
 	}
 	
 	prepareUtil()
