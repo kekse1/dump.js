@@ -55,7 +55,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'sum', 'rot13', 'print', 'xml' ];
+		return [ 'count', 'sum', 'rot13', 'print', 'xml', 'ansi' ];
 	}
 
 	static help(_exit = null)
@@ -787,6 +787,89 @@ class Utility extends Quant
 			}
 		}
 	}
+
+	ansi(_chunk)
+	{
+		this.length += _chunk.length;
+		
+		loop: for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(!this.countLines(_chunk[i]))
+			{
+				this.reachedLineLimit = (this.length - _chunk.length + i);
+				return false;
+			}
+
+			if(this.openState)
+			{
+				switch(this.openState)
+				{
+					case 1:
+						if(_chunk[i] >= 48 && _chunk[i] <= 63)
+						{
+							//
+						}
+						else if(_chunk[i] >= 32 && _chunk[i] <= 47)
+						{
+							this.openState = 2;
+						}
+						else
+						{
+							this.openState = 0;
+						}
+						break;
+					case 2:
+						if(_chunk[i] >= 32 && _chunk[i] <= 47)
+						{
+							//
+						}
+						else if(_chunk[i] >= 64 && _chunk[i] <= 126)
+						{
+							this.openState = 0;
+						}
+						else
+						{
+							this.openState = 0;
+						}
+						break;
+				}
+
+				++this.filteredBytes;
+
+				if(!this.openState)
+				{
+					++this.sequences;
+				}
+			}
+			else if(_chunk[i] === 27 && _chunk[i + 1] === 91)
+			{
+				this.filteredBytes += 2;
+				this.openState = 1;
+				++i;
+			}
+			else
+			{
+				++this.counting;
+				process.stdout.write(String.fromCharCode(
+					_chunk[i]));
+			}
+		}
+	}
+
+	ansiSummary()
+	{
+		if(this.sequences > 0)
+		{
+			console.info('Found and removed ' + this.sequences.toLocaleString().
+				bold(true).debug(true) + (' ANSI ' + 'CSI'.bold(true) +
+				' Escape Sequences ').warn(true) + '!');
+		}
+		else
+		{
+			console.info('No'.error(true) + (' ANSI ' + 'CSI'.bold(true) +
+				'Escape Sequences ').warn(true) + 'found!');
+		}
+	}
 	
 	xml(_chunk)
 	{
@@ -1132,6 +1215,15 @@ class Utility extends Quant
 					this.xmlSummary();
 				}
 				break;
+			case 'ansi':
+				console.eol();
+
+				if(this.summary)
+				{
+					this.checkFilter();
+					this.ansiSummary();
+				}
+				break;
 			default:
 				throw new Error('Invalid utility; unexpected!');
 		}
@@ -1146,8 +1238,8 @@ class Utility extends Quant
 		this.filteredBytes = 0;
 		
 		this.prepareUtil();
-
-		var handledCallback = true;
+		
+		var handledCallback = false;
 		
 		switch(_util)
 		{
@@ -1168,6 +1260,9 @@ class Utility extends Quant
 			case 'xml':
 				this.prepareXML(_callback);
 				handledCallback = true;
+				break;
+			case 'ansi':
+				this.prepareANSI();
 				break;
 			default:
 				throw new Error('Invalid utility chosen');
@@ -1225,23 +1320,16 @@ class Utility extends Quant
 		this.reachedLineLimit = null;
 	}
 
-	//
-	//TODO/MAYBE w/ `--lines`/...?
-	//
+	prepareANSI()
+	{
+		this.openState = false;
+		this.sequences = 0;
+		this.tryLineLimitInit();
+	}
+
 	prepareXML(_callback)
 	{
 		//
-		this.tags = 0;
-
-		if(this.param.has('summary'))
-		{
-			this.summary = this.param.get('summary');
-		}
-		else
-		{
-			this.summary = this.getConfig('summary');
-		}
-
 		if(this.param.has('mode'))
 		{
 			switch(this.mode = this.param.get('mode').toLowerCase())
@@ -1287,6 +1375,7 @@ class Utility extends Quant
 
 		this.openState = false;
 		this.entity = '';
+		this.tags = 0;
 
 		this.tryLineLimitInit();
 
