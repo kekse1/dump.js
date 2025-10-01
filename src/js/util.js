@@ -37,7 +37,7 @@ class Utility extends Quant
 		{
 			throw new Error('Missing _util argument');
 		}
-		
+
 		if(!func(this[this.util = _util]))
 		{
 			console.error('The utility `' + _util + '` is not available.');
@@ -55,7 +55,7 @@ class Utility extends Quant
 	
 	static get utilities()
 	{
-		return [ 'count', 'sum', 'rot13', 'print', 'xml', 'ansi' ];
+		return [ 'count', 'sum', 'rot13', 'print', 'xml', 'ansi', 'limits' ];
 	}
 
 	static help(_exit = null)
@@ -141,7 +141,7 @@ class Utility extends Quant
 				if(!this.param.has('size'))
 				{
 					console.error('Unable to determine file size, so please argue with `--size`.');
-					console.warn('But maybe this file is just empty..');
+					console.warn('But maybe this file is just empty..!');
 					process.exit(true);
 				}
 				
@@ -265,11 +265,12 @@ class Utility extends Quant
 		var total = this.length;
 		var percent = Math.round(counting / total * 100,
 			DEFAULT_PRECISION);
-		
-		if(!filtered)
+
+		/*if(!filtered)
+		//if(!total)
 		{
 			return false;
-		}
+		}*/
 		
 		if(this.radix !== 10)
 		{
@@ -306,11 +307,25 @@ class Utility extends Quant
 			percent += '%';
 		}
 
-		console.info(('Data ' + 'filtered'.bold(true)).debug(true) +
-			': ' + counting + ' Bytes counted (' + total + ' in total; '.
-				debug(true) + filtered + ' filtered out)'.debug(true));
+		if(this.filteredBytes)
+		{
+			console.info(('Data ' + 'filtered'.bold(true)).debug(true) +
+				': ' + counting + ' Bytes counted (' + total + ' in total; '.
+					debug(true) + filtered + ' filtered out)'.debug(true));
+		}
+		else if(this.length)
+		{
+			console.info('Received ' + total + ' Bytes (' +
+				('and ' + 'nothing'.bold(true) + ' was filtered)').
+					debug(true) + '.');
+		}
+		else
+		{
+			console.error('No bytes received. So nothing\'s done..');
+		}
 		
-		if(this.counting >= 1024 || this.length >= 1024 || this.filtered >= 1024)
+		//if(this.counting >= 1024 || this.length >= 1024 || this.filtered >= 1024)
+		if(this.counting >= 1024 || this.filtered >= 1024)
 		{
 			console.debug('               ' + Math.size.styled(this.counting).
 				info(true) + ' counted (' + Math.size.styled(this.length).
@@ -318,7 +333,10 @@ class Utility extends Quant
 					this.filtered).warn(true) + ' filtered out)'.debug(true));
 		}
 		
-		console.debug('            => ' + percent);
+		if(this.filteredBytes)
+		{
+			console.debug('            => ' + percent);
+		}
 	}
 
 	countLines(_char)
@@ -871,6 +889,53 @@ class Utility extends Quant
 		}
 	}
 	
+	showLimits()
+	{
+		if(!this.length)
+		{
+			return;
+		}
+		
+		if(this.radix !== 10)
+		{
+			this.min = this.min.toString(this.radix);
+			this.max = this.max.toString(this.radix);
+		}
+		else if(this.locale)
+		{
+			this.min = this.min.toLocaleString();
+			this.max = this.max.toLocaleString();
+		}
+		else
+		{
+			this.min = this.min.toString();
+			this.max = this.max.toString();
+		}
+		
+		console.info('Byte '.faint(true) + 'minimum'.underline(true) +
+			': '.debug(true) + this.min.bold(true));
+		console.error('Byte '.faint(true) + 'maximum'.underline(true) +
+			': '.debug(true) + this.max.bold(true));
+	}
+
+	limits(_chunk)
+	{
+		this.length += _chunk.length;
+		
+		for(var i = 0; i < _chunk.length; ++i)
+		{
+			if(this.min === null || _chunk[i] < this.min)
+			{
+				this.min = _chunk[i];
+			}
+			
+			if(this.max === null || _chunk[i] > this.max)
+			{
+				this.max = _chunk[i];
+			}
+		}
+	}
+
 	xml(_chunk)
 	{
 		this.length += _chunk.length;
@@ -1224,8 +1289,13 @@ class Utility extends Quant
 					this.ansiSummary();
 				}
 				break;
+			case 'limits':
+				this.showLimits();
+				console.eol();
+				this.checkFilter();
+				break;
 			default:
-				throw new Error('Invalid utility; unexpected!');
+				throw new Error('Invalid utility; unexpected error!');
 		}
 		
 		return process.exit();
@@ -1263,6 +1333,9 @@ class Utility extends Quant
 				break;
 			case 'ansi':
 				this.prepareANSI();
+				break;
+			case 'limits':
+				this.prepareLimits();
 				break;
 			default:
 				throw new Error('Invalid utility chosen');
@@ -1561,6 +1634,12 @@ class Utility extends Quant
 		{
 			this.printable = this.getConfig('printable');
 		}
+	}
+	
+	prepareLimits()
+	{
+		this.min = null;
+		this.max = null;
 	}
 	
 	onData(_chunk, ... _args)

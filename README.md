@@ -11,6 +11,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
+* \[**2025-10-01**\] New **util `limits`** (very easy one - could maybe be enhanced in the future..);
 * \[**2025-06-30**\] New **util `ansi`** (filtering);
 * \[**2025-06-30**\] New **util `xml`** (w/ three more cmd-line-params, plus config changes);
 * \[**2025-06-19**\] New `--lines` [parameter](#command-line-parameters) **and** config item!
@@ -249,6 +250,7 @@ These are the only available utilties (**atm**):
 * [**`print`**](src/sh/dump.print.sh)
 * [**`xml`**](src/sh/dump.xml.sh)
 * [**`ansi`**](src/sh/dump.ansi.sh)
+* [**`limits`**](src/sh/dump.limits.sh)
 
 They all require at least a file path [parameter](#command-line-parameters) and can also
 make us of all the [available parameters](#command-line-parameters).
