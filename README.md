@@ -41,7 +41,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## Introduction
-It became necessary since I wanted to inspect the changing data of my [Norbert](https://github.com/kekse1/norbert/).
+It became necessary since I wanted to inspect the changing data of my `Norbert` project.
 
 <br>
 
