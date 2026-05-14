@@ -63,7 +63,7 @@ class Helper
 					}
 					else
 					{
-						step = (Math.int(step) % 256);
+						step = (Math.trunc(step) % 256);
 					}
 
 					_input[i] = _input[i].substr(0, idx);
@@ -100,12 +100,12 @@ class Helper
 					continue;
 				}
 				
-				if((_input[i][0] = Math.int(_input[i][0] % 256)) < 0)
+				if((_input[i][0] = Math.trunc(_input[i][0] % 256)) < 0)
 				{
 					_input[i][0] = (256 + _input[i][0]);
 				}
 				
-				if((_input[i][1] = Math.int(_input[i][1] % 256)) < 0)
+				if((_input[i][1] = Math.trunc(_input[i][1] % 256)) < 0)
 				{
 					_input[i][1] = (256 + _input[i][1]);
 				}
@@ -125,7 +125,7 @@ class Helper
 			}
 			else if(!isNaN(_input[i] = parseInt(_input[i], radix)))
 			{
-				if((_input[i] = Math.int(_input[i] % 256)) < 0)
+				if((_input[i] = Math.trunc(_input[i] % 256)) < 0)
 				{
 					_input[i] = (256 + _input[i]);
 				}
