@@ -1,3 +1,4 @@
+<img src="without.svg" /><br>
 <img src="https://kekse.biz/github.php?draw&override=github:dump.js" />
 
 # The **`dump`** utility
