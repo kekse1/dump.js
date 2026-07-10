@@ -1,9 +1,9 @@
 <img src="https://kekse.biz/github.php?draw&override=github:dump.js" />
 
-<br>
-
 # The **`dump`** utility
 My own **Radix viewer** (JavaScript version). First version only w/ **viewing** functionality..
+
+<br>
 
 > [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
@@ -289,7 +289,7 @@ I mention this project here because I often used it before I came up with my own
 In the future, when I'm extending this code base, I think I'm going to see this foreign
 project as an example for me. Like more colors for different types of byte data, and more.
 
-<br>
+<br><br>
 
 # Contact
 
