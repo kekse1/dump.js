@@ -294,10 +294,12 @@ project as an example for me. Like more colors for different types of byte data,
 # Contact
 
 <a href="https://github.com/kekse1/dump.js/issues/">
-    <img src="https://kekse.biz/github.php?override=github:dump.js&draw&text=Issues&angle=-4&size=21px&fg=110,20,150&font=OpenSans&ro&readonly&h=48&v=16" />
+    <img src="https://kekse.biz/github.php?override=github:dump.js&draw&text=Issues&angle=-4&size=24px&fg=110,20,150&font=OpenSans&ro&readonly&h=48&v=16" />
 </a>
 
-<img src="https://kekse.biz/github.php?override=github:dump.js&draw&text=dump.js@kekse.biz&angle=6&size=24px&fg=150,20,90&font=OpenSans&ro&readonly&h=64&v=16" />
+<img src="https://kekse.biz/github.php?override=github:dump.js&draw&text=dump.js@kekse.biz&angle=6&size=38pt&fg=150,20,90&font=OpenSans&ro&readonly&h=64&v=16" />
+
+<br>
 
 # Copyright and License
 The Copyright is [(c) Sebastian Kucharczyk](./COPYRIGHT.txt),
