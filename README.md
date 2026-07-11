@@ -36,6 +36,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 	* [Infra-Structure](#infra-structure)
 		* [Contact me](#contact-me)
 4. [Utilities](#utilities)
+    * [Scripts](#scripts)
 5. [Comments/F.A.Q.](#commentsfaq)
 6. [Links](#links)
 7. [Contact](#contact)
@@ -269,6 +270,14 @@ make us of all the [available parameters](#command-line-parameters).
 > should be `--only` and `--without`. For the rest see the [command line parameters](#command-line-parameters).
 
 <br><br>
+
+### Scripts
+Now there are also two scripts I used to use. \^_\^
+
+You can find them in the [**`src/scripts/`**](./src/scripts/) directory.
+As symbolic links.. they reside under the usual [**`src/sh/`**](./src/sh/) directory.
+
+<br>
 
 ## Comments/F.A.Q.
 
