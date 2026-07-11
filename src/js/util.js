@@ -1168,13 +1168,32 @@ class Utility extends Quant
 		{
 			String.TAB = 0;
 
-			for(var i = 0; i < this.result.length; ++i)
+			if(this.compact && this.onlySize === 1)
+			{
+				process.stdout.write(this.result[this.onlyByte][2] + EOL);
+			}
+			else for(var i = 0; i < this.result.length; ++i)
 			{
 				if(!this.empty && !this.result[i][3]) continue;
 				if(!this.result[i][4]) continue;
-				key = this.result[i][1];
+
+				if(this.compact && this.onlySize === 1)
+				{
+					process.stdout.write(value + EOL);
+					break;
+				}
+				
 				value = this.result[i][2];
-				process.stdout.write(key + '=' + value + this.sep);
+				
+				if(this.compact)
+				{
+					process.stdout.write(value + this.sep);
+				}
+				else
+				{
+					key = this.result[i][1];
+					process.stdout.write(key + '=' + value + this.sep);
+				}
 			}
 			
 			return process.exit();
@@ -1562,11 +1581,16 @@ class Utility extends Quant
 		if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
 		{
 			this.only = null;
-			this.realSize = 256;
+			this.onlySize = 256;
+			this.onlyByte = null;
+		}
+		else if((this.onlySize = this.only.size) === 1)
+		{
+			this.onlyByte = this.only.values().next().value;
 		}
 		else
 		{
-			this.realSize = this.only.size;
+			this.onlyByte = null;
 		}
 
 		this.without = Helper.parseBytes(this.param.get('without'));
