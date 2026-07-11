@@ -63,7 +63,7 @@ echo
 
 #
 for i in *.log; do
-	echo "$(dump.util count --only ${_BYTE} --compact on --pairs yes "$i") $i";
+	echo -e "$(dump.util count --only ${_BYTE} --compact on --pairs yes "$i") $i\0";
 done | sort -k 1,1${_ORDER}n
 
 #

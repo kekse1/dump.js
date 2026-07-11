@@ -6,7 +6,7 @@
 #
 
 # set to zero(0) to enable this whole tool! .. ^_^
-_DRY_RUN=1
+_DRY_RUN=0
 
 #
 _real="$(realpath "$0")"
@@ -115,20 +115,18 @@ else
 
 	if [[ -e "$_TARGET" ]]; then
 		echo -e "ERROR: Target directory may not already exist: \`${_TARGET}\`" >&2
-		echo -e "We need a 'clean environment' for the file listing." >&2
+		echo -e "We need a 'clean environment' for the file listing.\n" >&2
 		exit 5
 	elif [[ $_DRY_RUN -eq 0 ]]; then
 		mkdir -p "$_TARGET" >/dev/null 2>&1
 		
 		if [[ $? -ne 0 ]]; then
-			echo -e "Unable to create your target directory: \`${_TARGET}\`" >&2
+			echo -e "Unable to create your target directory: \`${_TARGET}\`\n" >&2
 			exit 6
 		fi
 	else
-		echo -e "Because of \$_DRY_RUN we didn't create the target directory here, jfyi."
+		echo -e "Because of \$_DRY_RUN we didn't create the target directory here, jfyi.\n"
 	fi
-	
-	echo
 fi
 
 
