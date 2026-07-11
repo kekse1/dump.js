@@ -277,6 +277,9 @@ Now there are also two scripts I used to use. \^_\^
 You can find them in the [**`src/scripts/`**](./src/scripts/) directory.
 As symbolic links.. they reside under the usual [**`src/sh/`**](./src/sh/) directory.
 
+* [**`zero-count.sh`**](src/sh/zero-count.sh)
+* [**`sorted-file-list.sh`**](src/sh/sorted-file-list.sh)
+
 <br>
 
 ## Comments/F.A.Q.
