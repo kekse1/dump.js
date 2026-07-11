@@ -1170,19 +1170,14 @@ class Utility extends Quant
 
 			if(this.compact && this.onlySize === 1)
 			{
-				process.stdout.write(this.result[this.onlyByte][2] + EOL);
+				process.stdout.write(this.result[this.onlyByte][2] + this.sep);
+				process.exit(0);
 			}
 			else for(var i = 0; i < this.result.length; ++i)
 			{
 				if(!this.empty && !this.result[i][3]) continue;
 				if(!this.result[i][4]) continue;
 
-				if(this.compact && this.onlySize === 1)
-				{
-					process.stdout.write(value + EOL);
-					break;
-				}
-				
 				value = this.result[i][2];
 				
 				if(this.compact)
@@ -1659,6 +1654,10 @@ class Utility extends Quant
 		if(string(this.param.get('sep'), false))
 		{
 			this.sep = this.param.get('sep');
+		}
+		else if(nul(this.param.get('sep')))
+		{
+			this.sep = '';
 		}
 		else
 		{

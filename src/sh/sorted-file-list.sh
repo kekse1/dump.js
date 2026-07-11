@@ -2,7 +2,7 @@
 #
 # Copyright (c) Sebastian Kucharczyk <kuchen@kekse.biz>
 # https://kekse.biz/ https://github.com/kekse1/scripts/
-# v0.3.1
+# v0.4.0
 #
 
 # set to zero(0) to enable this whole tool! .. ^_^
@@ -69,6 +69,14 @@ confirm()
 	[[ "$confirm" != "y" ]] && return 1
 	return 0
 }
+
+stop()
+{
+	trap - INT
+	errorCase 0 0
+}
+
+trap "stop" INT
 
 #
 if [[ $# -eq 0 ]]; then
@@ -144,15 +152,19 @@ if [[ $_COUNT -eq 0 ]]; then
 
 	#
 	echo -e "Using the log file sizes to sort the list (see also \`--count / -c\`)."
-	mapfile -t -d '' files < <(find -mindepth 1 -maxdepth 1 -not -name '.*' -name "$_GLOB" -type f -printf "%s %f\0" | sort -zn)
+	mapfile -t -d '' rawFiles < <(find -mindepth 1 -maxdepth 1 -not -name '.*' -name "$_GLOB" -type f -printf "%s %f\0" | tr -d '\n\r' | sort -zn)
 else
 	_BYTE="${args[2]:-0}"
 	_ORDER="${args[3]:-asc}"
 	
 	#
 	echo -e "Using the \`zero-count.sh\` instead of using file sizes (see \`--count / -c\`)."
-	mapfile -t -d '' files < <("$_count" "$_BYTE" "$_ORDER" | sort -zn)
+	mapfile -t -d '' rawFiles < <("$_count" "$_BYTE" "$_ORDER" 1 | tr -d '\n\r' | sort -zn)
 fi
+
+files=(); for i in "${rawFiles[@]}"; do
+	[[ -n "$i" ]] && files+=("$i")
+done; rawFiles=0
 
 #
 _count=${#files[@]}
@@ -221,7 +233,7 @@ fi
 #
 if [[ $_errors -eq 0 ]]; then
 	echo -e "Finished to copy ${_count} files into \`$(realpath --relative-to . "${_TARGET}")\`! :-)"
-	echo -e "\t${_TARGET}"
+	echo -e "\n\t${_TARGET}"
 	_dryTest
 elif [[ $_errors -eq $_count ]]; then
 	echo -en "SORRY: not a single file could be copied, " >&2
@@ -232,7 +244,8 @@ else
 	_success=$(($_count-$_errors))
 	echo -en "Sorry: ${_success} files could be copied, "
 	echo -e "but ${_errors} files couldn't." >&2
-	echo -e "\t${_TARGET}"
+	echo -e "\n\t${_TARGET}"
 	_dryTest
 	exit 10
 fi
+

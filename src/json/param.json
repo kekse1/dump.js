@@ -43,7 +43,7 @@
 		"disable": "list"
 	},
 	"sep": {
-		"type": "string",
+		"type": [ "string", "null" ],
 		"required": false
 	},
 	"list": {
