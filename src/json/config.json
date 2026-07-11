@@ -1,145 +1,63 @@
 {
+
 	/* globally enable/disable this project */
 	"enabled": true,
 
 	/* possibility to globally disable all ansi escape sequences (styles/colors/..) */
 	"ansi": true,
 
-	/* default --head and --tail values. can be booleans and integers; but BOTH at the same time are invalid! */
-	"head": false,
-	"tail": false,
+	/* sort results; either (null) for NO sort, or a boolean to define
+	       	the direction (asc/desc); ... */
+	"sort": null,
 
-	/* default --radix .. use (16) for kinda "hex viewer/editor", but you can use all in the range of [ 2 .. 36 ]
-		(TODO: `radix.js` for even more radix values.. didn't implement it here for performance reasons... */
+	/* default radix (base) */
 	"radix": 10,
 
-	/* if here or via --refresh parameter a positive integer, the file is being dumped every (n) milliseconds;
-		useful if you'd like to observe changing files. .. */
-	"refresh": 0,
-
-	/* for --head and --tail with boolean: this will be subtracted from the 'console.height'..
-		.. e.g. more place for bigger prompts, etc.. */
-	"consoleHeightSub": 4,
-
-	/* use chars replacing the bytes by a specific radix, e.g. (2); ... */
-	"replace": false,/*2,*/
-
-	/* print (some!) numeric values w/ `.toLocaleString()` instead of `.toString()` ... */
+	/* with default radix (10) the numbers can also be adapted to your locale setting */
 	"locale": true,
 
-	/* filter out many same bytes? yes/no */
+	/* without any beautify or so, only assignments; like `10=64`; see also 'separator' below */
+	"pairs": false,
+
+	/* or you enable the regular 'list' output.. will be overridden by 'pairs'. */
+	"list": false,
+
+	/* if with 'pairs' or 'list' is enabled (see above), this is the separator..
+		defaults to newline '\n'. */
+	"sep": "\n",
+
+	/* space between the items.. too compact is worse to take a look at it... */
+	"spaces": 3,
+
+	/* also show empty items? comment: this won't happen always, depending
+		on output type and ansi (param/config) state.. */
+	"empty": false,
+
+	/* shows the characters (only printable ones) with their mapped character, not byte values.. */
+	"printable": false,
+
+	/* summary .. eingefuehrt wg. `util.count`, dass die anzahl an bytes w/ math.size; ..
+		... v.a. wg. '--only' bzw. '--without' sinnvoll! ;-) ... */
+	"summary": true,
+
+	/* the 'print' utility can also print 'ansi' characters, so these *above* 127... */
+	"above": true,
+
+	/* when e.g. `rot13` should be outputted without control characters, ... */
 	"filter": true,
 
-	/* colors for the left (character) view.. looks nice as it is now. */
-	"design": {
+	/* optional integer, also `--lines`, to limit output to (n) terminal rows.
+		... counts *effectively*: not only by `\n` occurences, also the
+		real row count of the terminal!1 .. */
+	"lines": null,
 
-		/* see also `--color` parameter! */
-		"color": null,
+	/* 'xml'.. only necessary or all chars @ {,un}escape(); ... */
+	"all": false,
 
-		"left": {
-		
-			/* */
-			
-		},
-		
-		"right": {
-		
-			/* pad string to pad numeric outputs .. */
-			"pad": "0"
-			
-		},
+	/* @ 'xml'.. if(all) above, either hexa- or decimal. */
+	"hex": false,
 
-		/* valid are all printable characters (ascii, for ansi see below). */
-		"printable": {
-			
-			"left": {
-			
-				"replace": null,
-				"fg": [ 0, 0, 0 ],
-				"bg": [ 90, 130, 190 ]
-
-				
-			},
-			
-			"right": {
-			
-				"fg": [ 90, 130, 190 ]
-				
-			}
-
-		},
-
-		/* invalid are mostly binary values.. so 0-31 and 127 */
-		"nonPrintable": {
-
-			"left": {
-			
-				"replace": true,
-				"fg": [ 0, 0, 0 ],
-				"bg": [ 190, 150, 40 ]
-				
-			},
-			
-			"right": {
-				
-				"fg": [ 250, 190, 20 ]
-
-			}
-
-		},
-
-		/* ansi is >127 */
-		"ansi": {
-
-			"left": {
-			
-				"replace": true,
-				"fg": [ 0, 0, 0 ],
-				"bg": [ 140, 180, 80 ]
-				
-			},
-			
-			"right": {
-			
-				/*"fg": [ 110, 190, 40 ]*/
-				"fg": [ 120, 190, 40 ]
-				
-			}
-
-		},
-
-		/* \0 null byte, is special. and last byte \255 kommt hier noch dazu (quasi negatives \0 .. ;-) */
-		"null": {
-
-			"left": {
-
-				"replace": " ",
-				"fg": [ 255, 255, 255 ],
-				"bg": [ 240, 10, 40 ]
-
-			},
-			
-			"right": {
-
-				"fg": [ 240, 10, 40 ]
-
-			}
-		
-		},
-
-		/* special case: if the input data ended, and the current/last output line wasn't written up to it's end. */
-		"empty": {
-
-			"left": {
-			
-				"replace": " ",
-				"fg": [ 255, 255, 255 ],
-				"bg": [ 0, 0, 0 ]
-				
-			}
-			
-		}
-
-	}
+	/* compact output.. good with `--only`, e.g.. */
+	"compact": false
 
 }

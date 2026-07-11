@@ -12,6 +12,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
+* \[**2026-07-11**\] Just got some updates! Inter alia.. w/ `--compact` now (great for `util.help count`, e.g.);
 * \[**2025-10-01**\] New **util `limits`** (very easy one - could maybe be enhanced in the future..);
 * \[**2025-06-30**\] New **util `ansi`** (filtering);
 * \[**2025-06-30**\] New **util `xml`** (w/ three more cmd-line-params, plus config changes);
@@ -115,6 +116,7 @@ And here with the [**`param.util.json`**](src/json/param.util.json):
 * **`--mode`** (String)
 * **`--all`** (Boolean)
 * **`--hex`** (Boolean)
+* **`--compact`** (Boolean)
 
 #### Boolean
 The Boolean values are either without any value assignment, which sometimes causes problems when the

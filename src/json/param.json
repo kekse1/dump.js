@@ -11,65 +11,55 @@
 		"type": "file",
 		"required": true
 	},
-	"refresh": {
-		"type": [ "integer", "boolean" ],
-		"required": false
-	},
 	"radix": {
-		"type": "radix",
+	       "type": "radix",
+	       "required": false,
+	       "disable": "locale"
+	},
+	"sort": {
+		"type": [ "boolean", "null" ],
 		"required": false
 	},
-	"path": {
-		"type": "file",
+	"offset": {
+		"type": "integer",
 		"required": false
+	},
+	"size": {
+		"type": "integer",
+		"required": false
+	},
+	"locale": {
+		"type": "boolean",
+		"required": false,
+		"disable": "radix"
 	},
 	"ansi": {
 		"type": "boolean",
 		"required": false
 	},
-	"head": {
-		"type": [ "boolean", "integer", "string" ],
+	"pairs": {
+		"type": "boolean",
 		"required": false,
-		"disable": "tail"
+		"disable": "list"
 	},
-	"tail": {
-		"type": [ "boolean", "integer", "string" ],
+	"sep": {
+		"type": "string",
+		"required": false
+	},
+	"list": {
+		"type": "boolean",
 		"required": false,
-		"disable": "head"
+		"disable": "pairs"
 	},
-	"start": {
+	"spaces": {
 		"type": "integer",
 		"required": false
 	},
-	"stop": {
-		"type": "integer",
-		"required": false
-	},
-	"replace": {
-		"type": [ "radix", "boolean" ],
-		"required": false
-	},
-	"heat": {
-		"type": "integer",
-		"required": false
-	},
-	"color": {
-		"type": [ "string", "null" ],
-		"required": false
-	},
-	"filter": {
+	"empty": {
 		"type": "boolean",
 		"required": false
 	},
-	"modulo": {
-		"type": [ "radix", "boolean" ],
-		"required": false
-	},
-	"follow": {
-		"type": "boolean",
-		"required": false
-	},
-	"high": {
+	"without": {
 		"type": [ "string", "integer" ],
 		"required": false
 	},
@@ -77,16 +67,48 @@
 		"type": [ "string", "integer" ],
 		"required": false
 	},
-	"without": {
+	"high": {
 		"type": [ "string", "integer" ],
 		"required": false
 	},
-	"count": {
-		"type": [ "integer", "string", "boolean" ],
+	"printable": {
+		"type": "boolean",
 		"required": false
 	},
-	"count-sort": {
+	"silent": {
+		"type": "boolean",
+		"required": false
+	},
+	"summary": {
+		"type": "boolean",
+		"required": false
+	},
+	"above": {
+		"type": "boolean",
+		"required": false
+	},
+	"filter": {
+		"type": "boolean",
+		"required": false
+	},
+	"lines": {
+		"type": [ "integer", "null" ],
+		"required": false
+	},
+	"mode": {
 		"type": "string",
+		"required": false
+	},
+	"all": {
+		"type": "boolean",
+		"required": false
+	},
+	"hex": {
+		"type": "boolean",
+		"required": false
+	},
+	"compact": {
+		"type": "boolean",
 		"required": false
 	}
 }

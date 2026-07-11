@@ -307,6 +307,8 @@ class Utility extends Quant
 			percent += '%';
 		}
 
+		console.log();
+		
 		if(this.filteredBytes)
 		{
 			console.info(('Data ' + 'filtered'.bold(true)).debug(true) +
@@ -550,17 +552,16 @@ class Utility extends Quant
 		
 		for(var i = 0; i < _chunk.length; ++i)
 		{
-			++this.result[_chunk[i]];
-			
 			if(this.only)
 			{
-				if(!this.only.has(_chunk[i]))
+				if(this.only.has(_chunk[i]))
 				{
-					++this.filteredBytes;
+					++this.result[_chunk[i]];
+					++this.counting;
 				}
 				else
 				{
-					++this.counting;
+					++this.filteredBytes;
 				}
 			}
 			else if(this.without.has(_chunk[i]))
@@ -569,6 +570,7 @@ class Utility extends Quant
 			}
 			else
 			{
+				++this.result[_chunk[i]];
 				++this.counting;
 			}
 		}
@@ -1068,7 +1070,7 @@ class Utility extends Quant
 				this.result[i][4] = true;
 			}
 		}
-		
+
 		if(bool(this.sort))
 		{
 			this.result.sort(2, !this.sort);
@@ -1078,6 +1080,11 @@ class Utility extends Quant
 		
 		for(var i = 0; i < this.result.length; ++i)
 		{
+			if(!this.result[i][4])
+			{
+				continue;
+			}
+			
 			if(this.printable && this.result[i][1] >= 32 && this.result[i][1] < 127)
 			{
 				this.result[i][1] = '`'.defaultFG(true) +
@@ -1116,30 +1123,32 @@ class Utility extends Quant
 			}
 		}
 
-		for(var i = 0; i < this.result.length; ++i)
+		if(!this.pairs) for(var i = 0; i < this.result.length; ++i)
 		{
-			if(!this.pairs)
+			if(!this.result[i][4])
 			{
-				if(! (maxKey === 3 && this.result[i][5]))
+				continue;
+			}
+			
+			if(! (maxKey === 3 && this.result[i][5]))
+			{
+				this.result[i][1] = this.result[i][1].pad(maxKey, ' ', true);
+			}
+
+			this.result[i][2] = this.result[i][2].padStart(maxValue, ' ');
+
+			if(process.ansi)
+			{
+				if(this.high.has(this.result[i][0]))
 				{
-					this.result[i][1] = this.result[i][1].pad(maxKey, ' ', true);
+					this.result[i][1] = this.result[i][1].bold(true).fg(255, 255, 255, true);
+					this.result[i][1] = this.result[i][1].inverse(true);
+					this.result[i][2] = this.result[i][2].fg(255, 255, 255, true).bold(true);
 				}
-
-				this.result[i][2] = this.result[i][2].padStart(maxValue, ' ');
-
-				if(process.ansi)
+				else
 				{
-					if(this.high.has(this.result[i][0]))
-					{
-						this.result[i][1] = this.result[i][1].bold(true).fg(255, 255, 255, true);
-						this.result[i][1] = this.result[i][1].inverse(true);
-						this.result[i][2] = this.result[i][2].fg(255, 255, 255, true).bold(true);
-					}
-					else
-					{
-						this.result[i][1] = this.result[i][1].debug(true);//.bold(true);
-						this.result[i][2] = this.result[i][2].info(true);
-					}
+					this.result[i][1] = this.result[i][1].debug(true);//.bold(true);
+					this.result[i][2] = this.result[i][2].info(true);
 				}
 			}
 		}
@@ -1162,7 +1171,7 @@ class Utility extends Quant
 			for(var i = 0; i < this.result.length; ++i)
 			{
 				if(!this.empty && !this.result[i][3]) continue;
-				else if(!this.result[i][4]) continue;
+				if(!this.result[i][4]) continue;
 				key = this.result[i][1];
 				value = this.result[i][2];
 				process.stdout.write(key + '=' + value + this.sep);
@@ -1175,7 +1184,7 @@ class Utility extends Quant
 			for(var i = 0; i < this.result.length; ++i)
 			{
 				if(!this.empty && !this.result[i][3]) continue;
-				else if(!this.result[i][4]) continue;
+				if(!this.result[i][4]) continue;
 				key = open + this.result[i][1] + close;
 				value = this.result[i][2];
 				process.stdout.write(key + ' ' + value + this.sep);
@@ -1192,11 +1201,18 @@ class Utility extends Quant
 
 		for(var i = 0, j = 0; i < this.result.length; ++i)
 		{
-			if(!this.result[i][3] && !process.ansi)
+			if(!this.result[i][4])
 			{
-				item = empty;
+				if(this.compact)
+				{
+					continue;
+				}
+				else
+				{
+					item = empty;
+				}
 			}
-			else if(!this.result[i][4])
+			else if(!this.result[i][3] && !process.ansi)
 			{
 				item = empty;
 			}
@@ -1546,6 +1562,11 @@ class Utility extends Quant
 		if((this.only = Helper.parseBytes(this.param.get('only'))).size === 0)
 		{
 			this.only = null;
+			this.realSize = 256;
+		}
+		else
+		{
+			this.realSize = this.only.size;
 		}
 
 		this.without = Helper.parseBytes(this.param.get('without'));
@@ -1558,6 +1579,16 @@ class Utility extends Quant
 		else
 		{
 			this.summary = this.getConfig('summary');
+		}
+		
+		//
+		if(this.param.has('compact'))
+		{
+			this.compact = this.param.get('compact');
+		}
+		else
+		{
+			this.compact = this.getConfig('compact');
 		}
 	}
 	

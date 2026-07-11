@@ -11,7 +11,8 @@ import Dump from './dump.js';
 import Utility from './util.js';
 
 //
-const param = getopt(true);
+//const param = getopt(true);
+const param = getopt({ cast: true });
 
 //
 var dump = null;
