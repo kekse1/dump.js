@@ -12,7 +12,6 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 <br><br>
 
 ## News
-* \[**2026-07-11**\] See also the new [Scripts](#scripts); ... I'm using 'em.
 * \[**2026-07-11**\] Just got some updates! Inter alia.. w/ `--compact` now (great for `util.help count`, e.g.);
 * \[**2025-10-01**\] New **util `limits`** (very easy one - could maybe be enhanced in the future..);
 * \[**2025-06-30**\] New **util `ansi`** (filtering);
@@ -270,17 +269,6 @@ make us of all the [available parameters](#command-line-parameters).
 > should be `--only` and `--without`. For the rest see the [command line parameters](#command-line-parameters).
 
 <br><br>
-
-### Scripts
-Now there are also two scripts I used to use. \^_\^
-
-You can find them in the [**`src/scripts/`**](./src/scripts/) directory.
-As symbolic links.. they reside under the usual [**`src/sh/`**](./src/sh/) directory.
-
-* [**`zero-count.sh`**](src/sh/zero-count.sh)
-* [**`sorted-file-list.sh`**](src/sh/sorted-file-list.sh)
-
-<br>
 
 ## Comments/F.A.Q.
 

@@ -1,1 +1,0 @@
-../sh/zero-count.sh
