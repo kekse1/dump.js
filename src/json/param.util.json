@@ -43,7 +43,7 @@
 		"disable": "list"
 	},
 	"sep": {
-		"type": "string",
+		"type": [ "string", "null" ],
 		"required": false
 	},
 	"list": {
@@ -105,6 +105,10 @@
 	},
 	"hex": {
 		"type": "boolean",
+		"required": false
+	},
+	"compact": {
+		"type": [ "boolean", "null" ],
 		"required": false
 	}
 }

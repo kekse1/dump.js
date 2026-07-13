@@ -55,6 +55,9 @@
 	"all": false,
 
 	/* @ 'xml'.. if(all) above, either hexa- or decimal. */
-	"hex": false
+	"hex": false,
+
+	/* compact output.. (null) macht's abhaengig von {sort}! ;-) ... */
+	"compact": null
 
 }

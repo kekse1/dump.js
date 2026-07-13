@@ -549,7 +549,7 @@ class Utility extends Quant
 	count(_chunk, ... _args)
 	{
 		this.length += _chunk.length;
-		
+//console.dir({only:this.only,without:this.without,compact:this.compact});process.exit(111);//zzzzz
 		for(var i = 0; i < _chunk.length; ++i)
 		{
 			if(this.only)
@@ -1600,21 +1600,7 @@ class Utility extends Quant
 			this.summary = this.getConfig('summary');
 		}
 		
-		//
-		if(this.param.has('compact'))
-		{
-			this.compact = this.param.get('compact');
-		}
-		else
-		{
-			this.compact = this.getConfig('compact');
-		}
-	}
-	
-	prepareCount()
-	{
-		//
-		if(bool(this.param.get('sort')) || this.param.get('sort') === null)
+		if(this.param.has('sort'))
 		{
 			this.sort = this.param.get('sort');
 		}
@@ -1623,7 +1609,28 @@ class Utility extends Quant
 			this.sort = this.getConfig('sort');
 		}
 
-		//
+		if(!bool(this.sort))
+		{
+			this.sort = null;
+		}
+
+		if(this.param.has('compact'))
+		{
+			this.compact = this.param.get('compact');
+		}
+		else
+		{
+			this.compact = this.getConfig('compact');
+		}
+
+		if(this.compact === null)
+		{
+			this.compact = (this.sort !== null);
+		}
+	}
+	
+	prepareCount()
+	{
 		if(this.param.has('pairs'))
 		{
 			this.pairs = this.param.get('pairs');
@@ -1651,13 +1658,16 @@ class Utility extends Quant
 			this.pairs = null;
 		}
 		
-		if(string(this.param.get('sep'), false))
+		if(this.param.has('sep'))
 		{
-			this.sep = this.param.get('sep');
-		}
-		else if(nul(this.param.get('sep')))
-		{
-			this.sep = '';
+			if(string(this.param.get('sep'), false))
+			{
+				this.sep = this.param.get('sep');
+			}
+			else
+			{
+				this.sep = '';
+			}
 		}
 		else
 		{
