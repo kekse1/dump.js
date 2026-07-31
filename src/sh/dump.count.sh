@@ -20,7 +20,7 @@ DIR="$(dirname "$REAL")"
 MAIN="$(realpath "${DIR}/dump.util.sh")"
 
 #
-CMD="${BASH} '${MAIN}' count -printable off"
+CMD="${BASH} '${MAIN}' count --printable off"
 
 for i in "$@"; do
 	CMD="${CMD} '$i'"

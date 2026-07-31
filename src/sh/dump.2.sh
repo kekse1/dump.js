@@ -6,6 +6,9 @@
 # 
 
 #
+_PRINTABLE="no"
+
+#
 BASH="bash"
 BASH="`which $BASH 2>/dev/null`"
 
@@ -20,7 +23,7 @@ DIR="$(dirname "$REAL")"
 MAIN="$(realpath "${DIR}/dump.util.sh")"
 
 #
-CMD="${BASH} '${MAIN}' count --sort yes --high '0-255+2' --printable yes"
+CMD="${BASH} '${MAIN}' count --sort yes --high '0-255+2' --printable $_PRINTABLE"
 
 for i in "$@"; do
 	CMD="${CMD} '$i'"

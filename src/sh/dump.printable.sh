@@ -20,7 +20,7 @@ DIR="$(dirname "$REAL")"
 MAIN="$(realpath "${DIR}/dump.util.sh")"
 
 #
-CMD="${BASH} '${MAIN}' count --sort yes --only '32-126,10,13' --high '0-255+2'"
+CMD="${BASH} '${MAIN}' count --sort yes --high '32-126,9,10,13'"
 
 for i in "$@"; do
 	CMD="${CMD} '$i'"

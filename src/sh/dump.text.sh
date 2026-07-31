@@ -20,7 +20,7 @@ DIR="$(dirname "$REAL")"
 MAIN="$(realpath "${DIR}/dump.sh")"
 
 #
-CMD="${BASH} '${MAIN}' --only '32-126,10,13' --high '10,13,32,65,97' --tail 80%"
+CMD="${BASH} '${MAIN}' --only '32-126,9,10,13' --high '9,10,13,32,65,97' --tail 80%"
 
 for i in "$@"; do
 	CMD="${CMD} '$i'"
