@@ -8,6 +8,9 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 
 > [!NOTE]
 > When I talk about the **radix**, I mean the numeric **base** (decimal, binary/dual, ..).
+> **For me** it's about **inner** and **outer** bases.. so the digits/symbols itself as
+> the **radix** (kinda **depth**) and the maximum numeric values (like **12/24h** or
+> **60min/sec** etc. ;-)
 
 <br><br>
 
