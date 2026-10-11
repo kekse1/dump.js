@@ -11,6 +11,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 
 <br><br>
 
+<!--
 ## News
 * \[**2026-07-13**\] Some little updates (that make sense); ...
 * \[**2026-07-11**\] Just got some updates! Inter alia.. w/ `--compact` now (great for `util.help count`, e.g.); ..
@@ -25,6 +26,7 @@ My own **Radix viewer** (JavaScript version). First version only w/ **viewing** 
 * \[**2025-03-24**\] Newest update: the `dump` now also supports `--count` and `--count-sort`.
 
 <br>
+  -->
 
 ## Index
 1. [Introduction](#introduction)
